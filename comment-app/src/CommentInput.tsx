@@ -59,9 +59,11 @@ class CommentInput extends Component<IProps, IState> {
             const { username, content } = this.state;
             if (username === '') {
                 alert("username is required");
+                return;
             }
             if (content === '') {
                 alert("content is required");
+                return;
             }
             this.props.onSubmit(username, content);
             this.setState({
