@@ -1,10 +1,19 @@
 import { Component, ReactNode } from 'react';
+import CommentInput from './CommentInput';
+import CommentList from './CommentList';
 
 class App extends Component {
   render(): ReactNode {
       return (
-        <h1>Hello, welcome to my first react app.</h1>
-      )
+        <div className='wrapper'>
+          <CommentInput />
+          <CommentList />
+        </div>
+      );
+  }
+
+  handleSubmitContent(username: string, content: string): void {
+    console.log(username, content);
   }
 }
 
