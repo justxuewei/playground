@@ -4,6 +4,7 @@ import Comment from './Comment';
 
 interface IProps {
     comments: Array<CommentModel>
+    onDeleteComment: (key: number) => void;
 }
 
 class CommentList extends Component<IProps, unknown> {
@@ -11,10 +12,17 @@ class CommentList extends Component<IProps, unknown> {
         return (
             <div>
                 {this.props.comments.map((comment: CommentModel, i: number) =>
-                    <Comment comment={comment} key={i} />
+                    <Comment
+                        comment={comment}
+                        key={i}
+                        onDeleteComment={this.handleDeleteComment.bind(this)} />
                 )}
             </div>
         );
+    }
+
+    handleDeleteComment(key: number) {
+        this.props.onDeleteComment(key);
     }
 }
 
