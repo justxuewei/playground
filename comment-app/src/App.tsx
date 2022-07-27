@@ -1,6 +1,6 @@
 import { Component, ReactNode } from 'react';
-import CommentInput from './CommentInput';
-import CommentList from './CommentList';
+import CommentInput from './components/CommentInput';
+import CommentList from './components/CommentList';
 import CommentModel from './model';
 
 interface IState {

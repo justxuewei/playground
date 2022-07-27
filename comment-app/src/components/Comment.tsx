@@ -1,5 +1,5 @@
 import { Component, ReactNode } from 'react';
-import CommentModel from './model';
+import CommentModel from '../model';
 import './index.css';
 
 interface IProps {

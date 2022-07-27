@@ -1,9 +1,9 @@
 import { Component, ReactNode } from 'react';
-import CommentModel from './model';
+import CommentModel from '../model';
 import Comment from './Comment';
 
 interface IProps {
-    comments: Array<CommentModel>
+    comments: CommentModel[];
     onDeleteComment: (key: number) => void;
 }
 

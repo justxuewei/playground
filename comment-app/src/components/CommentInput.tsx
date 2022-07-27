@@ -1,7 +1,9 @@
 import React, { Component, ReactNode } from 'react';
 
 interface IProps {
+    username: string;
     onSubmit?: (username: string, content: string) => void,
+    onUsernameInputBlur?: (username: string) => void;
 }
 
 interface IState {
@@ -15,7 +17,7 @@ class CommentInput extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            username: '',
+            username: props.username,
             content: '',
         };
 
@@ -24,10 +26,6 @@ class CommentInput extends Component<IProps, IState> {
 
     componentDidMount() {
         this.textarea.current?.focus();
-    }
-
-    componentWillMount() {
-        this._loadUsername();
     }
 
     render(): ReactNode {
@@ -60,22 +58,11 @@ class CommentInput extends Component<IProps, IState> {
         );
     }
 
-    _saveUsername(username: string) {
-        localStorage.setItem('username', username);
-    }
-
-    _loadUsername() {
-        const username = localStorage.getItem('username');
-        if (username) {
-            this.setState({
-                username: username,
-            });
-        }
-    }
-
     // save username to local storage if input loss focus
     handleUsernameBlur(event: React.FocusEvent<HTMLInputElement>): void {
-        this._saveUsername(event.target.value);
+        if (this.props.onUsernameInputBlur) {
+            this.props.onUsernameInputBlur(event.target.value);
+        }
     }
 
     handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>): void {
