@@ -1,5 +1,6 @@
 import { Component, ReactNode } from "react";
 import { connect } from 'react-redux';
+import { Dispatch } from "redux";
 import CommentList from "../components/CommentList";
 import CommentModel from "../model";
 import { Action, deleteComment, initComments, State } from "../reducers/common";
@@ -10,11 +11,7 @@ export interface IProps {
     onDeleteComment: (commentIndex: number) => void;
 }
 
-export interface IState {
-    comments: CommentModel[];
-}
-
-class CommentListContainer extends Component<IProps, IState> {
+class CommentListContainer extends Component<IProps> {
     constructor(props: IProps) {
         super(props);
     }
@@ -62,7 +59,7 @@ const mapStateToProps = (state: State) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: (a: Action) => void) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         // 提供给 CommentListContainer
         // 当从 LocalStorage 加载评论列表以后就会通过这个方法
