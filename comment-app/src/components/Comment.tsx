@@ -1,6 +1,6 @@
 import { Component, ReactNode } from 'react';
 import CommentModel from '../model';
-import './index.css';
+import '../index.css';
 
 interface IProps {
     key: number;

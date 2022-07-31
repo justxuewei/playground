@@ -1,17 +1,17 @@
-import { Component, ReactNode } from "react";
+import { PureComponent, ReactNode } from "react";
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import CommentList from "../components/CommentList";
 import CommentModel from "../model";
-import { Action, deleteComment, initComments, State } from "../reducers/common";
+import { deleteComment, initComments, State } from "../reducers/common";
 
 export interface IProps {
     comments: CommentModel[];
-    initComments: (comments: CommentModel[]) => Action;
+    initComments: (comments: CommentModel[]) => void;
     onDeleteComment: (commentIndex: number) => void;
 }
 
-class CommentListContainer extends Component<IProps> {
+class commentListContainer extends PureComponent<IProps> {
     constructor(props: IProps) {
         super(props);
     }
@@ -26,6 +26,7 @@ class CommentListContainer extends Component<IProps> {
         const comments: CommentModel[] = commentsJson ? JSON.parse(commentsJson) : [];
         // this.props.initComments 是 connect 传进来的
         // 可以帮我们把数据初始化到 state 里面去
+        console.log("_loadComments", comments);
         this.props.initComments(comments);
     }
 
@@ -65,6 +66,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         // 当从 LocalStorage 加载评论列表以后就会通过这个方法
         // 把评论列表初始化到 state 当中
         initComments: (comments: CommentModel[]) => {
+            console.log("initComments", comments);
             dispatch(initComments(comments));
         },
         // 删除评论
@@ -74,4 +76,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentListContainer);
+export const CommentListContainer = connect(mapStateToProps, mapDispatchToProps)(commentListContainer);

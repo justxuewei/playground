@@ -1,4 +1,4 @@
-import { Component, ReactNode } from 'react';
+import { PureComponent, ReactNode } from 'react';
 import CommentModel from '../model';
 import Comment from './Comment';
 
@@ -7,7 +7,7 @@ interface IProps {
     onDeleteComment: (key: number) => void;
 }
 
-class CommentList extends Component<IProps, unknown> {
+class CommentList extends PureComponent<IProps> {
     render(): ReactNode {
         return (
             <div>

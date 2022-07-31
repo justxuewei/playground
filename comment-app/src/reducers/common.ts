@@ -34,26 +34,33 @@ export const deleteComment = (commentIndex: number): Action => {
     };
 };
 
-export const Reducer = (state: State, action: Action): State => {
-    switch (action.type) {
-        case INIT_COMMENTS:
-            if (action.comments) {
-                state.comments = action.comments;
-            }
-            break;
-        case ADD_COMMENT:
-            if (action.comment) {
-                state.comments = [...state.comments, action.comment];
-            }
-            break;
-        case DELETE_COMMENT:
-            if (action.commentIndex) {
-                state.comments = [
-                    ...state.comments.slice(0, action.commentIndex),
-                    ...state.comments.slice(action.commentIndex + 1)
-                ];
-            }
-            break;
+export const Reducer = (state?: State, action?: Action): State => {
+    if (!state) {
+        return {
+            comments: [],
+        };
+    }
+    if (action) {
+        switch (action.type) {
+            case INIT_COMMENTS:
+                if (action.comments) {
+                    state.comments = action.comments;
+                }
+                break;
+            case ADD_COMMENT:
+                if (action.comment) {
+                    state.comments = [...state.comments, action.comment];
+                }
+                break;
+            case DELETE_COMMENT:
+                if (action.commentIndex) {
+                    state.comments = [
+                        ...state.comments.slice(0, action.commentIndex),
+                        ...state.comments.slice(action.commentIndex + 1)
+                    ];
+                }
+                break;
+        }
     }
     return state;
 };
