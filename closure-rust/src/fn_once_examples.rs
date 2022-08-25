@@ -24,7 +24,23 @@ pub fn test_case_1() {
     println!("===== fn_once_examples::test_case_1 ended =====");
 }
 
+pub fn test_case_3() {
+    println!("===== fn_once_examples::test_case_3 starts =====");
+    let mut e = E { a: "hello".to_string() };
+    let f = || {
+        println!("fn once closure called: {:?}", e);
+        e.a = "changed in fn_once".to_string();
+        println!("fn once closure called: {:?}", e);
+    };
+    fn_once(f);
+    println!("after fn once closure finished: e = {:?}", e);
+    println!("===== fn_once_examples::test_case_3 ended =====");
+}
+
 /**
+ * 结论（Updated at Aug 25, 2022）
+ * 1. 如果没有 move，e 的所有权不会变
+ * 
  * 结果如下，可以看到在使用 move 之后 E 的所有权被移动到 fn_once 中了，
  * 所以在 fn_once 退出之后 E 就被销毁了。
  * 
@@ -50,5 +66,6 @@ pub fn test_case_2() {
         println!("fn once closure called: {:?}", e);
     };
     fn_once(f);
+    // println!("after fn once closure finished: e = {:?}", e);
     println!("===== fn_once_examples::test_case_2 ended =====");
 }
