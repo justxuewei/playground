@@ -11,7 +11,7 @@ pub fn run() {
     // err 1:
     // cannot move out of `*immut_mut_int` which is behind a shared reference
     // move occurs because `*immut_mut_int` has type `&mut i32`, which does not
-    // implement the `Copy` trait 
+    // implement the `Copy` trait
     // let deref_immut_mut_int = *immut_mut_int;
 
     // err 2:
