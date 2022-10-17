@@ -39,3 +39,15 @@ message User {
   string id = 2;
   int32 age = 3;
 }
+
+service Echo {
+  rpc Ping (EchoRequest) returns (EchoResponse) {}
+}
+
+message EchoRequest {
+  string id = 1;
+}
+
+message EchoResponse {
+  string data = 1;
+}

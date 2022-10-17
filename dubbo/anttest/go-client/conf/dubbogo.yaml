@@ -5,3 +5,7 @@ dubbo:
         protocol: tri
         url: "tri://localhost:20000"
         interface: "" # read from pb
+      EchoClientImpl:
+        protocol: tri
+        url: "tri://localhost:20000"
+        interface: ""

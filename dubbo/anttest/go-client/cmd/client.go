@@ -30,10 +30,12 @@ import (
 )
 
 var grpcGreeterImpl = new(api.GreeterClientImpl)
+var echoImpl = new(api.EchoClientImpl)
 
-// export DUBBO_GO_CONFIG_PATH= PATH_TO_SAMPLES/helloworld/go-client/conf/dubbogo.yaml
+// export DUBBO_GO_CONFIG_PATH=$(pwd)/conf/dubbogo.yaml
 func main() {
 	config.SetConsumerService(grpcGreeterImpl)
+	config.SetConsumerService(echoImpl)
 	if err := config.Load(); err != nil {
 		panic(err)
 	}
@@ -47,4 +49,13 @@ func main() {
 		logger.Error(err)
 	}
 	logger.Infof("client response result: %v\n", reply)
+
+	echoReq := &api.EchoRequest{
+		Id: "ant",
+	}
+	echoReply, err := echoImpl.Ping(context.Background(), echoReq)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infof("echo response result: %v\n", echoReply)
 }

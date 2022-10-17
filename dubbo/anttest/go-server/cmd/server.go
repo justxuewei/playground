@@ -19,14 +19,14 @@ package main
 
 import (
 	"context"
-)
 
-import (
+	"dubbo.apache.org/dubbo-go/v3/common"
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
 	"dubbo.apache.org/dubbo-go/v3/config"
-	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"helloworld/api"
+
+	_ "dubbo.apache.org/dubbo-go/v3/imports"
 )
 
 type GreeterProvider struct {
@@ -38,9 +38,22 @@ func (s *GreeterProvider) SayHello(ctx context.Context, in *api.HelloRequest) (*
 	return &api.User{Name: "Hello " + in.Name, Id: "12345", Age: 21}, nil
 }
 
-// export DUBBO_GO_CONFIG_PATH= PATH_TO_SAMPLES/helloworld/go-server/conf/dubbogo.yaml
+var _ common.TriplePBService = (*EchoServer)(nil)
+
+type EchoServer struct {
+	api.UnimplementedEchoServer
+}
+
+func (s *EchoServer) Ping(ctx context.Context, in *api.EchoRequest) (*api.EchoResponse, error) {
+	return &api.EchoResponse{
+		Data: "pong",
+	}, nil
+}
+
+// export DUBBO_GO_CONFIG_PATH=$(pwd)/conf/dubbogo.yaml
 func main() {
 	config.SetProviderService(&GreeterProvider{})
+	config.SetProviderService(&EchoServer{})
 	if err := config.Load(); err != nil {
 		panic(err)
 	}

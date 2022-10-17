@@ -5,5 +5,7 @@ dubbo:
       port: 20000
   provider:
     services:
-      GreeterProvider:
-        interface: "" # read from pb
+      # GreeterProvider:
+      #   interface: "" # read from pb
+      EchoServer:
+        interface: ""
