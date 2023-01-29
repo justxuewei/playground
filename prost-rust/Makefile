@@ -1,3 +1,7 @@
+.PHONY: build
+build:
+	@cd example && cargo build
+
 .PHONY: run
 run:
 	@cd example && cargo run

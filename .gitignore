@@ -1,3 +1,6 @@
+prost-rust/example/src/proto
+!prost-rust/example/src/proto/mod.rs
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
