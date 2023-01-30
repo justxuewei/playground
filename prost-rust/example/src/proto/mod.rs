@@ -1,2 +1,1 @@
-mod example;
-pub use example;
+include!("example.rs");
