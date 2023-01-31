@@ -13,4 +13,5 @@ Contents
 - netlink-go: vishvananda/netlink examples
 - mutex-rust: mutex tests for rust
 - async-await-rust: async examples written in rust 
-
+- proc-macro-rust: an example of procedural macro, please refer to a series of guides from [the Zhihu](https://zhuanlan.zhihu.com/p/342408254).
+- prost-rust: an example of proto generator with prost crate.
