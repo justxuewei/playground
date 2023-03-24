@@ -15,3 +15,4 @@ Contents
 - async-await-rust: async examples written in rust 
 - proc-macro-rust: an example of procedural macro, please refer to a series of guides from [the Zhihu](https://zhuanlan.zhihu.com/p/342408254).
 - prost-rust: an example of proto generator with prost crate.
+- channel-rust: an example of channel in Rust
