@@ -10,10 +10,11 @@ Contents
 - fp-rust: functional programming in Rust.
 - dubbo:
 	- generic-nacos-go-client-java-server: generic service sample with a go client and a java server.
-- netlink-go: vishvananda/netlink examples
-- mutex-rust: mutex tests for rust
-- async-await-rust: async examples written in rust 
+- netlink-go: vishvananda/netlink examples.
+- mutex-rust: mutex tests in Rust.
+- async-await-rust: async examples written in Rust. 
 - proc-macro-rust: an example of procedural macro, please refer to a series of guides from [the Zhihu](https://zhuanlan.zhihu.com/p/342408254).
 - prost-rust: an example of proto generator with prost crate.
-- channel-rust: an example of channel in Rust
-- netlink-route-c: get routes by netlink written in C
+- channel-rust: an example of channel in Rust.
+- netlink-route-c: get routes by netlink written in C.
+- serde-rust: examples of serde in Rust.
