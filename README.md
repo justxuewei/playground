@@ -18,3 +18,4 @@ Contents
 - channel-rust: an example of channel in Rust.
 - netlink-route-c: get routes by netlink written in C.
 - serde-rust: examples of serde in Rust.
+- phantom-rust: examples of phantom
