@@ -5,7 +5,7 @@ pub struct Foo4<T: Debug> {
     name: *mut T,
     // 告诉编译器 Foo4::drop() 一定会访问堆上的 T 这个类型的，也就是 T 的生命周
     // 期应该严格长于 Foo4
-    // 如果 T 拥有自定义的drop函数，那么编译器仍然要T strictly outlive Foo。
+    // 如果 T 拥有自定义的 drop 函数，那么编译器仍然要 T strictly outlive Foo4。
     _mark: PhantomData<T>,
 }
 
@@ -32,11 +32,11 @@ unsafe impl<#[may_dangle] T: Debug> Drop for Foo4<T> {
 }
 
 #[derive(Debug)]
-pub struct Bad4<T: Debug>(pub T);
+pub struct Bar4<T: Debug>(pub T);
 
 // 如果把这段代码注释掉，则 phontam4 可以正常编译
 // why？？？
-impl<T: Debug> Drop for Bad4<T> {
+impl<T: Debug> Drop for Bar4<T> {
     fn drop(&mut self) {
         println!("Bad4 is going to be dropped");
         println!("{:?}", self.0);

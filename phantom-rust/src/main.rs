@@ -5,8 +5,8 @@
 
 // use phantom1::Foo1;
 use phantom2::Foo2;
-use phantom3::{Bad3, Foo3};
-use phantom4::{Bad4, Foo4};
+use phantom3::{Bar3, Foo3};
+use phantom4::{Bar4, Foo4};
 
 mod phantom1;
 // using #[may_dangle]
@@ -59,16 +59,16 @@ fn main() {
     // Bad3 dropped
     // Foo3 dropped
     // **************************
-    let _a;
-    let _s = "evil dog".to_owned();
-    let _b = Bad3(&_s);
-    _a = Foo3::new(_b);
+    // let _a;
+    // let _s = "evil dog".to_owned();
+    // let _b = Bar3(&_s);
+    // _a = Foo3::new(_b);
 
     // --> phantom4
     // 无法编译，因为要求 Bad4 的生命周期应该严格长于 Foo4
-    // let _a;
-    // let _s = "evil dog".to_owned();
-    // let _b = Bad4(&_s);
-    // // _b move to _a, _b 的生命周期比 _a 小
-    // _a = Foo4::new(_b);
+    let _a;
+    let _s = "evil dog".to_owned();
+    let _b = Bar4(&_s);
+    // _b move to _a, _b 的生命周期比 _a 小
+    _a = Foo4::new(_b);
 }

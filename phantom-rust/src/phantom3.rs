@@ -22,9 +22,9 @@ unsafe impl<#[may_dangle] T: Debug> Drop for Foo3<T> {
 }
 
 #[derive(Debug)]
-pub struct Bad3<T: Debug>(pub T);
+pub struct Bar3<T: Debug>(pub T);
 
-impl<T: Debug> Drop for Bad3<T> {
+impl<T: Debug> Drop for Bar3<T> {
     fn drop(&mut self) {
         println!("Bad3 is going to be dropped");
         println!("{:?}", self.0);
