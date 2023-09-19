@@ -12,11 +12,13 @@ pub struct GpuMetrics {
     mem_util: u32,
 }
 
-pub fn gpu_metrics(index: u32) -> Result<GpuMetrics> {
+pub fn init_nvml() -> Result<Nvml> {
     let mut nvml_builder = Nvml::builder();
     nvml_builder.lib_path(OsStr::new(NVML_LIB));
-    let nvml = nvml_builder.init().context("nvml init")?;
+    nvml_builder.init().context("nvml init")
+}
 
+pub fn gpu_metrics(nvml: &Nvml, index: u32) -> Result<GpuMetrics> {
     let device = nvml.device_by_index(index).context("get gpu device")?;
 
     let util = device.utilization_rates().context("get utilization")?;

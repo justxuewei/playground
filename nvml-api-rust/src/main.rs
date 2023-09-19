@@ -1,7 +1,10 @@
 mod nvml;
 
 fn main() {
-    println!("Nvml wrapper example app.");
-    let gpu_metrics = nvml::gpu_metrics(0).unwrap();
-    println!("{:?}", serde_json::to_string(&gpu_metrics).unwrap());
+    let nvml = nvml::init_nvml().unwrap();
+
+    for _ in 0..1000000 {
+        let gpu_metrics = nvml::gpu_metrics(&nvml, 0).unwrap();
+        println!("{:?}", serde_json::to_string(&gpu_metrics).unwrap());
+    }
 }
