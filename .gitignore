@@ -1,3 +1,6 @@
+.vscode
+.idea
+
 prost-rust/example/src/proto
 !prost-rust/example/src/proto/mod.rs
 
