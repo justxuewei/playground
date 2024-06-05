@@ -1,4 +1,4 @@
-use std::{mem, slice};
+use std::{ffi::CString, mem, slice};
 
 use anyhow::{anyhow, Result};
 
@@ -17,6 +17,17 @@ fn main() {
     let bytes = [0xd2, 0x04, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00];
     call_service_handler(&bytes, Box::new(test1));
     call_service_handler(&bytes, Box::new(test2));
+
+    let name = CString::new("xavier").unwrap();
+    let ping_request = PingRequest {
+        name: cstring_to_u8_128(name).unwrap(),
+    };
+    let ping_request_data = c_plain_struct_serialize(&ping_request).unwrap();
+    println!(
+        "ping_request: size: {}, data: {:?}",
+        mem::size_of::<PingRequest>(),
+        ping_request_data
+    );
 }
 
 pub trait CStructSerializer {
@@ -49,11 +60,30 @@ where
     Ok(t.clone())
 }
 
+fn cstring_to_u8_128(input: CString) -> Result<[u8; 128]> {
+    let mut array = [0; 128];
+    let bytes = input.into_bytes();
+    if bytes.len() >= 128 {
+        return Err(anyhow!("Too long"));
+    }
+    for (i, &byte) in bytes.iter().enumerate() {
+        array[i] = byte;
+    }
+    array[bytes.len()] = b'\0'; // Add null terminator
+    Ok(array)
+}
+
 #[repr(C)]
 #[derive(Clone, Debug)]
 struct MyStruct {
     my_int: u32,
     my_bool: bool,
+}
+
+#[repr(C)]
+#[derive(Clone, Debug)]
+struct PingRequest {
+    name: [u8; 128],
 }
 
 impl CStructSerializer for MyStruct {
