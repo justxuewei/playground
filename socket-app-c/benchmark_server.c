@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
+#include <time.h>
 
 long long get_time_in_microseconds()
 {
@@ -29,6 +30,9 @@ int main(int argc, char *argv[])
 	struct sockaddr_in server_addr, client_addr;
 	socklen_t client_addr_size;
 	char *data;
+	struct timeval tv;
+	struct tm *tm_now;
+	char formatted_time[24];
 
 	// Create simulated data
 	data = malloc(data_size_kb * 1024);
@@ -45,6 +49,14 @@ int main(int argc, char *argv[])
 		perror("error on creating socket");
 		err = -1;
 		goto out_data;
+	}
+
+	int optval = 1;
+	if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &optval,
+		       sizeof(optval)) == -1) {
+		perror("error on setting SO_REUSEADDR");
+		err = -1;
+		goto out_server;
 	}
 
 	memset(&server_addr, 0, sizeof(server_addr));
@@ -76,11 +88,21 @@ int main(int argc, char *argv[])
 
 	// Send data N times and record time
 	for (int i = 0; i < rounds; i++) {
+		snprintf(data, 11, "%010d", i);
+		data[10] = 'A';
 		if (write(client_sock, data, data_size_kb * 1024) == -1) {
 			perror("error on writing");
 			err = -1;
 			goto out_client;
 		}
+
+		gettimeofday(&tv, NULL);
+		tm_now = localtime(&tv.tv_sec);
+		strftime(formatted_time, sizeof(formatted_time), "%H:%M:%S",
+			 tm_now);
+
+		printf("%s.%06ld - Round %d: sending completed\n",
+		       formatted_time, tv.tv_usec, (i + 1));
 	}
 
 	// Close sockets
@@ -88,6 +110,11 @@ out_client:
 	close(client_sock);
 out_server:
 	close(server_sock);
+	gettimeofday(&tv, NULL);
+	tm_now = localtime(&tv.tv_sec);
+	strftime(formatted_time, sizeof(formatted_time), "%H:%M:%S", tm_now);
+	printf("%s.%06ld - server_sock closed\n", formatted_time, tv.tv_usec);
+
 out_data:
 	free(data);
 

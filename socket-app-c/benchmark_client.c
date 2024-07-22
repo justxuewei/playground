@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
+#include <time.h>
 
 void error_handling(const char *message)
 {
@@ -31,12 +32,19 @@ int main(int argc, char *argv[])
 
 	int sock;
 	struct sockaddr_in server_addr;
-	char *buffer;
+	char *buffer, *data;
+	struct timeval tv;
+	struct tm *tm_now;
+	char formatted_time[24];
 
 	// Create buffer for receiving data
 	buffer = malloc(data_size_kb * 1024);
 	if (buffer == NULL) {
-		error_handling("malloc() error");
+		error_handling("malloc buffer error");
+	}
+	data = malloc(data_size_kb * 1024);
+	if (data == NULL) {
+		error_handling("malloc data error");
 	}
 
 	// Create socket
@@ -58,23 +66,37 @@ int main(int argc, char *argv[])
 
 	// Receive data and record time
 	long long total_bytes_received = 0, total_time_elapsed = 0, start_time;
-	int rounds = 0, recv_len, next_round = 0, total_recv_len;
+	int rounds = 0, recv_len, eof_offset = 0, total_recv_len;
 
 	start_time = get_time_in_microseconds();
 	while (1) {
 		long long __start_time;
-		total_recv_len = next_round;
+
+		// reset data
+		memset(data, 0, data_size_kb * 1024);
+		if (eof_offset > 0) {
+			memcpy(data, buffer + eof_offset,
+			       recv_len - eof_offset);
+			total_recv_len = (recv_len - eof_offset);
+		} else {
+			total_recv_len = 0;
+		}
+
 		while ((recv_len = read(sock, buffer, data_size_kb * 1024)) >
 		       0) {
 			int i;
+
 			for (i = 0; i < recv_len; i++) {
 				if (buffer[i] == '\0') {
-					next_round = recv_len - (i + 1);
-					total_recv_len += (i + 1);
+					eof_offset = (i + 1);
+					memcpy(data, buffer + total_recv_len,
+					       eof_offset);
+					total_recv_len += eof_offset;
 					goto out_loop;
 				}
 			}
 
+			memcpy(data, buffer + total_recv_len, recv_len);
 			total_recv_len += recv_len;
 		}
 
@@ -95,8 +117,16 @@ out_loop:
 		double speed = (total_recv_len / (1024.0 * 1024)) /
 			       elapsed_time_in_seconds; // Unit: MB/s
 
-		printf("Round %d: Time = %lld us (%.6f s), Speed = %.6f MB/s, Bytes received = %.2f KB\n",
-		       ++rounds, elapsed_time, elapsed_time_in_seconds, speed,
+		sscanf(data, "%10d", &rounds);
+
+		gettimeofday(&tv, NULL);
+		tm_now = localtime(&tv.tv_sec);
+		strftime(formatted_time, sizeof(formatted_time),
+			 "%H:%M:%S", tm_now);
+
+		printf("%s.%06ld - Round %d: Time = %lld us (%.6f s), Speed = %.6f MB/s, Bytes received = %.2f KB\n",
+		       formatted_time, tv.tv_usec, (rounds + 1),
+		       elapsed_time, elapsed_time_in_seconds, speed,
 		       (total_recv_len / 1024.0));
 
 		total_bytes_received += total_recv_len;
@@ -112,6 +142,7 @@ out_loop:
 	// Close socket and free buffer
 	close(sock);
 	free(buffer);
+	free(data);
 
 	return 0;
 }
