@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
 	}
 
 	// Receive data and record time
-	long long total_bytes_received = 0, total_time_elapsed = 0, start_time, end_time;
+	long long total_bytes_received = 0, total_time_elapsed = 0, start_time,
+		  end_time;
 	int rounds = 0, recv_len, eof_offset = 0, total_recv_len;
 
 	start_time = get_time_in_microseconds();
@@ -80,8 +81,16 @@ int main(int argc, char *argv[])
 			total_recv_len = 0;
 		}
 
+		struct timeval start, end;
+		long duration;
+		gettimeofday(&start, NULL);
 		while ((recv_len = read(sock, buffer, data_size_kb * 1024)) >
 		       0) {
+			gettimeofday(&end, NULL);
+			duration = (end.tv_sec - start.tv_sec) * 1000000L + (end.tv_usec - start.tv_usec);
+
+            printf("recv_len: %d, took %ld us\n", recv_len, duration);
+
 			int i;
 
 			for (i = 0; i < recv_len; i++) {
@@ -96,6 +105,7 @@ int main(int argc, char *argv[])
 
 			memcpy(data + total_recv_len, buffer, recv_len);
 			total_recv_len += recv_len;
+            gettimeofday(&start, NULL);
 		}
 
 out_loop:
@@ -109,8 +119,8 @@ out_loop:
 
 		gettimeofday(&tv, NULL);
 		tm_now = localtime(&tv.tv_sec);
-		strftime(formatted_time, sizeof(formatted_time),
-			 "%H:%M:%S", tm_now);
+		strftime(formatted_time, sizeof(formatted_time), "%H:%M:%S",
+			 tm_now);
 
 		printf("%s.%06ld - Round %d: Bytes received = %.2f KB\n",
 		       formatted_time, tv.tv_usec, (rounds + 1),
@@ -119,8 +129,8 @@ out_loop:
 		total_bytes_received += total_recv_len;
 	}
 
-    end_time = get_time_in_microseconds();
-    total_time_elapsed = end_time - start_time;
+	end_time = get_time_in_microseconds();
+	total_time_elapsed = end_time - start_time;
 
 	double average_speed = (total_bytes_received / (1024.0 * 1024)) /
 			       (total_time_elapsed / 1000000.0); // Unit: MB/s
