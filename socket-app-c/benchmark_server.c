@@ -51,14 +51,6 @@ int main(int argc, char *argv[])
 		goto out_data;
 	}
 
-	int optval = 1;
-	if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &optval,
-		       sizeof(optval)) == -1) {
-		perror("error on setting SO_REUSEADDR");
-		err = -1;
-		goto out_server;
-	}
-
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(ip);
