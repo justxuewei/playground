@@ -30,12 +30,14 @@ int main(int argc, char *argv[])
 	int port = atoi(argv[2]);
 	int data_size_kb = atoi(argv[3]);
 
-	int sock;
+	int sock, recv_len, total_recv_len, rounds;
 	struct sockaddr_in server_addr;
 	char *buffer, *data;
 	struct timeval tv;
 	struct tm *tm_now;
 	char formatted_time[24];
+	long long start_time, end_time, total_bytes_received = 0,
+					total_time_elapsed = 0;
 
 	// Create buffer for receiving data
 	buffer = malloc(data_size_kb * 1024);
@@ -47,80 +49,56 @@ int main(int argc, char *argv[])
 		error_handling("malloc data error");
 	}
 
-	// Create socket
-	sock = socket(PF_INET, SOCK_STREAM, 0);
-	if (sock == -1) {
-		error_handling("socket() error");
-	}
-
-	memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = inet_addr(ip);
-	server_addr.sin_port = htons(port);
-
-	// Connect to server
-	if (connect(sock, (struct sockaddr *)&server_addr,
-		    sizeof(server_addr)) == -1) {
-		error_handling("connect() error");
-	}
-
-	// Receive data and record time
-	long long total_bytes_received = 0, total_time_elapsed = 0, start_time, end_time;
-	int rounds = 0, recv_len, eof_offset = 0, total_recv_len;
-
-	start_time = get_time_in_microseconds();
 	while (1) {
-		// reset data
-		memset(data, 0, data_size_kb * 1024);
-		if (eof_offset > 0) {
-			memcpy(data, buffer + eof_offset,
-			       recv_len - eof_offset);
-			total_recv_len = (recv_len - eof_offset);
-		} else {
-			total_recv_len = 0;
+		// Create socket
+		sock = socket(AF_INET, SOCK_STREAM, 0);
+		if (sock == -1) {
+			error_handling("socket() error");
 		}
+
+		memset(&server_addr, 0, sizeof(server_addr));
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_addr.s_addr = inet_addr(ip);
+		server_addr.sin_port = htons(port);
+
+		if (connect(sock, (struct sockaddr *)&server_addr,
+			    sizeof(server_addr)) == -1) {
+			perror("error on connecting");
+			break;
+		}
+
+		start_time = get_time_in_microseconds();
+		// Reset
+		memset(data, 0, data_size_kb * 1024);
+		total_recv_len = 0;
 
 		while ((recv_len = read(sock, buffer, data_size_kb * 1024)) >
 		       0) {
-			int i;
-
-			for (i = 0; i < recv_len; i++) {
-				if (buffer[i] == '\0') {
-					eof_offset = (i + 1);
-					memcpy(data + total_recv_len, buffer,
-					       eof_offset);
-					total_recv_len += eof_offset;
-					goto out_loop;
-				}
-			}
-
-			memcpy(data + total_recv_len, buffer, recv_len);
+			memcpy(data, buffer + total_recv_len, recv_len);
 			total_recv_len += recv_len;
 		}
 
-out_loop:
-		if (recv_len == -1) {
-			error_handling("read() error");
-		} else if (recv_len == 0) {
-			break; // No more data
-		}
+		end_time = get_time_in_microseconds();
+
+		long long elapsed_time =
+			end_time - start_time; // Unit: microseconds
 
 		sscanf(data, "%10d", &rounds);
 
 		gettimeofday(&tv, NULL);
 		tm_now = localtime(&tv.tv_sec);
-		strftime(formatted_time, sizeof(formatted_time),
-			 "%H:%M:%S", tm_now);
+		strftime(formatted_time, sizeof(formatted_time), "%H:%M:%S",
+			 tm_now);
 
 		printf("%s.%06ld - Round %d: Bytes received = %.2f KB\n",
 		       formatted_time, tv.tv_usec, (rounds + 1),
 		       (total_recv_len / 1024.0));
 
 		total_bytes_received += total_recv_len;
-	}
+		total_time_elapsed += elapsed_time;
 
-    end_time = get_time_in_microseconds();
-    total_time_elapsed = end_time - start_time;
+		close(sock);
+	}
 
 	double average_speed = (total_bytes_received / (1024.0 * 1024)) /
 			       (total_time_elapsed / 1000000.0); // Unit: MB/s
@@ -128,8 +106,6 @@ out_loop:
 	       (total_bytes_received / 1024.0), total_time_elapsed,
 	       average_speed);
 
-	// Close socket and free buffer
-	close(sock);
 	free(buffer);
 	free(data);
 
