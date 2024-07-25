@@ -81,15 +81,15 @@ int main(int argc, char *argv[])
 			total_recv_len = 0;
 		}
 
-		struct timeval start, end;
-		long duration;
-		gettimeofday(&start, NULL);
+		// struct timeval start, end;
+		// long duration;
+		// gettimeofday(&start, NULL);
 		while ((recv_len = read(sock, buffer, data_size_kb * 1024)) >
 		       0) {
-			gettimeofday(&end, NULL);
-			duration = (end.tv_sec - start.tv_sec) * 1000000L + (end.tv_usec - start.tv_usec);
+			// gettimeofday(&end, NULL);
+			// duration = (end.tv_sec - start.tv_sec) * 1000000L + (end.tv_usec - start.tv_usec);
 
-            printf("recv_len: %d, took %ld us\n", recv_len, duration);
+            // printf("recv_len: %d, took %ld us\n", recv_len, duration);
 
 			int i;
 
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
 			memcpy(data + total_recv_len, buffer, recv_len);
 			total_recv_len += recv_len;
-            gettimeofday(&start, NULL);
+            // gettimeofday(&start, NULL);
 		}
 
 out_loop:
