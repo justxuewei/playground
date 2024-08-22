@@ -1,69 +1,94 @@
-#include <arpa/inet.h>
-#include <linux/vm_sockets.h>
-#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 
-#define BUFSIZE 1024
+#define DATA_SIZE 32768
+#define NUM_MESSAGES 100
 
-int main(int argc, char **argv)
-{
-	if (argc != 3) {
-		printf("Usage: %s {ip} {port}\n", argv[0]);
-		return 1;
-	}
+void generate_data(char *buffer, int size) {
+    int offset = 0;
+    for (int i = 1; offset < size; i++) {
+        offset += snprintf(buffer + offset, size - offset, "%d", i);
+    }
+}
 
-	int sockfd, n, err;
-	size_t addr_len;
-	char buf[BUFSIZE], *client_ip;
-	uint32_t server_ip, server_port;
-	struct sockaddr_in server_addr, client_addr;
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Usage: %s <Server IP> <Server Port>\n", argv[0]);
+        return -1;
+    }
 
-	// convert ip and port string to int
-	inet_pton(AF_INET, argv[1], &server_ip);
-	server_port = atoi(argv[2]);
+    const char *server_ip = argv[1];
+    int server_port = atoi(argv[2]);
 
-	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-		perror("socket failed");
-		return sockfd;
-	}
+    int sockfd, rcvbuf = DATA_SIZE;
+    struct sockaddr_in server_addr, client_addr;
 
-	memset(&server_addr, 0, sizeof(struct sockaddr_in));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(server_port);
-	server_addr.sin_addr.s_addr = server_ip;
+    // 创建UDP socket
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
 
-	if ((err = bind(sockfd, (struct sockaddr *)&server_addr,
-			sizeof(struct sockaddr_in))) < 0) {
-		perror("bind failed");
-		return err;
-	}
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &rcvbuf, sizeof(int)) < 0) {
+        perror("setsockopt failed");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
 
-	printf("bound at %s:%s\n", argv[1], argv[2]);
+    memset(&server_addr, 0, sizeof(server_addr));
+    memset(&client_addr, 0, sizeof(client_addr));
 
-	memset(&client_addr, 0, sizeof(struct sockaddr_in));
-	addr_len = sizeof(struct sockaddr_in);
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(server_port);
+    server_addr.sin_addr.s_addr = inet_addr(server_ip);
 
-	memset(buf, 0, BUFSIZE);
-	printf("waiting for a message to arrive...\n");
-	n = recvfrom(sockfd, buf, BUFSIZE, MSG_WAITALL,
-		     (struct sockaddr *)&client_addr, (socklen_t *)&addr_len);
-	if (n >= BUFSIZE) {
-		perror("buffer overflow");
-		return -1;
-	} else if (n < 0) {
-		perror("recvfrom failed");
-		return n;
-	}
-	
-	buf[n] = '\0';
-	client_ip = inet_ntoa(client_addr.sin_addr);
-	printf("received %d bytes from \"%s:%d\":\n%s\n", n, client_ip,
-	       client_addr.sin_port, buf);
+    if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("bind failed");
+        close(sockfd);
+        return -1;
+    }
 
-	return 0;
+    char buffer[DATA_SIZE];
+    char expected_data[DATA_SIZE];
+    socklen_t addr_len = sizeof(client_addr);
+
+    for (int i = 0; i < NUM_MESSAGES; i++) {
+        memset(buffer, 0, DATA_SIZE);
+        memset(expected_data, 0, DATA_SIZE);
+        generate_data(expected_data, DATA_SIZE);
+
+        int total_bytes_received = 0;
+        while (total_bytes_received < DATA_SIZE) {
+            int n = recvfrom(sockfd, buffer + total_bytes_received, DATA_SIZE - total_bytes_received, 0, (struct sockaddr *)&client_addr, &addr_len);
+            if (n < 0) {
+                perror("recvfrom failed");
+                close(sockfd);
+                return -1;
+            } else if (n == 0) {
+                printf("No more data to receive. Ending reception.\n");
+                break;
+            }
+            printf("recv %d bytes\n", n);
+            total_bytes_received += n;
+        }
+
+        printf("recv %d bytes, expected recv %d bytes\n", total_bytes_received, DATA_SIZE);
+
+        if (total_bytes_received != DATA_SIZE) {
+            exit(1);
+        }
+
+        if (memcmp(buffer, expected_data, DATA_SIZE) == 0) {
+            printf("Message %d received correctly. Total bytes received: %d\n", i + 1, total_bytes_received);
+        } else {
+            printf("Message %d received incorrectly. Total bytes received: %d\n", i + 1, total_bytes_received);
+            exit(1);
+        }
+    }
+
+    close(sockfd);
+    return 0;
 }
