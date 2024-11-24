@@ -2,6 +2,7 @@ package name.nxw;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -62,7 +63,7 @@ public class App {
             System.out.printf("\n");
             System.out.printf("Host\t\tAddress\n");
             System.out.printf("%s\t%s\n", hostname, Arrays.toString(addresses));
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error resolving hostname: " + e.getMessage());
         }
     }
@@ -72,12 +73,15 @@ public class App {
         InetAddress inetAddress = InetAddress.getByName("baidu.com");
         return new String[] { inetAddress.getHostAddress() };
     }
-    
+
     private static String[] resolveHostnameUsingDnsjava(String hostname, String dnsServer) throws IOException {
         SimpleResolver resolver = new SimpleResolver(dnsServer);
         Lookup lookup = new Lookup(hostname, Type.A);
         lookup.setResolver(resolver);
         Record[] records = lookup.run();
+        if (records == null) {
+            throw new UnknownHostException ("Hostname not found");
+        }
         String[] addresses = Arrays.stream(records).map(record -> {
             ARecord aRecord = (ARecord) record;
             return aRecord.getAddress().getHostAddress();
