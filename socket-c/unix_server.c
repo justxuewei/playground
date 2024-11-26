@@ -7,24 +7,50 @@
 
 #define BUFSIZE 1024
 
+socklen_t init_sockaddr_un(struct sockaddr_un *sun, char *path,
+			   int use_abs_path)
+{
+	socklen_t len = sizeof(*sun);
+	size_t copied_len = 0;
+
+	memset(sun, 0, sizeof(*sun));
+
+	sun->sun_family = AF_UNIX;
+
+	if (use_abs_path) {
+		copied_len = strnlen(path, sizeof(sun->sun_path) - 2);
+		strncpy(sun->sun_path + 1, path, copied_len);
+		len -= (108 - copied_len - 1);
+	} else {
+		copied_len = strnlen(path, sizeof(sun->sun_path) - 1);
+		strncpy(sun->sun_path, path, copied_len);
+		len -= (108 - copied_len);
+	}
+
+	return len;
+}
+
 int main(int argc, char **argv)
 {
-	int use_abs_path, server_fd, client_fd, n;
-	char path[108];
+	int use_abs_path, server_fd, client_fd, n, err = 0;
+	char *path = NULL;
 	struct sockaddr_un server_addr, client_addr;
 	char buf[BUFSIZE];
-	socklen_t client_addr_len = sizeof(client_addr);
+	socklen_t server_addr_len, client_addr_len = sizeof(client_addr);
 
 	if (argc == 2) {
+		path = argv[1];
 		use_abs_path = 0;
-		strcpy(path, argv[1]);
 	} else if (argc == 3) {
-		if (strcmp(argv[1], "-a"))
-			goto out;
+		if (strcmp(argv[1], "-a")) {
+			err = -1;
+			goto printusage;
+		}
 		use_abs_path = 1;
-		strcpy(path, argv[2]);
+		path = argv[2];
 	} else {
-		goto out;
+		err = -1;
+		goto printusage;
 	}
 
 	if ((server_fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {
@@ -32,32 +58,21 @@ int main(int argc, char **argv)
 		return server_fd;
 	}
 
-	memset(&server_addr, 0, sizeof(struct sockaddr_un));
-	server_addr.sun_family = AF_UNIX;
-	if (use_abs_path) {
-		server_addr.sun_path[0] = 0;
-		strncpy(server_addr.sun_path + 1, path,
-			sizeof(server_addr.sun_path) - 2);
-		server_addr.sun_path[strlen(path) + 2] = 0;
-	} else {
-		strncpy(server_addr.sun_path, path,
-			sizeof(server_addr.sun_path) - 1);
-	}
+	server_addr_len = init_sockaddr_un(&server_addr, path, use_abs_path);
 
 	if (!use_abs_path)
 		unlink(path); // 删除已存在的 socket 文件
 
-	if (bind(server_fd, (struct sockaddr *)&server_addr,
-		 sizeof(struct sockaddr_un)) < 0) {
+	err = bind(server_fd, (struct sockaddr *)&server_addr, server_addr_len);
+	if (err < 0) {
 		perror("bind failed");
-		close(server_fd);
-		return -1;
+		goto closesvr;
 	}
 
-	if (listen(server_fd, 5) < 0) {
+	err = listen(server_fd, 5);
+	if (err < 0) {
 		perror("listen failed");
-		close(server_fd);
-		return -1;
+		goto closesvr;
 	}
 
 	if (use_abs_path)
@@ -68,17 +83,16 @@ int main(int argc, char **argv)
 	if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
 				&client_addr_len)) < 0) {
 		perror("accept failed");
-		close(server_fd);
-		return -1;
+		err = client_fd;
+		goto closeall;
 	}
 
 	memset(buf, 0, BUFSIZE);
 	n = recv(client_fd, buf, BUFSIZE, 0);
 	if (n < 0) {
 		perror("recv failed");
-		close(client_fd);
-		close(server_fd);
-		return -1;
+		err = n;
+		goto closeall;
 	}
 	printf("Received %d bytes from client:\n%s\n", n, buf);
 
@@ -86,20 +100,20 @@ int main(int argc, char **argv)
 	n = send(client_fd, buf, strlen(buf), 0);
 	if (n < 0) {
 		perror("send failed");
-		close(client_fd);
-		close(server_fd);
-		return n;
+		err = n;
+		goto closeall;
 	}
 	printf("Sent %d bytes to client:\n%s\n", n, buf);
 
+closeall:
 	close(client_fd);
+closesvr:
 	close(server_fd);
 	if (!use_abs_path)
-		unlink(path); // 删除 socket 文件
+		unlink(path);
+	return err;
 
-	return 0;
-
-out:
+printusage:
 	printf("Usage: %s [-a] {socket_path}\n", argv[0]);
-	return -1;
+	return err;
 }
