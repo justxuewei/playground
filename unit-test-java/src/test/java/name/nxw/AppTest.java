@@ -8,6 +8,8 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class AppTest extends TestCase {
+    private App app;
+
     /**
      * Create the test case
      *
@@ -15,6 +17,7 @@ public class AppTest extends TestCase {
      */
     public AppTest(String testName) {
         super(testName);
+        app = new App();
     }
 
     /**
@@ -29,5 +32,21 @@ public class AppTest extends TestCase {
      */
     public void testApp() {
         assertTrue(true);
+    }
+
+    public void testAdd() {
+        int a = 1;
+        int b = 2;
+        int result = app.add(a, b);
+        System.out.println("---" + Thread.currentThread().getName());
+        assertEquals(a + b, result);
+    }
+
+    public void testSubtract() {
+        int a = 1;
+        int b = 2;
+        int result = app.subtract(a, b);
+        System.out.println("---" + Thread.currentThread().getName());
+        assertEquals(a - b, result);
     }
 }
