@@ -3,7 +3,12 @@ package name.nxw;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
+import javax.naming.*;
+import javax.naming.directory.*;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -26,6 +31,7 @@ public class App {
         options.addOption("h", "hostname", true, "Hostname to resolve");
         options.addOption("d", "dns-server", true, "Custom DNS server");
         options.addOption("l", "lib", false, "Use dnsjava library");
+        options.addOption("j", "jndi", false, "Use JNDI library");
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -33,6 +39,7 @@ public class App {
         String hostname = "baidu.com";
         String dnsServer = "127.0.0.1";
         boolean useDnsjavaLib = false;
+        boolean useJndiLib = false;
 
         try {
             CommandLine cmd = parser.parse(options, args);
@@ -47,15 +54,22 @@ public class App {
             if (cmd.hasOption("lib")) {
                 useDnsjavaLib = true;
             }
+            if (cmd.hasOption("jndi")) {
+                useJndiLib = true;
+            }
         } catch (ParseException e) {
             System.err.println("Error on parsing options: " + e.getMessage());
             formatter.printHelp("CustomDNSWithCLI", options);
+
+            System.exit(1);
         }
 
         try {
             String[] addresses;
             if (useDnsjavaLib) {
                 addresses = resolveHostnameUsingDnsjava(hostname, dnsServer);
+            } else if (useJndiLib) {
+                addresses = resolveHostnameUsingJDNI(hostname, dnsServer);
             } else {
                 addresses = resolveHostname(hostname, dnsServer);
             }
@@ -65,12 +79,13 @@ public class App {
             System.out.printf("%s\t%s\n", hostname, Arrays.toString(addresses));
         } catch (IOException e) {
             System.err.println("Error resolving hostname: " + e.getMessage());
+            System.exit(1);
         }
     }
 
     private static String[] resolveHostname(String hostname, String dnsServer) throws IOException {
         logger.info("Using system DNS settings.");
-        InetAddress inetAddress = InetAddress.getByName("baidu.com");
+        InetAddress inetAddress = InetAddress.getByName(hostname);
         return new String[] { inetAddress.getHostAddress() };
     }
 
@@ -80,12 +95,52 @@ public class App {
         lookup.setResolver(resolver);
         Record[] records = lookup.run();
         if (records == null) {
-            throw new UnknownHostException ("Hostname not found");
+            throw new UnknownHostException("Hostname not found");
         }
         String[] addresses = Arrays.stream(records).map(record -> {
             ARecord aRecord = (ARecord) record;
             return aRecord.getAddress().getHostAddress();
         }).toArray(String[]::new);
         return addresses;
+    }
+
+
+    private static String[] resolveHostnameUsingJDNI(String hostname, String dnsServer) throws IOException{
+
+        Hashtable<String, String> env = new Hashtable<>();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
+
+        ArrayList<String> addresses = new ArrayList<>();
+
+        DirContext context = null;
+        try {
+        context = new InitialDirContext(env);
+        String[] recordTypes = { "A", "AAAA" };
+        Attributes attrs = context.getAttributes(hostname, recordTypes);
+
+        for (String recordType : recordTypes) {
+            Attribute attr = attrs.get(recordType);
+            if (attr != null) {
+                NamingEnumeration<?> values = attr.getAll();
+                while (values.hasMore()) {
+                    addresses.add(values.next().toString());
+                }
+            }
+        }
+    } catch(NameNotFoundException e) {
+        return new String[0];
+    } catch(NamingException e) {
+        throw new IOException(e);
+    } finally {
+        if (context != null) {
+            try {
+                context.close();
+            } catch (NamingException e) {
+                throw new IOException(e);
+            }
+        }
+    }
+
+        return addresses.stream().toArray(String[]::new);
     }
 }
