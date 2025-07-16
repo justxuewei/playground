@@ -29,33 +29,29 @@ public class App {
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption("h", "hostname", true, "Hostname to resolve");
-        options.addOption("d", "dns-server", true, "Custom DNS server");
         options.addOption("l", "lib", false, "Use dnsjava library");
         options.addOption("j", "jndi", false, "Use JNDI library");
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
 
-        String hostname = "baidu.com";
-        String dnsServer = "127.0.0.1";
+        String hostname = "private-test.com";
         boolean useDnsjavaLib = false;
         boolean useJndiLib = false;
+        String library = "inet address";
 
         try {
             CommandLine cmd = parser.parse(options, args);
-            String _hostname = cmd.getOptionValue("hostname");
-            if (_hostname != null) {
-                hostname = _hostname;
+            if (cmd.hasOption("h")) {
+                hostname = cmd.getOptionValue("h");
             }
-            String _dnsServer = cmd.getOptionValue("dns-server");
-            if (_dnsServer != null) {
-                dnsServer = _dnsServer;
-            }
-            if (cmd.hasOption("lib")) {
+            if (cmd.hasOption("l")) {
                 useDnsjavaLib = true;
+                library = "dns java";
             }
-            if (cmd.hasOption("jndi")) {
+            if (cmd.hasOption("j")) {
                 useJndiLib = true;
+                library = "jndi";
             }
         } catch (ParseException e) {
             System.err.println("Error on parsing options: " + e.getMessage());
@@ -64,17 +60,20 @@ public class App {
             System.exit(1);
         }
 
+        System.out.println("===== Java DNS Client =====");
+        System.out.printf("hostname: %s\n", hostname);
+        System.out.printf("library: %s\n", library);
+
         try {
             String[] addresses;
             if (useDnsjavaLib) {
-                addresses = resolveHostnameUsingDnsjava(hostname, dnsServer);
+                addresses = resolveHostnameUsingDnsjava(hostname);
             } else if (useJndiLib) {
-                addresses = resolveHostnameUsingJDNI(hostname, dnsServer);
+                addresses = resolveHostnameUsingJDNI(hostname);
             } else {
-                addresses = resolveHostname(hostname, dnsServer);
+                addresses = resolveHostname(hostname);
             }
-            System.out.printf("DNS Server\t%s\n", dnsServer);
-            System.out.printf("\n");
+            System.out.println("===== Result =====");
             System.out.printf("Host\t\tAddress\n");
             System.out.printf("%s\t%s\n", hostname, Arrays.toString(addresses));
         } catch (IOException e) {
@@ -83,14 +82,13 @@ public class App {
         }
     }
 
-    private static String[] resolveHostname(String hostname, String dnsServer) throws IOException {
-        logger.info("Using system DNS settings.");
+    private static String[] resolveHostname(String hostname) throws IOException {
         InetAddress inetAddress = InetAddress.getByName(hostname);
         return new String[] { inetAddress.getHostAddress() };
     }
 
-    private static String[] resolveHostnameUsingDnsjava(String hostname, String dnsServer) throws IOException {
-        SimpleResolver resolver = new SimpleResolver(dnsServer);
+    private static String[] resolveHostnameUsingDnsjava(String hostname) throws IOException {
+        SimpleResolver resolver = new SimpleResolver();
         Lookup lookup = new Lookup(hostname, Type.A);
         lookup.setResolver(resolver);
         Record[] records = lookup.run();
@@ -105,18 +103,19 @@ public class App {
     }
 
 
-    private static String[] resolveHostnameUsingJDNI(String hostname, String dnsServer) throws IOException{
+    private static String[] resolveHostnameUsingJDNI(String hostname) throws IOException{
 
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
+        env.put("com.example.jndi.dns.timeout.initial", "3000");
 
         ArrayList<String> addresses = new ArrayList<>();
 
         DirContext context = null;
         try {
         context = new InitialDirContext(env);
-        String[] recordTypes = { "A", "AAAA" };
-        Attributes attrs = context.getAttributes(hostname, recordTypes);
+        String[] recordTypes = { "A" };
+        Attributes attrs = context.getAttributes("dns:/"+hostname, recordTypes);
 
         for (String recordType : recordTypes) {
             Attribute attr = attrs.get(recordType);
