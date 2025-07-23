@@ -14,5 +14,5 @@ scan_fmt = "0.2"
 libc = "0.2"
 signal-hook = "0.3"
 clap = { version = "4", features = ["derive"] }
-cgroups = { package = "cgroups-rs", path = "/home/nxw/developer/cgroups-rs", features = ["oci"] }
-oci-spec = "0.6"
+cgroups = { package = "cgroups-rs", version = "0.4.0", features = ["oci"] }
+oci-spec = "0.8"

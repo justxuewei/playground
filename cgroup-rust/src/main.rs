@@ -46,11 +46,12 @@ fn systemd(args: &Args) {
         // --pid 1234
         "add" => {
             let pid = args.pid.expect("PID is required for add operation");
+            manager.set_term_timeout(500).unwrap();
             manager
-                .add_proc((pid as u64).into())
-                .expect("Failed to add process to cgroup");
+                .add_thread((pid as u64).into())
+                .expect("Failed to add thread to cgroup");
 
-            println!("add proc: ...ok");
+            println!("add thread: ...ok");
         }
         "show" => {
             show_states(&manager);
