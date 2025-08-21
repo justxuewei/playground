@@ -1,14 +1,17 @@
 BIN_DIR := bin
-TARGET := $(BIN_DIR)/tcp_connect_inf
-SRC := cmd/tcp_connect_inf/main.go
+
+BINS := tcp_client tcp_server
+TARGETS := $(addprefix $(BIN_DIR)/, $(BINS))
+SRCS := $(addprefix cmd/, $(addsuffix /main.go, $(BINS)))
 
 .PHONY: all clean
 
-all: $(TARGET)
+# build the SRCS all and save them it TARGETS
+all: clean $(TARGETS)
 
-$(TARGET): $(SRC)
-	mkdir -p $(BIN_DIR)
-	go build -o $(TARGET) $(SRC)
+$(BIN_DIR)/%: cmd/%/main.go
+	@mkdir -p $(BIN_DIR)
+	@go build -o $@ $<
 
 clean:
-	rm -rf $(BIN_DIR)
+	@rm -rf $(BIN_DIR)
