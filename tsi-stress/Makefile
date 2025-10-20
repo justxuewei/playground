@@ -1,6 +1,6 @@
 BIN_DIR := bin
 
-BINS := tcp_client tcp_server
+BINS := tcp_client tcp_client1 tcp_server
 TARGETS := $(addprefix $(BIN_DIR)/, $(BINS))
 SRCS := $(addprefix cmd/, $(addsuffix /main.go, $(BINS)))
 
