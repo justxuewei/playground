@@ -43,34 +43,6 @@ class MultiHeadAttentionBlock(nn.Module):
             (model_args.max_batch_size, model_args.max_seq_len, self.head_num, self.d_k)
         )
 
-    @staticmethod
-    # Dimension of the following args:
-    #   (batch_size, head_num, seq_len, d_k)
-    def attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor):
-        # query.shape = (batch_size, head_num, seq_len, d_k)
-        # query.shape[-1] is d_k
-        d_k = query.shape[-1]
-        # key.transpose(-2, -1) means transposing the last two
-        # dimensions:
-        # (batch_size, head_num, d_k, seq_len) ->
-        #           (batch_size, head_num, seq_len, d_k)
-        # The query shape is (batch_size, head_num, seq_len, d_k),
-        # transposing is required to dot product.
-        # head1 = Q1 * K1^T / sqrt(d_k)
-        # head2 = Q2 * K2^T / sqrt(d_k)
-        # ...
-        # attention_scores = concat(head1, head2, ...)
-        # attention_scores shape: (batch_size, head_num, seq_len, seq_len)
-        attention_scores = (query @ key.transpose(-2, -1)) / math.sqrt(d_k)
-        # ignore multi-head and batch, the shape is (seq_len, seq_len)
-        # dim=-1 means softmax is applied to each row, sum of each row
-        # is 1, i.e. scores[0][0] + scores[0][1] + ... = 1
-        attention_scores = attention_scores.softmax(dim=-1)
-
-        # 0: (batch_size, head_num, seq_len, d_k)
-        # 1: (batch_size, head_num, seq_len, seq_len)
-        return (attention_scores @ value), attention_scores
-
     # Why can KV cache accelerate inference?
     #
     # The output for tokenN depends on:
