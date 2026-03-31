@@ -6,29 +6,33 @@ Reproduces a kernel bug where the server cannot close its conn fd properly,
 leaving the socket stuck (e.g. in CLOSE_WAIT).
 
 Detection strategy:
-  Each iteration does a fresh bind() to port 10000 WITHOUT SO_REUSEADDR.
+  Each server iteration does a fresh bind() WITHOUT SO_REUSEADDR.
   If the previous conn fd was not fully released by the kernel, the port is
   still occupied and bind() fails with EADDRINUSE — confirming the bug.
 
 Server loop (one connection per iteration):
-  1. bind() to 0.0.0.0:10000  ← fails here if previous socket is stuck
+  1. bind() to 0.0.0.0:8080  ← fails here if previous socket is stuck
   2. listen()
   3. accept()  →  close listen fd
   4. read HTTP request, send response
   5. drain until peer closes, then close conn fd
-  6. repeat
+  6. randomly sleep before recreating the listener
+  7. repeat
 
-Client: curl hits http://127.0.0.1:10000/ in a loop.
+Client loop (independent):
+  curl hits http://127.0.0.1:8080/ continuously; may get connection refused
+  while the server listener is down between iterations.
 """
 
 import errno
+import random
 import socket
 import subprocess
 import threading
+import time
 
-HOST    = "0.0.0.0"
-PORT    = 8080
-REPEATS = 0  # 0 = run until bug is hit or Ctrl-C
+HOST = "0.0.0.0"
+PORT = 8080
 
 RESPONSE = (
     b"HTTP/1.1 200 OK\r\n"
@@ -40,15 +44,15 @@ RESPONSE = (
 )
 
 
-def server(ready: threading.Event, stop: threading.Event):
+def server(stop: threading.Event):
     iteration = 0
 
     while not stop.is_set():
         iteration += 1
 
         lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # No SO_REUSEADDR — a stuck conn fd from the previous iteration will
-        # cause bind() to return EADDRINUSE, exposing the kernel bug.
+        # No SO_REUSEADDR — a stuck socket from the previous iteration causes
+        # bind() to return EADDRINUSE, exposing the kernel bug.
         try:
             lsock.bind((HOST, PORT))
         except OSError as e:
@@ -64,16 +68,13 @@ def server(ready: threading.Event, stop: threading.Event):
             return
 
         lsock.listen(1)
-        lsock.settimeout(2.0)
+        lsock.settimeout(1.0)
         print(f"[server iter {iteration}] listening on {HOST}:{PORT}")
-
-        ready.set()
 
         try:
             conn, peer = lsock.accept()
         except socket.timeout:
             lsock.close()
-            ready.clear()
             continue
 
         # Close listen fd right after accept.
@@ -104,47 +105,49 @@ def server(ready: threading.Event, stop: threading.Event):
             pass
 
         conn.close()
-        print(f"[server iter {iteration}] conn fd closed\n")
+        print(f"[server iter {iteration}] conn fd closed")
 
-        ready.clear()
+        # Random downtime before recreating the listener — during this window
+        # the client will get connection refused.
+        downtime = random.uniform(0.0, 0.5)
+        print(f"[server iter {iteration}] listener down for {downtime:.2f}s\n")
+        time.sleep(downtime)
 
 
-def client(ready: threading.Event, stop: threading.Event):
+def client(stop: threading.Event):
     i = 0
     while not stop.is_set():
         i += 1
-
-        ready.wait(timeout=3.0)
-        if not ready.is_set():
-            print(f"[curl {i}] server not ready — giving up")
-            break
-
-        label = f"[curl {i}]"
-        print(f"{label} GET http://127.0.0.1:{PORT}/")
         try:
             result = subprocess.run(
-                ["curl", "-s", f"http://127.0.0.1:{PORT}/"],
+                ["curl", "-s", "--max-time", "2", f"http://127.0.0.1:{PORT}/"],
                 capture_output=True, text=True,
-                timeout=5,
+                timeout=3,
             )
-            print(f"{label} response: {result.stdout.strip()!r}")
+            if result.returncode == 0:
+                print(f"[curl {i}] ok: {result.stdout.strip()!r}")
+            else:
+                # exit code 7 = connection refused, 28 = timeout
+                print(f"[curl {i}] refused/error (curl exit {result.returncode})")
         except subprocess.TimeoutExpired:
-            print(f"{label} timeout")
+            print(f"[curl {i}] timeout")
 
-    stop.set()
-    print("\n[client] done")
+        time.sleep(random.uniform(0.05, 0.2))
+
+    print("[client] done")
 
 
 def main():
-    ready = threading.Event()
-    stop  = threading.Event()
+    stop = threading.Event()
 
-    srv = threading.Thread(target=server, args=(ready, stop), daemon=True)
+    srv = threading.Thread(target=server, args=(stop,), daemon=True)
+    cli = threading.Thread(target=client, args=(stop,), daemon=True)
+
     srv.start()
+    cli.start()
 
-    client(ready, stop)
-
-    srv.join(timeout=3.0)
+    srv.join()
+    cli.join(timeout=1.0)
     print("[main] exit")
 
 
