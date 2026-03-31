@@ -27,7 +27,7 @@ import subprocess
 import threading
 
 HOST    = "0.0.0.0"
-PORT    = 10000
+PORT    = 8080
 REPEATS = 0  # 0 = run until bug is hit or Ctrl-C
 
 RESPONSE = (
