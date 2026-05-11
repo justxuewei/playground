@@ -1,7 +1,7 @@
 // CUDA headers
 #include <cuda_runtime_api.h>
-#include <cuda/cmath>
 // C++ standard library headers
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 // C / system headers
@@ -19,7 +19,7 @@ __global__ void vecAdd(float *A, float *B, float *C, int vectorLength)
 
 void initArray(float *A, int length)
 {
-	std::srand(std::time({}));
+	std::srand(std::time(nullptr));
 
 	for (int i = 0; i < length; i++) {
 		// this value is between 0.0 and 1.0 roughly
@@ -38,7 +38,7 @@ bool vectorApproximatelyEqual(float *A, float *B, int length,
 			      float epsilon = 0.00001)
 {
 	for (int i = 0; i < length; i++) {
-		if (fabs(A[i] - B[i]) > epsilon) {
+		if (std::fabs(A[i] - B[i]) > epsilon) {
 			printf("Index %d mismatch: %f != %f", i, A[i], B[i]);
 			return false;
 		}
@@ -96,7 +96,7 @@ void explicitMemExample(int vectorLength)
 
 	// Launch the kernel
 	int threads = 256;
-	int blocks = cuda::ceil_div(vectorLength, threads);
+	int blocks = (vectorLength + threads - 1) / threads;
 	vecAdd<<<blocks, threads> > >(devA, devB, devC, vectorLength);
 	// wait for kernel execution to complete
 	cudaDeviceSynchronize();
