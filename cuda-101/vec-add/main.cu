@@ -97,7 +97,7 @@ void explicitMemExample(int vectorLength)
 	// Launch the kernel
 	int threads = 256;
 	int blocks = (vectorLength + threads - 1) / threads;
-	vecAdd<<<blocks, threads> > >(devA, devB, devC, vectorLength);
+	vecAdd<<<blocks, threads>>>(devA, devB, devC, vectorLength);
 	// wait for kernel execution to complete
 	cudaDeviceSynchronize();
 

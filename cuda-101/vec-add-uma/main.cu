@@ -66,7 +66,7 @@ void unifiedMemExample(int vectorLength)
 	// accessible to the GPU.
 	int threads = 256;
 	int blocks = (vectorLength + threads - 1) / threads;
-	vecAdd<<<blocks, threads> > >(A, B, C, vectorLength);
+	vecAdd<<<blocks, threads>>>(A, B, C, vectorLength);
 	// Wait for the kernel to complete execution
 	cudaDeviceSynchronize();
 
