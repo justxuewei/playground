@@ -59,12 +59,15 @@ find_package(CUDAToolkit REQUIRED)
 add_library(sgemm_project_options INTERFACE)
 
 # Step 10: Attach include directories to the settings target.
-# PROJECT_SOURCE_DIR/include is where your own headers can go.
+# PROJECT_SOURCE_DIR/include is where public project headers can go.
+# PROJECT_SOURCE_DIR/src is included here because this learning project keeps
+# runner.cuh and kernels.cuh next to the CUDA source they support.
 # CUDAToolkit_INCLUDE_DIRS is where CUDA headers such as cuda_runtime.h live.
 # Because this is INTERFACE, consumers inherit these include paths.
 target_include_directories(sgemm_project_options
   INTERFACE
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
     ${CUDAToolkit_INCLUDE_DIRS}
 )
 
@@ -89,7 +92,7 @@ target_compile_options(sgemm_project_options
     $<$<AND:$<CONFIG:Debug>,$<COMPILE_LANGUAGE:CUDA>>:-G;-src-in-ptx>
 )
 
-# Step 13: Add the CUDA executable target.
+# Step 13: Add the simple CUDA executable target.
 # add_executable creates a real build target named simplest_kernel from the
 # CUDA source file copied from the reference project.
 add_executable(simplest_kernel simplest_kernel.cu)
@@ -100,4 +103,20 @@ add_executable(simplest_kernel simplest_kernel.cu)
 target_link_libraries(simplest_kernel
   PRIVATE
     sgemm_project_options
+)
+
+# Step 15: Add the SGEMM benchmark executable target.
+# sgemm.cu owns the benchmark/validation flow, while src/runner.cu owns the
+# cuBLAS reference path and kernel dispatch.
+add_executable(sgemm
+  sgemm.cu
+  src/runner.cu
+)
+
+# Step 16: Link SGEMM against shared project settings and cuBLAS.
+# CUDA::cublas is needed for kernel 0, the cuBLAS reference implementation.
+target_link_libraries(sgemm
+  PRIVATE
+    sgemm_project_options
+    CUDA::cublas
 )
