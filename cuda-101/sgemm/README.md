@@ -59,6 +59,28 @@ After adding source files, link targets to `sgemm_project_options` in
 `CMakeLists.txt` so they inherit the CUDA include path, CUDA runtime link, and
 debug CUDA flags.
 
+## Benchmark Results
+
+These benchmark results were recorded on an NVIDIA Tesla T4 GPU:
+
+Kernel: `0`, the cuBLAS FP32 reference implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS |
+| ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.000121 | 34.7 | 0.000122 | 34.4 |
+| 256 | 0.000112 | 300.3 | 0.000112 | 298.4 |
+| 512 | 0.000135 | 1987.7 | 0.000135 | 1990.3 |
+| 1024 | 0.000829 | 2589.6 | 0.000829 | 2590.3 |
+
+Kernel: `1`, the naive SGEMM implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS |
+| ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.000380 | 11.0 | 0.000243 | 17.2 |
+| 256 | 0.001891 | 17.7 | 0.001868 | 18.0 |
+| 512 | 0.006330 | 42.4 | 0.007006 | 38.3 |
+| 1024 | 0.035482 | 60.5 | 0.035274 | 60.9 |
+
 ## Credit
 
 The CUDA example source is adapted from
