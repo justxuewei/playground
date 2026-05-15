@@ -81,6 +81,15 @@ Kernel: `1`, the naive SGEMM implementation.
 | 512 | 0.006330 | 42.4 | 0.007006 | 38.3 |
 | 1024 | 0.035482 | 60.5 | 0.035274 | 60.9 |
 
+Kernel: `2`, the global-memory coalescing SGEMM implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS |
+| ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.000216 | 19.4 | 0.000038 | 111.3 |
+| 256 | 0.000834 | 40.2 | 0.000142 | 235.6 |
+| 512 | 0.004313 | 62.2 | 0.000962 | 279.0 |
+| 1024 | 0.020805 | 103.2 | 0.005219 | 411.5 |
+
 ## Credit
 
 The CUDA example source is adapted from
