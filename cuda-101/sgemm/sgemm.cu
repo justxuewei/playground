@@ -14,14 +14,16 @@ const std::string errLogFile = "matrixValidationFailure.txt";
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "Please select a kernel: 0 for cuBLAS, 1 for naive SGEMM"
+    std::cerr << "Please select a kernel: 0 for cuBLAS, 1 for naive SGEMM, "
+                 "2 for global-memory coalescing"
               << std::endl;
     exit(EXIT_FAILURE);
   }
 
   const int kernel_num = std::stoi(argv[1]);
-  if (kernel_num < 0 || kernel_num > 1) {
-    std::cerr << "Please enter a valid kernel number (0 or 1)" << std::endl;
+  if (kernel_num < 0 || kernel_num > 2) {
+    std::cerr << "Please enter a valid kernel number (0, 1, or 2)"
+              << std::endl;
     exit(EXIT_FAILURE);
   }
 
