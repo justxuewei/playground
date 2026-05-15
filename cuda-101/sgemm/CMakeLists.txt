@@ -17,17 +17,19 @@ project(cuda_101_sgemm
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Step 4: Configure the host C++ language standard.
-# CMAKE_CXX_STANDARD selects C++20 for normal .cpp/.cc files.
+# CMAKE_CXX_STANDARD selects C++17 for normal .cpp/.cc files.
+# C++17 is intentionally conservative because CUDA 11.8 with CMake 3.24 does
+# not support enabling the CUDA20 dialect through CMake.
 # REQUIRED prevents CMake from silently falling back to an older standard.
 # EXTENSIONS OFF asks for standard C++ instead of compiler-specific gnu++ mode.
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Step 5: Configure the CUDA C++ language standard.
 # CUDA source files also compile host-side C++ code, so keep this aligned with
 # the C++ standard above unless you have a specific reason to differ.
-set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_EXTENSIONS OFF)
 
