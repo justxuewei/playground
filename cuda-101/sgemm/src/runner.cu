@@ -1,6 +1,7 @@
 // Adapted from SGEMM_CUDA:
 // https://github.com/siboehm/SGEMM_CUDA/blob/5a7dcc513d951ba764d51bc9d587b3163f3a894d/src/runner.cu
 
+#include "kernels.cuh"
 #include "runner.cuh"
 
 #include <cmath>
@@ -127,9 +128,9 @@ void runCublasFP32(cublasHandle_t handle, int M, int N, int K, float alpha,
 
 void run_sgemm_naive(int M, int N, int K, float alpha, float *A, float *B,
                      float beta, float *C) {
-  // Step 3 will add src/kernels/1_naive.cuh and replace this placeholder with
-  // the actual naive kernel launch.
-  throw std::runtime_error("kernel 1 is not available until step 3");
+  dim3 gridDim((M + 31) / 32, (N + 31) / 32);
+  dim3 blockDim(32, 32);
+  sgemm_naive<<<gridDim, blockDim>>>(M, N, K, alpha, A, B, beta, C);
 }
 
 void run_kernel(int kernel_num, int M, int N, int K, float alpha, float *A,
