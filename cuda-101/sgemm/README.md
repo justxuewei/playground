@@ -6,8 +6,23 @@ The `simplest_kernel.cu` example is adapted from
 
 ## Configure
 
+The simplest path is to use the Makefile wrapper:
+
+```sh
+make
+```
+
+This configures and builds the debug preset. For release:
+
+```sh
+make release
+```
+
+You can also call CMake directly:
+
 ```sh
 cmake --preset debug
+cmake --build --preset debug
 ```
 
 The preset uses:
