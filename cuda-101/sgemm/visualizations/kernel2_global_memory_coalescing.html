@@ -12,8 +12,8 @@
       <div>
         <h1>Kernel 2: Global Memory Coalescing</h1>
         <p class="subtitle">
-          A 1D block still computes one 32x32 C tile, but each warp walks
-          across one output row so B loads and C stores are consecutive.
+          Walks from the CUDA code, to the first 1D block, to one 32x32 output
+          tile, and finally to the full matrix grid.
         </p>
       </div>
       <div class="controls" aria-label="Animation controls">

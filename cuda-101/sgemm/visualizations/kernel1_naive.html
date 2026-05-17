@@ -12,9 +12,8 @@
       <div>
         <h1>Kernel 1: Naive SGEMM</h1>
         <p class="subtitle">
-          Follow one CUDA block from C tile selection to one thread computing
-          one C element. The final step shows why the naive warp mapping is
-          inefficient.
+          Walks from the CUDA code, to the first block, to one 32x32 output
+          tile, and finally to the full matrix grid.
         </p>
       </div>
       <div class="controls" aria-label="Animation controls">

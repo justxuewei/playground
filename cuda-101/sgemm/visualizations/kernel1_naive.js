@@ -7,30 +7,28 @@
   const W = 1200;
   const H = 680;
   const BLOCK = 32;
-  const selectedBlock = { x: 1, y: 0 };
+  const selectedBlock = { x: 0, y: 0 };
   const exampleThread = { x: 2, y: 3 };
   const stageMs = 5600;
+  const codeHotspots = [];
+  let selectedCodeStep = null;
 
   const stages = [
     {
-      title: "GEMM",
-      note: "One C element is a dot product of one A row and one B column."
+      title: "Code walkthrough",
+      note: "Read the naive kernel in execution order: block index, thread index, K loop, and writeback."
     },
     {
-      title: "Block owns tile",
-      note: "One CUDA block computes one 32x32 tile of C, not one element."
+      title: "Block setup",
+      note: "Start with blockIdx = (0, 0): one 32x32 block of threads owns C rows 0..31 and cols 0..31."
     },
     {
-      title: "Threads own elements",
-      note: "Inside the tile, each thread computes exactly one C element."
-    },
-    {
-      title: "One thread loop",
-      note: "A single thread walks across K to build its dot product."
+      title: "Tile work",
+      note: "Inside the selected tile, each thread computes one C element with a full K loop."
     },
     {
       title: "Block fills tile",
-      note: "All 1024 threads do the same pattern for different C elements."
+      note: "All 1024 threads run the same K-loop pattern for different C elements."
     },
     {
       title: "Warp view",
@@ -39,6 +37,10 @@
     {
       title: "K-loop access",
       note: "At one loop step, kernel 1 reads A and writes C with strided addresses."
+    },
+    {
+      title: "Matrix grid",
+      note: "The grid repeats the same block-level program across the full C matrix."
     }
   ];
 
@@ -74,6 +76,19 @@
     stageStartedAt = performance.now();
   });
 
+  canvas.addEventListener("click", (event) => {
+    const hit = codeHotspotAt(event);
+    if (hit === null) return;
+    selectedCodeStep = hit;
+    playing = false;
+    playButton.textContent = "Play";
+    draw();
+  });
+
+  canvas.addEventListener("mousemove", (event) => {
+    canvas.style.cursor = codeHotspotAt(event) === null ? "default" : "pointer";
+  });
+
   window.addEventListener("resize", () => {
     setupCanvas();
     draw();
@@ -81,6 +96,7 @@
 
   function setStage(index) {
     stageIndex = index;
+    selectedCodeStep = null;
     stageStartedAt = performance.now();
     updateTabs();
     draw();
@@ -114,13 +130,13 @@
     drawBackground();
     drawHeader();
 
-    if (stageIndex === 0) drawGemmStage(progress);
-    if (stageIndex === 1) drawBlockTileStage(progress);
-    if (stageIndex === 2) drawThreadElementStage(progress);
-    if (stageIndex === 3) drawOneThreadLoopStage(progress);
-    if (stageIndex === 4) drawBlockFillsTileStage(progress);
-    if (stageIndex === 5) drawWarpStage(progress);
-    if (stageIndex === 6) drawKLoopAccessStage(progress);
+    if (stageIndex === 0) drawCodeWalkthroughStage(progress);
+    if (stageIndex === 1) drawBlockSetupStage(progress);
+    if (stageIndex === 2) drawTileWorkStage(progress);
+    if (stageIndex === 3) drawBlockFillsTileStage(progress);
+    if (stageIndex === 4) drawWarpStage(progress);
+    if (stageIndex === 5) drawKLoopAccessStage(progress);
+    if (stageIndex === 6) drawMatrixGridStage(progress);
   }
 
   function drawBackground() {
@@ -149,13 +165,13 @@
 
   function drawCode(index) {
     const lines = [
-      "C[row][col] = sum_i A[row][i] * B[i][col]",
-      "gridDim = (ceil(M/32), ceil(N/32)); blockDim = (32, 32);",
+      "sgemm_naive<<<gridDim, dim3(32, 32)>>>(...)",
       "row = blockIdx.x * blockDim.x + threadIdx.x;",
       "for (int i = 0; i < K; ++i) sum += A[row*K+i] * B[i*N+col];",
       "1024 threads in one block -> 1024 C elements in one tile",
       "warp 0: threadIdx.x = 0..31, threadIdx.y = 0",
-      "warp 0 at loop i -> A[32..63][i], B[i][0], C[32..63][0]"
+      "warp 0 at loop i -> A[0..31][i], B[i][0], C[0..31][0]",
+      "gridDim repeats 32x32 tiles over C"
     ];
     roundRect(705, 9, 468, 40, 6, "#f4f7fb", "#d8dde8");
     ctx.fillStyle = "#1d2433";
@@ -163,53 +179,113 @@
     ctx.fillText(lines[index], 718, 34);
   }
 
-  function drawGemmStage(progress) {
-    drawMiniMatrix("A", 95, 155, 260, 260, "#dbeafe", "#2563eb", {
-      row: 4,
-      col: Math.floor(progress * 8)
-    });
-    drawMiniMatrix("B", 470, 155, 260, 260, "#fef3c7", "#b45309", {
-      col: 3,
-      row: Math.floor(progress * 8)
-    });
-    drawMiniMatrix("C", 845, 155, 260, 260, "#dcfce7", "#118a4b", {
-      row: 4,
-      col: 3,
-      point: true
-    });
-    bigText("x", 395, 294);
-    bigText("=", 775, 294);
-    drawCallout(118, 475, [
-      "A single C element is not copied from A or B.",
-      "",
-      "It is computed by multiplying one A row",
-      "with one B column across the K dimension."
-    ]);
-    drawFormula(705, 478, "C[4][3] = A[4][0] * B[0][3] + ... + A[4][K-1] * B[K-1][3]");
+  function drawCodeWalkthroughStage(progress) {
+    const codeX = 58;
+    const codeY = 112;
+    codeHotspots.length = 0;
+    const active = selectedCodeStep ?? Math.min(4, Math.floor(progress * 5));
+    const codeLines = [
+      "dim3 gridDim((M + 31) / 32, (N + 31) / 32);",
+      "dim3 blockDim(32, 32);",
+      "row = blockIdx.x * blockDim.x + threadIdx.x;",
+      "col = blockIdx.y * blockDim.y + threadIdx.y;",
+      "float sum = 0.0f;",
+      "for (int i = 0; i < K; ++i) {",
+      "  sum += A[row * K + i] * B[i * N + col];",
+      "}",
+      "C[row * N + col] = alpha * sum + beta * C[row * N + col];"
+    ];
+
+    roundRect(codeX - 18, codeY - 34, 665, 360, 8, "#ffffff", "#d8dde8");
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 16px ui-sans-serif, system-ui";
+    ctx.fillText("Kernel execution order", codeX, codeY - 10);
+
+    for (let i = 0; i < codeLines.length; i += 1) {
+      const group = naiveCodeGroupForLine(i);
+      const isActive = group === active;
+      codeHotspots.push({
+        x: codeX - 8,
+        y: codeY + i * 30 + 4,
+        w: 630,
+        h: 25,
+        step: group
+      });
+      if (isActive) {
+        roundRect(codeX - 8, codeY + i * 30 + 4, 630, 25, 5, "#e8f7ef", "#118a4b");
+      }
+      ctx.fillStyle = isActive ? "#14532d" : "#1d2433";
+      ctx.font = "14px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.fillText(codeLines[i], codeX, codeY + i * 30 + 23);
+    }
+
+    const steps = [
+      ["Launch", "gridDim covers C with 32x32 block tiles."],
+      ["Thread coords", "blockIdx plus threadIdx chooses row and col."],
+      ["Register sum", "Each thread keeps one private accumulator."],
+      ["K loop", "The thread scans one A row and one B column."],
+      ["Write C", "The accumulator becomes one C element."]
+    ];
+    const cardX = 755;
+    const cardY = 112;
+    for (let i = 0; i < steps.length; i += 1) {
+      const y = cardY + i * 78;
+      const isActive = i === active;
+      roundRect(cardX, y, 358, 58, 7, isActive ? "#fef3c7" : "#ffffff", isActive ? "#b45309" : "#d8dde8");
+      ctx.fillStyle = isActive ? "#78350f" : "#1d2433";
+      ctx.font = "700 13px ui-sans-serif, system-ui";
+      ctx.fillText(`${i + 1}. ${steps[i][0]}`, cardX + 12, y + 22);
+      ctx.fillStyle = "#5b6475";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(steps[i][1], cardX + 12, y + 40);
+    }
+
+    drawFormula(205, 548, "C[2][3] = sum_i A[2][i] * B[i][3]");
   }
 
-  function drawBlockTileStage(progress) {
+  function naiveCodeGroupForLine(line) {
+    if (line <= 1) return 0;
+    if (line <= 3) return 1;
+    if (line === 4) return 2;
+    if (line <= 7) return 3;
+    return 4;
+  }
+
+  function codeHotspotAt(event) {
+    if (stageIndex !== 0) return null;
+    const rect = canvas.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * W;
+    const y = ((event.clientY - rect.top) / rect.height) * H;
+    const hit = codeHotspots.find((spot) =>
+      x >= spot.x && x <= spot.x + spot.w && y >= spot.y && y <= spot.y + spot.h
+    );
+    return hit ? hit.step : null;
+  }
+
+  function drawBlockSetupStage(progress) {
     drawTileMatrix("Full C matrix view", 385, 112, 360, selectedBlock);
     drawCallout(62, 128, [
-      "This is the full C matrix.",
+      "Start with the first block:",
       "",
-      "Each large square is one 32x32 tile.",
-      "Each tile is assigned to one CUDA block."
+      "blockIdx = (0, 0)",
+      "",
+      "This block owns the first 32x32",
+      "tile of C."
     ]);
     drawCallout(795, 128, [
-      "For blockIdx = (1, 0):",
+      "For blockIdx = (0, 0):",
       "",
-      "blockIdx.x = 1 -> row tile 1",
+      "blockIdx.x = 0 -> row tile 0",
       "blockIdx.y = 0 -> column tile 0",
       "",
-      "This block computes C rows 32..63",
+      "This block computes C rows 0..31",
       "and C columns 0..31."
     ]);
-    pulseRect(385, 112 + 90, 90, 90, "#118a4b", progress);
+    pulseRect(385, 112, 90, 90, "#118a4b", progress);
     drawFormula(295, 520, "block -> one 32x32 C tile -> 1024 C elements");
   }
 
-  function drawThreadElementStage(progress) {
+  function drawTileWorkStage(progress) {
     drawCElementGrid(405, 116, 360);
     drawParallelThreadsOverlay(405, 116, 360, progress);
     drawThreadPointer(405, 116, 360, exampleThread.x, exampleThread.y);
@@ -228,9 +304,9 @@
       "threadIdx.y -> local column inside the tile",
       "",
       "The red cell is one example thread:",
-      "thread (2, 3) owns C[34][3]."
+      "thread (2, 3) owns C[2][3]."
     ]);
-    drawFormula(328, 545, "All 1024 threads run in parallel; the red one is only an example.");
+    drawFormula(222, 545, "Each thread runs: for i in 0..K-1, sum += A[row][i] * B[i][col]");
   }
 
   function drawOneThreadLoopStage(progress) {
@@ -244,20 +320,20 @@
     drawCallout(54, 505, [
       "Only one thread is shown here:",
       "",
-      "blockIdx = (1, 0)",
+      "blockIdx = (0, 0)",
       "threadIdx = (2, 3)",
-      "row = 34, col = 3"
+      "row = 2, col = 3"
     ]);
     drawCallout(640, 505, [
       "The thread loops over K.",
       "",
-      "At each i, it reads A[34][i]",
+      "At each i, it reads A[2][i]",
       "and B[i][3], then adds one product",
       "to its private sum register.",
       "",
       "Other threads do their own K loops in parallel."
     ]);
-    drawFormula(190, 83, `i samples 0..K-1, now near ${kLabel}: sum += A[34][i] * B[i][3]`);
+    drawFormula(190, 83, `i samples 0..K-1, now near ${kLabel}: sum += A[2][i] * B[i][3]`);
   }
 
   function drawBlockFillsTileStage(progress) {
@@ -279,7 +355,7 @@
       "",
       "So one block computes 1024 C elements."
     ]);
-    drawFormula(365, 545, "1024 threads in block (1, 0) fill C[32..63][0..31]");
+    drawFormula(365, 545, "1024 threads in block (0, 0) fill C[0..31][0..31]");
   }
 
   function drawWarpStage(progress) {
@@ -303,7 +379,7 @@
       "",
       "All 32 warp threads are active together.",
       "",
-      "So warp 0 computes C[32..63][0]."
+      "So warp 0 computes C[0..31][0]."
     ]);
     drawCallout(805, 126, [
       "This step is only about the warp shape.",
@@ -335,9 +411,9 @@
     drawCallout(805, 118, [
       "Memory picture for warp 0:",
       "",
-      "A[32..63][i] -> strided by K",
+      "A[0..31][i]  -> strided by K",
       "B[i][0]      -> same address",
-      "C[32..63][0] -> strided by N",
+      "C[0..31][0]  -> strided by N",
       "",
       "This is why kernel 2 remaps the warp",
       "to move horizontally across columns."
@@ -345,9 +421,32 @@
   }
 
   function drawMemoryLanes(x, y, progress) {
-    drawLane(x, y, "A", "A[32][i], A[33][i], ...", "#2563eb", false, progress);
+    drawLane(x, y, "A", "A[0][i], A[1][i], ...", "#2563eb", false, progress);
     drawLane(x, y + 58, "B", "B[i][0] for all warp threads", "#b45309", "same", progress);
-    drawLane(x, y + 116, "C", "C[32][0], C[33][0], ...", "#118a4b", false, progress);
+    drawLane(x, y + 116, "C", "C[0][0], C[1][0], ...", "#118a4b", false, progress);
+  }
+
+  function drawMatrixGridStage(progress) {
+    drawTileMatrix("Full C matrix view", 385, 112, 360, selectedBlock);
+    pulseRect(385, 112, 90, 90, "#118a4b", progress);
+    drawCallout(62, 128, [
+      "Matrix view:",
+      "",
+      "The previous stages followed the first",
+      "block and its first 32x32 C tile.",
+      "",
+      "The grid launches the same program for",
+      "every other 32x32 tile."
+    ]);
+    drawCallout(795, 128, [
+      "Kernel 1 rule:",
+      "",
+      "one block  -> one 32x32 C tile",
+      "one thread -> one C element",
+      "",
+      "No shared memory is used.",
+      "Every thread reads A and B directly."
+    ]);
   }
 
   function drawLane(x, y, name, label, color, mode, progress) {
@@ -507,10 +606,10 @@
     });
     ctx.fillStyle = "#2563eb";
     ctx.font = "700 13px ui-sans-serif, system-ui";
-    ctx.fillText("row 34", x + 12, y + 2 * (size / 8) + 24);
+    ctx.fillText("row 2", x + 12, y + 2 * (size / 8) + 24);
     ctx.fillStyle = "#be123c";
     ctx.font = "700 12px ui-monospace, SFMono-Regular, Menlo, monospace";
-    ctx.fillText(`A[34][i]`, x + 12 + (activeK % 8) * (size / 8), y + 2 * (size / 8) - 8);
+    ctx.fillText(`A[2][i]`, x + 12 + (activeK % 8) * (size / 8), y + 2 * (size / 8) - 8);
     drawAxisLabel(x, y, size, "columns are K: 0..K-1");
   }
 
@@ -547,7 +646,7 @@
     pulseRect(x + 3 * cell, y + 2 * cell, cell, cell, "#118a4b", progress);
     ctx.fillStyle = "#118a4b";
     ctx.font = "700 13px ui-monospace, SFMono-Regular, Menlo, monospace";
-    ctx.fillText("C[34][3]", x + 3 * cell - 8, y + 2 * cell - 8);
+    ctx.fillText("C[2][3]", x + 3 * cell - 8, y + 2 * cell - 8);
     drawAxisLabel(x, y, size, "output element owned by one thread");
   }
 

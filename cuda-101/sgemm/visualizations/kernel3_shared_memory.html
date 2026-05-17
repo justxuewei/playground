@@ -95,7 +95,7 @@
 
     .stage-tabs {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 10px;
     }
@@ -207,8 +207,8 @@
       <div>
         <h1>Kernel 3: Shared Memory Blocking</h1>
         <p class="subtitle">
-          Focuses on the new kernel 3 concept: block-private shared memory.
-          Tile ownership and thread mapping are covered by kernels 1 and 2.
+          Walks from the CUDA code, to the first block, to one shared-memory
+          tile, and finally to the full matrix grid.
         </p>
       </div>
       <div class="controls" aria-label="Animation controls">
@@ -241,16 +241,22 @@
     const W = 1200;
     const H = 680;
     const BLOCK = 32;
-    const selectedBlock = { x: 1, y: 0 };
+    const selectedBlock = { x: 0, y: 0 };
+    const codeHotspots = [];
+    let selectedCodeStep = null;
 
     const stages = [
       {
-        title: "Shared scope",
-        note: "Shared memory is private to one block and shared by its threads."
+        title: "Code walkthrough",
+        note: "Read the shared-memory kernel in execution order: block index, shared tiles, load, sync, compute, and writeback."
       },
       {
-        title: "Load tiles",
-        note: "Every thread copies one A element and one B element."
+        title: "Block setup",
+        note: "Start with blockIdx = (0, 0): one block owns the first 32x32 C tile and its own As/Bs."
+      },
+      {
+        title: "Tile work",
+        note: "The block loads A[32x32] and B[32x32] into shared memory for the current K chunk."
       },
       {
         title: "Sync",
@@ -265,8 +271,8 @@
         note: "Pointers advance to the next 32-wide K chunk."
       },
       {
-        title: "Write C",
-        note: "Each thread writes its accumulated C element."
+        title: "Matrix grid",
+        note: "The grid repeats that same shared-memory block program across the full C matrix."
       }
     ];
 
@@ -303,8 +309,22 @@
       stageStartedAt = performance.now();
     });
 
+    canvas.addEventListener("click", (event) => {
+      const hit = codeHotspotAt(event);
+      if (hit === null) return;
+      selectedCodeStep = hit;
+      playing = false;
+      playButton.textContent = "Play";
+      draw();
+    });
+
+    canvas.addEventListener("mousemove", (event) => {
+      canvas.style.cursor = codeHotspotAt(event) === null ? "default" : "pointer";
+    });
+
     function setStage(index) {
       stageIndex = index;
+      selectedCodeStep = null;
       stageStartedAt = performance.now();
       updateTabs();
       draw();
@@ -350,12 +370,13 @@
       drawBackground();
       drawStageHeader();
 
-      if (stageIndex === 0) drawSharedScopeStage(progress);
-      if (stageIndex === 1) drawLoadStage(progress, 0);
-      if (stageIndex === 2) drawSyncStage(progress);
-      if (stageIndex === 3) drawDotStage(progress);
-      if (stageIndex === 4) drawLoadStage(progress, 1);
-      if (stageIndex === 5) drawWriteStage(progress);
+      if (stageIndex === 0) drawCodeWalkthroughStage(progress);
+      if (stageIndex === 1) drawBlockSetupStage(progress);
+      if (stageIndex === 2) drawLoadStage(progress, 0);
+      if (stageIndex === 3) drawSyncStage(progress);
+      if (stageIndex === 4) drawDotStage(progress);
+      if (stageIndex === 5) drawLoadStage(progress, 1);
+      if (stageIndex === 6) drawMatrixGridStage(progress);
     }
 
     function drawBackground() {
@@ -390,12 +411,13 @@
 
     function drawCodeLine(x, y, index) {
       const lines = [
-        "__shared__ float As[32*32]; __shared__ float Bs[32*32];",
+        "sgemm_shared_mem_block<32><<<gridDim, 1024>>>(...)",
+        "blockIdx = (0, 0) owns C[0..31][0..31];",
         "As[...] = A[...]; Bs[...] = B[...];",
         "__syncthreads();",
         "tmp += As[threadRow][dotIdx] * Bs[dotIdx][threadCol];",
         "A += 32; B += 32 * N;",
-        "C[...] = alpha * tmp + beta * C[...];"
+        "gridDim repeats shared-memory tiles over C;"
       ];
       roundRect(x, y - 19, 380, 40, 6, "#f4f7fb", "#d8dde8");
       ctx.fillStyle = "#1d2433";
@@ -403,17 +425,110 @@
       ctx.fillText(lines[index], x + 12, y + 5);
     }
 
-    function drawSharedScopeStage(progress) {
+    function drawCodeWalkthroughStage(progress) {
+      const codeX = 58;
+      const codeY = 104;
+      codeHotspots.length = 0;
+      const active = selectedCodeStep ?? Math.min(6, Math.floor(progress * 7));
+      const codeLines = [
+        "const uint cTileRow = blockIdx.x;",
+        "const uint cTileCol = blockIdx.y;",
+        "__shared__ float As[BLOCKSIZE * BLOCKSIZE];",
+        "__shared__ float Bs[BLOCKSIZE * BLOCKSIZE];",
+        "threadCol = threadIdx.x % BLOCKSIZE;",
+        "threadRow = threadIdx.x / BLOCKSIZE;",
+        "for (int bkIdx = 0; bkIdx < K; bkIdx += BLOCKSIZE) {",
+        "  As[...] = A[...]; Bs[...] = B[...];",
+        "  __syncthreads();",
+        "  for (int dotIdx = 0; dotIdx < BLOCKSIZE; ++dotIdx) {",
+        "    tmp += As[threadRow][dotIdx] * Bs[dotIdx][threadCol];",
+        "  }",
+        "  __syncthreads();",
+        "}",
+        "C[...] = alpha * tmp + beta * C[...];"
+      ];
+
+      roundRect(codeX - 18, codeY - 34, 680, 474, 8, "#ffffff", "#d8dde8");
+      ctx.fillStyle = "#1d2433";
+      ctx.font = "700 16px ui-sans-serif, system-ui";
+      ctx.fillText("Kernel execution order", codeX, codeY - 10);
+
+      for (let i = 0; i < codeLines.length; i += 1) {
+        const group = sharedCodeGroupForLine(i);
+        const isActive = group === active;
+        codeHotspots.push({
+          x: codeX - 8,
+          y: codeY + i * 26 + 4,
+          w: 645,
+          h: 23,
+          step: group
+        });
+        if (isActive) {
+          roundRect(codeX - 8, codeY + i * 26 + 4, 645, 23, 5, "#e8f7ef", "#118a4b");
+        }
+        ctx.fillStyle = isActive ? "#14532d" : "#1d2433";
+        ctx.font = "13px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillText(codeLines[i], codeX, codeY + i * 26 + 21);
+      }
+
+      const steps = [
+        ["Block index", "blockIdx chooses one 32x32 C tile."],
+        ["Shared tiles", "As and Bs are private to this block."],
+        ["Thread mapping", "1024 threads map to 32 rows x 32 cols."],
+        ["Load chunk", "Each thread copies one A and one B value."],
+        ["Sync", "All threads wait before reading As/Bs."],
+        ["Compute", "Threads reuse shared memory for the dot product."],
+        ["Write C", "Each thread writes one C element."]
+      ];
+      const cardX = 785;
+      const cardY = 108;
+      for (let i = 0; i < steps.length; i += 1) {
+        const y = cardY + i * 68;
+        const isActive = i === active;
+        roundRect(cardX, y, 346, 52, 7, isActive ? "#fef3c7" : "#ffffff", isActive ? "#b45309" : "#d8dde8");
+        ctx.fillStyle = isActive ? "#78350f" : "#1d2433";
+        ctx.font = "700 13px ui-sans-serif, system-ui";
+        ctx.fillText(`${i + 1}. ${steps[i][0]}`, cardX + 12, y + 20);
+        ctx.fillStyle = "#5b6475";
+        ctx.font = "12px ui-sans-serif, system-ui";
+        ctx.fillText(steps[i][1], cardX + 12, y + 38);
+      }
+    }
+
+    function sharedCodeGroupForLine(line) {
+      if (line <= 1) return 0;
+      if (line <= 3) return 1;
+      if (line <= 5) return 2;
+      if (line <= 7) return 3;
+      if (line === 8 || line === 12) return 4;
+      if (line <= 13) return 5;
+      return 6;
+    }
+
+    function codeHotspotAt(event) {
+      if (stageIndex !== 0) return null;
+      const rect = canvas.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * W;
+      const y = ((event.clientY - rect.top) / rect.height) * H;
+      const hit = codeHotspots.find((spot) =>
+        x >= spot.x && x <= spot.x + spot.w && y >= spot.y && y <= spot.y + spot.h
+      );
+      return hit ? hit.step : null;
+    }
+
+    function drawBlockSetupStage(progress) {
       drawGlobalMemoryBand(74, 105);
-      drawBlockSharedMemory(72, 250, "block (0, 0)", false, progress);
-      drawBlockSharedMemory(418, 250, "block (1, 0)", true, progress);
+      drawBlockSharedMemory(72, 250, "block (0, 0)", true, progress);
+      drawBlockSharedMemory(418, 250, "block (1, 0)", false, progress);
       drawBlockSharedMemory(764, 250, "block (0, 1)", false, progress);
 
       drawCallout(80, 520, [
-        "Global memory is visible to every block.",
+        "Start with the first block:",
         "",
-        "Shared memory is different:",
-        "each block gets its own private As and Bs."
+        "blockIdx = (0, 0)",
+        "C rows 0..31, C cols 0..31",
+        "",
+        "This block gets its own private As and Bs."
       ]);
       drawCallout(620, 520, [
         "Inside one block, different threadIdx values",
@@ -509,7 +624,7 @@
 
       drawCallout(420, 92, [
         chunk === 0 ? "First K chunk" : "Next K chunk",
-        `A tile: rows 32..63, cols ${kStart}..${kStart + 31}`,
+        `A tile: rows 0..31, cols ${kStart}..${kStart + 31}`,
         `B tile: rows ${kStart}..${kStart + 31}, cols 0..31`,
         "",
         "Each thread copies one A element and one B element."
@@ -548,12 +663,12 @@
         "  threadRow = 0",
         "  threadCol = 0",
         "",
-        "It computes C[32][0]."
+        "It computes C[0][0]."
       ]);
       drawFormula(58, 520, `dotIdx = ${dot}: tmp += As[0][${dot}] * Bs[${dot}][0]`);
     }
 
-    function drawWriteStage(progress) {
+    function drawMatrixGridStage(progress) {
       drawSharedPair(95, 130, 1);
       drawMatrixTiles("C matrix", 720, 128, 330, 330, 4, 4, {
         row: selectedBlock.x,
@@ -563,12 +678,13 @@
       });
       drawArrow(505, 285, 720, 285, "#118a4b", ease(progress));
       drawCallout(650, 500, [
-        "After all K chunks are accumulated:",
+        "Matrix view:",
         "",
-        "C[threadRow][threadCol] gets one result.",
-        "All 1024 threads together write the 32x32 C tile."
+        "The first block writes C[0..31][0..31].",
+        "The grid repeats the same shared-memory",
+        "program for every other 32x32 C tile."
       ]);
-      pulseRect(720, 128 + 82.5, 82.5, 82.5, "#118a4b", progress);
+      pulseRect(720, 128, 82.5, 82.5, "#118a4b", progress);
     }
 
     function drawGlobalPair(kStart) {

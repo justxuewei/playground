@@ -8,8 +8,10 @@
   const W = 1200;
   const H = 680;
   const BLOCK = 32;
-  const block = { x: 1, y: 0 };
+  const block = { x: 0, y: 0 };
   const stageMs = 4200;
+  const codeHotspots = [];
+  let selectedCodeStep = null;
 
   const kernelStages = {
     1: [
@@ -40,12 +42,16 @@
     ],
     2: [
       {
-        title: "C tile",
-        note: "A block still owns one 32x32 tile of C."
+        title: "Code walkthrough",
+        note: "Read the coalesced kernel in execution order: block index, 1D thread mapping, K loop, and writeback."
       },
       {
-        title: "1D block",
-        note: "threadIdx.x is remapped into a local row and column."
+        title: "Block setup",
+        note: "Start with blockIdx = (0, 0): one 1D block of 1024 threads owns the first 32x32 C tile."
+      },
+      {
+        title: "Tile work",
+        note: "Each thread computes one C element; threadIdx.x is remapped into a local row and column."
       },
       {
         title: "Warp shape",
@@ -64,8 +70,8 @@
         note: "Each thread accumulates one output element in a register."
       },
       {
-        title: "Write C",
-        note: "Neighboring threads write neighboring C addresses."
+        title: "Matrix grid",
+        note: "The grid repeats that same coalesced block program across the full C matrix."
       }
     ]
   };
@@ -103,6 +109,19 @@
     stageStartedAt = performance.now();
   });
 
+  canvas.addEventListener("click", (event) => {
+    const hit = codeHotspotAt(event);
+    if (hit === null) return;
+    selectedCodeStep = hit;
+    playing = false;
+    playButton.textContent = "Play";
+    draw();
+  });
+
+  canvas.addEventListener("mousemove", (event) => {
+    canvas.style.cursor = codeHotspotAt(event) === null ? "default" : "pointer";
+  });
+
   window.addEventListener("resize", () => {
     setupCanvas();
     draw();
@@ -110,6 +129,7 @@
 
   function setStage(index) {
     stageIndex = index;
+    selectedCodeStep = null;
     stageStartedAt = performance.now();
     updateTabs();
     draw();
@@ -144,13 +164,13 @@
     drawHeader();
 
     if (config.kernel === 2) {
-      if (stageIndex === 0) drawCTileStage(progress);
+      if (stageIndex === 0) drawCodeWalkthroughStage(progress);
       if (stageIndex === 1) drawBlockStage(progress);
-      if (stageIndex === 2) drawWarpStage(progress);
-      if (stageIndex === 3) drawCoalescingStage(progress);
-      if (stageIndex === 4) drawAccessStage(progress);
-      if (stageIndex === 5) drawAccumulateStage(progress);
-      if (stageIndex === 6) drawWriteStage(progress);
+      if (stageIndex === 2) drawTileWorkStage(progress);
+      if (stageIndex === 3) drawWarpStage(progress);
+      if (stageIndex === 4) drawCoalescingStage(progress);
+      if (stageIndex === 5) drawAccessStage(progress);
+      if (stageIndex === 6) drawMatrixGridStage(progress);
       return;
     }
 
@@ -202,13 +222,13 @@
       "C[row * N + col] = alpha * sum + beta * C[...]"
     ];
     const kernel2 = [
-      "gridDim = (ceil(M/32), ceil(N/32));",
-      "blockDim = (32 * 32);",
+      "sgemm_global_mem_coalesce<32><<<gridDim, 1024>>>(...)",
+      "threadIdx.x -> local row and local column;",
       "row = blockIdx.x * 32 + threadIdx.x / 32;",
-      "lanes 0..31 -> B[i][0..31], C[32][0..31]",
-      "sum += A[row * K + i] * B[i * N + col];",
-      "tmp accumulates C[row][col] in one thread;",
-      "C[row * N + col] = alpha * sum + beta * C[...]"
+      "lanes 0..31 -> B[i][0..31], C[0][0..31]",
+      "A[0][i] broadcast; B/C are consecutive across lanes;",
+      "gridDim repeats 32x32 tiles over C;",
+      "same kernel logic runs for every C tile"
     ];
     const lines = config.kernel === 1 ? kernel1 : kernel2;
     roundRect(x, y - 19, 420, 40, 6, "#f4f7fb", "#d8dde8");
@@ -235,14 +255,95 @@
       "blockIdx.y selects the column tile."
     ]);
     drawCallout(790, 128, [
-      "Example blockIdx = (1, 0):",
+      "Start with blockIdx = (0, 0):",
       "",
-      "C rows 32..63",
+      "C rows 0..31",
       "C cols 0..31",
       "",
       "Step 2 zooms into this green tile."
     ]);
-    pulseRect(370, 112 + 90, 90, 90, "#118a4b", progress);
+    pulseRect(370, 112, 90, 90, "#118a4b", progress);
+  }
+
+  function drawCodeWalkthroughStage(progress) {
+    const codeX = 58;
+    const codeY = 112;
+    codeHotspots.length = 0;
+    const active = selectedCodeStep ?? Math.min(4, Math.floor(progress * 5));
+    const codeLines = [
+      "dim3 gridDim((M + 31) / 32, (N + 31) / 32);",
+      "dim3 blockDim(32 * 32);",
+      "row = blockIdx.x * 32 + threadIdx.x / 32;",
+      "col = blockIdx.y * 32 + threadIdx.x % 32;",
+      "float sum = 0.0f;",
+      "for (int i = 0; i < K; ++i) {",
+      "  sum += A[row * K + i] * B[i * N + col];",
+      "}",
+      "C[row * N + col] = alpha * sum + beta * C[row * N + col];"
+    ];
+
+    roundRect(codeX - 18, codeY - 34, 665, 360, 8, "#ffffff", "#d8dde8");
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 16px ui-sans-serif, system-ui";
+    ctx.fillText("Kernel execution order", codeX, codeY - 10);
+
+    for (let i = 0; i < codeLines.length; i += 1) {
+      const group = coalescedCodeGroupForLine(i);
+      const isActive = group === active;
+      codeHotspots.push({
+        x: codeX - 8,
+        y: codeY + i * 30 + 4,
+        w: 630,
+        h: 25,
+        step: group
+      });
+      if (isActive) {
+        roundRect(codeX - 8, codeY + i * 30 + 4, 630, 25, 5, "#e8f7ef", "#118a4b");
+      }
+      ctx.fillStyle = isActive ? "#14532d" : "#1d2433";
+      ctx.font = "14px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.fillText(codeLines[i], codeX, codeY + i * 30 + 23);
+    }
+
+    const steps = [
+      ["Launch", "gridDim covers C with 32x32 block tiles."],
+      ["Thread mapping", "threadIdx.x maps to local row and column."],
+      ["Register sum", "Each thread keeps one private accumulator."],
+      ["K loop", "All threads scan K for their C element."],
+      ["Write C", "Warp lanes write consecutive C columns."]
+    ];
+    const cardX = 755;
+    const cardY = 112;
+    for (let i = 0; i < steps.length; i += 1) {
+      const y = cardY + i * 78;
+      const isActive = i === active;
+      roundRect(cardX, y, 358, 58, 7, isActive ? "#fef3c7" : "#ffffff", isActive ? "#b45309" : "#d8dde8");
+      ctx.fillStyle = isActive ? "#78350f" : "#1d2433";
+      ctx.font = "700 13px ui-sans-serif, system-ui";
+      ctx.fillText(`${i + 1}. ${steps[i][0]}`, cardX + 12, y + 22);
+      ctx.fillStyle = "#5b6475";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(steps[i][1], cardX + 12, y + 40);
+    }
+  }
+
+  function coalescedCodeGroupForLine(line) {
+    if (line <= 1) return 0;
+    if (line <= 3) return 1;
+    if (line === 4) return 2;
+    if (line <= 7) return 3;
+    return 4;
+  }
+
+  function codeHotspotAt(event) {
+    if (stageIndex !== 0 || config.kernel !== 2) return null;
+    const rect = canvas.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * W;
+    const y = ((event.clientY - rect.top) / rect.height) * H;
+    const hit = codeHotspots.find((spot) =>
+      x >= spot.x && x <= spot.x + spot.w && y >= spot.y && y <= spot.y + spot.h
+    );
+    return hit ? hit.step : null;
   }
 
   function drawBlockStage(progress) {
@@ -260,11 +361,11 @@
         "threadIdx.y is the local col."
       ]);
       drawCallout(780, 126, [
-        "For block (1, 0):",
+        "For block (0, 0):",
         "",
-        "thread (0, 0)  -> C[32][0]",
-        "thread (31, 0) -> C[63][0]",
-        "thread (0, 1)  -> C[32][1]"
+        "thread (0, 0)  -> C[0][0]",
+        "thread (31, 0) -> C[31][0]",
+        "thread (0, 1)  -> C[0][1]"
       ]);
       drawThreadDots2D(420, 120, progress);
     } else {
@@ -281,17 +382,34 @@
         "All 1024 threads are active together."
       ]);
       drawCallout(780, 126, [
-        "For block (1, 0):",
+        "For block (0, 0):",
         "",
-        "threadIdx.x = 0  -> C[32][0]",
-        "threadIdx.x = 31 -> C[32][31]",
-        "threadIdx.x = 32 -> C[33][0]",
+        "threadIdx.x = 0  -> C[0][0]",
+        "threadIdx.x = 31 -> C[0][31]",
+        "threadIdx.x = 32 -> C[1][0]",
         "",
         "The red cell is one static example."
       ]);
       drawParallelThreadsOverlay(420, 120, 330, progress);
       drawExampleThread1D(420, 120, 330, 0);
     }
+  }
+
+  function drawTileWorkStage(progress) {
+    drawFormulaBox(74, 118, progress);
+    drawRegister(650, 206, progress);
+    drawThreadBlockTile(760, 122, 330);
+    drawParallelThreadsOverlay(760, 122, 330, progress);
+    drawExampleThread1D(760, 122, 330, 0);
+    drawCallout(72, 470, [
+      "Tile view:",
+      "",
+      "The selected block owns C[0..31][0..31].",
+      "Each thread owns one output element.",
+      "",
+      "The red example is threadIdx.x = 0,",
+      "which computes C[0][0]."
+    ]);
   }
 
   function drawWarpStage(progress) {
@@ -308,7 +426,7 @@
       drawCallout(805, 130, [
         "So warp 0 computes:",
         "",
-        "C[32..63][0]",
+        "C[0..31][0]",
         "",
         "It is vertical: 32 rows, one column."
       ]);
@@ -324,7 +442,7 @@
       drawCallout(805, 130, [
         "So warp 0 computes:",
         "",
-        "C[32][0..31]",
+        "C[0][0..31]",
         "",
         "It is horizontal: one row, 32 columns.",
         "",
@@ -345,17 +463,17 @@
       drawCallout(665, 438, [
         "At one K-loop step i, warp 0 reads:",
         "",
-        "A[32..63][i]  -> strided by K",
+        "A[0..31][i]   -> strided by K",
         "B[i][0]       -> same address",
-        "C[32..63][0]  -> strided by N"
+        "C[0..31][0]   -> strided by N"
       ]);
     } else {
       drawCallout(665, 438, [
         "At one K-loop step i, warp 0 reads:",
         "",
-        "A[32][i]      -> same address",
+        "A[0][i]       -> same address",
         "B[i][0..31]   -> consecutive",
-        "C[32][0..31]  -> consecutive"
+        "C[0][0..31]   -> consecutive"
       ]);
     }
   }
@@ -377,7 +495,7 @@
       400,
       310,
       "A",
-      "all lanes read A[32][i]",
+      "all lanes read A[0][i]",
       "same address",
       "#2563eb",
       "same",
@@ -397,7 +515,7 @@
       400,
       460,
       "C",
-      "lanes write C[32][0..31]",
+      "lanes write C[0][0..31]",
       "coalesced",
       "#118a4b",
       "contiguous",
@@ -407,9 +525,9 @@
     drawCallout(805, 118, [
       "Memory picture for warp 0:",
       "",
-      "A[32][i]      -> same address",
+      "A[0][i]       -> same address",
       "B[i][0..31]   -> consecutive",
-      "C[32][0..31]  -> consecutive",
+      "C[0][0..31]   -> consecutive",
       "",
       "So B loads and C stores are coalesced."
     ]);
@@ -458,7 +576,7 @@
       430,
       126,
       "A read",
-      "all lanes read A[32][i]",
+      "all lanes read A[0][i]",
       "#2563eb",
       "same"
     );
@@ -474,7 +592,7 @@
       430,
       442,
       "C write",
-      "lanes write C[32][0], C[32][1], ... C[32][31]",
+      "lanes write C[0][0], C[0][1], ... C[0][31]",
       "#118a4b",
       "contiguous"
     );
@@ -492,7 +610,7 @@
     drawCallout(820, 372, [
       "A is different:",
       "",
-      "All lanes read the same A[32][i] value.",
+      "All lanes read the same A[0][i] value.",
       "That is broadcast/cache-friendly, but it",
       "is not a consecutive-address pattern."
     ]);
@@ -581,7 +699,7 @@
         "row = 32",
         "col = 0",
         "",
-        "It owns C[32][0]."
+        "It owns C[0][0]."
       ]);
     } else {
       drawHorizontalWarp(780, 350, 260, progress);
@@ -592,7 +710,7 @@
         "row = 32",
         "col = 0",
         "",
-        "It owns C[32][0]."
+        "It owns C[0][0]."
       ]);
     }
   }
@@ -619,7 +737,37 @@
       ]);
     }
     drawArrow(455, 292, 735, 292, "#118a4b", ease(progress));
-    pulseRect(735, 126 + 82.5, 82.5, 82.5, "#118a4b", progress);
+    pulseRect(735, 126, 82.5, 82.5, "#118a4b", progress);
+  }
+
+  function drawMatrixGridStage(progress) {
+    drawMatrixTiles("Full C matrix, shown as 32x32 tiles", 410, 126, 330, {
+      row: block.x,
+      col: block.y,
+      fill: "#dcfce7",
+      stroke: "#118a4b"
+    });
+    pulseRect(410, 126, 82.5, 82.5, "#118a4b", progress);
+    drawCallout(66, 128, [
+      "Matrix view:",
+      "",
+      "The previous stages followed",
+      "the first block and its first",
+      "32x32 C tile.",
+      "",
+      "Every other grid cell runs the",
+      "same coalesced mapping."
+    ]);
+    drawCallout(800, 128, [
+      "Kernel 2 rule:",
+      "",
+      "one block  -> one 32x32 C tile",
+      "one thread -> one C element",
+      "one warp   -> one C row segment",
+      "",
+      "That row-shaped warp gives",
+      "coalesced B loads and C stores."
+    ]);
   }
 
   function drawMemoryPanel(x, y, progress) {
@@ -629,13 +777,13 @@
     ctx.fillText("One warp, one K-loop step", x + 18, y + 30);
 
     if (config.kernel === 1) {
-      drawAddressLane(x + 38, y + 78, "A", "A[32][i], A[33][i], ...", "strided", "#2563eb", false, progress);
+      drawAddressLane(x + 38, y + 78, "A", "A[0][i], A[1][i], ...", "strided", "#2563eb", false, progress);
       drawAddressLane(x + 38, y + 178, "B", "B[i][0] for every thread", "same address", "#b45309", "same", progress);
-      drawAddressLane(x + 38, y + 278, "C", "C[32][0], C[33][0], ...", "strided", "#118a4b", false, progress);
+      drawAddressLane(x + 38, y + 278, "C", "C[0][0], C[1][0], ...", "strided", "#118a4b", false, progress);
     } else {
-      drawAddressLane(x + 38, y + 78, "A", "A[32][i] for every thread", "same address", "#2563eb", "same", progress);
+      drawAddressLane(x + 38, y + 78, "A", "A[0][i] for every thread", "same address", "#2563eb", "same", progress);
       drawAddressLane(x + 38, y + 178, "B", "B[i][0], B[i][1], ...", "coalesced", "#b45309", true, progress);
-      drawAddressLane(x + 38, y + 278, "C", "C[32][0], C[32][1], ...", "coalesced", "#118a4b", true, progress);
+      drawAddressLane(x + 38, y + 278, "C", "C[0][0], C[0][1], ...", "coalesced", "#118a4b", true, progress);
     }
   }
 
