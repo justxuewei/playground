@@ -131,6 +131,15 @@ Kernel: `6`, the vectorized memory access SGEMM implementation.
 | 512 | 0.030018 | 8.9 | 0.000330 | 814.1 | +9047.2% | +9.3% |
 | 1024 | 0.091689 | 23.4 | 0.001430 | 1501.6 | +6317.1% | +10.5% |
 
+Kernel: `7`, the shared-memory bank conflict SGEMM implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.010230 | 0.4 | 0.000094 | 44.5 | +11025.0% | +0.2% |
+| 256 | 0.015085 | 2.2 | 0.000172 | 195.4 | +8781.8% | +0.0% |
+| 512 | 0.030440 | 8.8 | 0.000331 | 811.8 | +9125.0% | -0.3% |
+| 1024 | 0.092810 | 23.1 | 0.001304 | 1647.0 | +7029.9% | +9.7% |
+
 ## Credit
 
 The CUDA example source is adapted from
