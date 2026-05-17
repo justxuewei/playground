@@ -39,6 +39,10 @@
     {
       title: "Matrix grid",
       note: "The grid repeats that same block-level tile across the full C matrix."
+    },
+    {
+      title: "Why faster",
+      note: "Kernel 4 is faster because each thread reuses one B value across 8 register accumulators."
     }
   ];
 
@@ -134,6 +138,7 @@
     if (stageIndex === 3) drawReuseStage(progress);
     if (stageIndex === 4) drawNextKStage(progress);
     if (stageIndex === 5) drawMatrixStage(progress);
+    if (stageIndex === 6) drawWhyFasterStage(progress);
   }
 
   function drawBackground() {
@@ -173,6 +178,7 @@
       "As[64x8] and Bs[8x64] cache one K chunk;",
       "tmpB = Bs[dotIdx * BN + threadCol];",
       "A += BK; B += BK * N;",
+      "kernel4 reuses tmpB across 8 register accumulators;",
       "gridDim repeats the 64x64 block tile across C;"
     ];
     roundRect(x, y - 19, 405, 40, 6, "#f4f7fb", "#d8dde8");
@@ -365,6 +371,54 @@
       "",
       "Kernel 3 had one register result/thread."
     ]);
+  }
+
+  function drawWhyFasterStage(progress) {
+    drawComparisonPanel(70, 118, "Kernel 3", [
+      "C tile: 32x32",
+      "shared: 2048 floats",
+      "thread result: 1x1",
+      "per dotIdx: 1 FMA",
+      "one C value/thread"
+    ], "#fff7ed", "#be123c");
+    drawComparisonPanel(440, 118, "Kernel 4", [
+      "C tile: 64x64",
+      "shared: 1024 floats",
+      "thread result: 8x1",
+      "per dotIdx: 8 FMAs",
+      "8 C values/thread"
+    ], "#e8f7ef", "#118a4b");
+    drawArrow(380, 276, 430, 276, "#118a4b", ease(progress));
+
+    roundRect(815, 128, 310, 302, 8, "#ffffff", "#d8dde8");
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 16px ui-sans-serif, system-ui";
+    ctx.fillText("Why faster", 835, 160);
+    ctx.fillStyle = "#5b6475";
+    ctx.font = "13px ui-sans-serif, system-ui";
+    ctx.fillText("Kernel 4 computes more C values", 835, 200);
+    ctx.fillText("per thread. One Bs value becomes", 835, 221);
+    ctx.fillText("tmpB and feeds 8 vertical FMAs.", 835, 242);
+    ctx.fillText("That raises reuse while using half", 835, 284);
+    ctx.fillText("the shared memory per block of", 835, 305);
+    ctx.fillText("kernel 3.", 835, 326);
+
+    drawFormula(280, 560, "Kernel 4: one tmpB + 8 As values -> 8 FMAs into threadResults[8]");
+  }
+
+  function drawComparisonPanel(x, y, title, lines, fill, stroke) {
+    roundRect(x, y, 310, 360, 8, fill, stroke);
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 18px ui-sans-serif, system-ui";
+    ctx.fillText(title, x + 18, y + 34);
+    for (let i = 0; i < lines.length; i += 1) {
+      roundRect(x + 18, y + 68 + i * 52, 274, 36, 6, "#ffffff", "#d8dde8");
+      ctx.fillStyle = i === lines.length - 1 ? stroke : "#1d2433";
+      ctx.font = i === lines.length - 1
+        ? "700 13px ui-sans-serif, system-ui"
+        : "13px ui-sans-serif, system-ui";
+      ctx.fillText(lines[i], x + 30, y + 91 + i * 52);
+    }
   }
 
   function drawNextKStage(progress) {

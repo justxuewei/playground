@@ -273,6 +273,10 @@
       {
         title: "Matrix grid",
         note: "The grid repeats that same shared-memory block program across the full C matrix."
+      },
+      {
+        title: "Why faster",
+        note: "Kernel 3 is faster because each A/B tile is loaded once into shared memory and reused by the whole block."
       }
     ];
 
@@ -377,6 +381,7 @@
       if (stageIndex === 4) drawDotStage(progress);
       if (stageIndex === 5) drawLoadStage(progress, 1);
       if (stageIndex === 6) drawMatrixGridStage(progress);
+      if (stageIndex === 7) drawWhyFasterStage(progress);
     }
 
     function drawBackground() {
@@ -417,6 +422,7 @@
         "__syncthreads();",
         "tmp += As[threadRow][dotIdx] * Bs[dotIdx][threadCol];",
         "A += 32; B += 32 * N;",
+        "shared tiles replace repeated global reads;",
         "gridDim repeats shared-memory tiles over C;"
       ];
       roundRect(x, y - 19, 380, 40, 6, "#f4f7fb", "#d8dde8");
@@ -685,6 +691,53 @@
         "program for every other 32x32 C tile."
       ]);
       pulseRect(720, 128, 82.5, 82.5, "#118a4b", progress);
+    }
+
+    function drawWhyFasterStage(progress) {
+      drawComparisonPanel(70, 118, "Kernel 2", [
+        "A/B read from global",
+        "each thread loops over K",
+        "neighbor threads repeat A/B reads",
+        "no block-level cache",
+        "more global memory traffic"
+      ], "#fff7ed", "#be123c");
+      drawComparisonPanel(440, 118, "Kernel 3", [
+        "load A/B tiles once",
+        "As: 32x32 shared",
+        "Bs: 32x32 shared",
+        "1024 threads reuse tiles",
+        "less global memory traffic"
+      ], "#e8f7ef", "#118a4b");
+      drawArrow(380, 276, 430, 276, "#118a4b", ease(progress));
+
+      roundRect(815, 128, 310, 302, 8, "#ffffff", "#d8dde8");
+      ctx.fillStyle = "#1d2433";
+      ctx.font = "700 16px ui-sans-serif, system-ui";
+      ctx.fillText("Why faster", 835, 160);
+      ctx.fillStyle = "#5b6475";
+      ctx.font = "13px ui-sans-serif, system-ui";
+      ctx.fillText("Kernel 3 still computes one C", 835, 200);
+      ctx.fillText("element per thread, like kernel 2.", 835, 221);
+      ctx.fillText("The speedup comes from moving", 835, 263);
+      ctx.fillText("a 32-wide K chunk into shared", 835, 284);
+      ctx.fillText("memory before the dot-product loop.", 835, 305);
+
+      drawFormula(265, 560, "Kernel 3: global A/B tile -> shared As/Bs once -> reused by 1024 threads");
+    }
+
+    function drawComparisonPanel(x, y, title, lines, fill, stroke) {
+      roundRect(x, y, 310, 360, 8, fill, stroke);
+      ctx.fillStyle = "#1d2433";
+      ctx.font = "700 18px ui-sans-serif, system-ui";
+      ctx.fillText(title, x + 18, y + 34);
+      for (let i = 0; i < lines.length; i += 1) {
+        roundRect(x + 18, y + 68 + i * 52, 274, 36, 6, "#ffffff", "#d8dde8");
+        ctx.fillStyle = i === lines.length - 1 ? stroke : "#1d2433";
+        ctx.font = i === lines.length - 1
+          ? "700 13px ui-sans-serif, system-ui"
+          : "13px ui-sans-serif, system-ui";
+        ctx.fillText(lines[i], x + 30, y + 91 + i * 52);
+      }
     }
 
     function drawGlobalPair(kStart) {

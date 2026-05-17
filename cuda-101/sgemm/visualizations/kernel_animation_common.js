@@ -66,12 +66,12 @@
         note: "A is broadcast-friendly; B and C are coalesced."
       },
       {
-        title: "Accumulate",
-        note: "Each thread accumulates one output element in a register."
-      },
-      {
         title: "Matrix grid",
         note: "The grid repeats that same coalesced block program across the full C matrix."
+      },
+      {
+        title: "Why faster",
+        note: "Kernel 2 is faster because the same warp instruction touches consecutive B and C addresses."
       }
     ]
   };
@@ -171,6 +171,7 @@
       if (stageIndex === 4) drawCoalescingStage(progress);
       if (stageIndex === 5) drawAccessStage(progress);
       if (stageIndex === 6) drawMatrixGridStage(progress);
+      if (stageIndex === 7) drawKernel2WhyFasterStage(progress);
       return;
     }
 
@@ -227,6 +228,7 @@
       "row = blockIdx.x * 32 + threadIdx.x / 32;",
       "lanes 0..31 -> B[i][0..31], C[0][0..31]",
       "A[0][i] broadcast; B/C are consecutive across lanes;",
+      "kernel2 fixes kernel1's vertical warp memory pattern;",
       "gridDim repeats 32x32 tiles over C;",
       "same kernel logic runs for every C tile"
     ];
@@ -768,6 +770,54 @@
       "That row-shaped warp gives",
       "coalesced B loads and C stores."
     ]);
+  }
+
+  function drawKernel2WhyFasterStage(progress) {
+    drawComparisonPanel(70, 118, "Kernel 1", [
+      "warp shape: vertical",
+      "A read: strided",
+      "B read: same address",
+      "C write: strided",
+      "poor memory coalescing"
+    ], "#fff7ed", "#be123c");
+    drawComparisonPanel(440, 118, "Kernel 2", [
+      "warp shape: horizontal",
+      "A read: same address",
+      "B read: consecutive",
+      "C write: consecutive",
+      "coalesced B/C traffic"
+    ], "#e8f7ef", "#118a4b");
+    drawArrow(380, 276, 430, 276, "#118a4b", ease(progress));
+
+    roundRect(815, 128, 310, 302, 8, "#ffffff", "#d8dde8");
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 16px ui-sans-serif, system-ui";
+    ctx.fillText("Why faster", 835, 160);
+    ctx.fillStyle = "#5b6475";
+    ctx.font = "13px ui-sans-serif, system-ui";
+    ctx.fillText("Kernel 2 does the same math and", 835, 200);
+    ctx.fillText("still computes one C element per", 835, 221);
+    ctx.fillText("thread.", 835, 242);
+    ctx.fillText("The speedup comes from changing", 835, 284);
+    ctx.fillText("the warp layout so B loads and C", 835, 305);
+    ctx.fillText("stores become contiguous.", 835, 326);
+
+    drawFormula(292, 560, "Kernel 1: vertical warp -> strided memory; Kernel 2: horizontal warp -> coalesced B/C");
+  }
+
+  function drawComparisonPanel(x, y, title, lines, fill, stroke) {
+    roundRect(x, y, 310, 360, 8, fill, stroke);
+    ctx.fillStyle = "#1d2433";
+    ctx.font = "700 18px ui-sans-serif, system-ui";
+    ctx.fillText(title, x + 18, y + 34);
+    for (let i = 0; i < lines.length; i += 1) {
+      roundRect(x + 18, y + 68 + i * 52, 274, 36, 6, "#ffffff", "#d8dde8");
+      ctx.fillStyle = i === lines.length - 1 ? stroke : "#1d2433";
+      ctx.font = i === lines.length - 1
+        ? "700 13px ui-sans-serif, system-ui"
+        : "13px ui-sans-serif, system-ui";
+      ctx.fillText(lines[i], x + 30, y + 91 + i * 52);
+    }
   }
 
   function drawMemoryPanel(x, y, progress) {
