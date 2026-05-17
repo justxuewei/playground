@@ -18,15 +18,17 @@ int main(int argc, char **argv) {
                  "2 for global-memory coalescing, "
                  "3 for shared-memory blocking, "
                  "4 for 1D block tiling, "
-                 "5 for 2D block tiling"
+                 "5 for 2D block tiling, "
+                 "6 for vectorized memory access"
               << std::endl;
     exit(EXIT_FAILURE);
   }
 
   const int kernel_num = std::stoi(argv[1]);
-  if (kernel_num < 0 || kernel_num > 5) {
-    std::cerr << "Please enter a valid kernel number (0, 1, 2, 3, 4, or 5)"
-              << std::endl;
+  if (kernel_num < 0 || kernel_num > 6) {
+    std::cerr
+        << "Please enter a valid kernel number (0, 1, 2, 3, 4, 5, or 6)"
+        << std::endl;
     exit(EXIT_FAILURE);
   }
 

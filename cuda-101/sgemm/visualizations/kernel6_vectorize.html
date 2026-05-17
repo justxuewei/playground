@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kernel 6 Vectorized Memory Access</title>
+  <link rel="stylesheet" href="kernel_animation.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Kernel 6: Vectorized Memory Access</h1>
+        <p class="subtitle">
+          Walks from the CUDA code, to one 256-thread block, to vectorized
+          global memory traffic, and finally to the full matrix grid.
+        </p>
+      </div>
+      <div class="controls" aria-label="Animation controls">
+        <button id="prev" type="button">Prev</button>
+        <button id="play" type="button">Play</button>
+        <button id="next" type="button">Next</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+    </header>
+
+    <nav class="stage-tabs" aria-label="Animation stages" id="tabs"></nav>
+
+    <section class="canvas-shell" aria-label="Kernel 6 vectorized memory animation">
+      <canvas id="scene" width="1200" height="680"></canvas>
+      <div class="legend" aria-label="Legend">
+        <span class="legend-item"><span class="swatch c"></span>C tile</span>
+        <span class="legend-item"><span class="swatch warp"></span>Thread tile</span>
+        <span class="legend-item"><span class="swatch a"></span>A / As tile</span>
+        <span class="legend-item"><span class="swatch b"></span>B / Bs tile</span>
+        <span class="legend-item"><span class="swatch memo"></span>Registers / float4</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="kernel6_vectorize.js"></script>
+</body>
+</html>

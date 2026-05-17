@@ -26,7 +26,7 @@ Start with `blockIdx = (0, 0)`:
 
 - Kernel 1-3: `C rows 0..31, C cols 0..31`
 - Kernel 4: `C rows 0..63, C cols 0..63`
-- Kernel 5: `C rows 0..127, C cols 0..127`
+- Kernel 5-6: `C rows 0..127, C cols 0..127`
 
 For kernels that use `gridDim.x` for columns and `gridDim.y` for rows, say so
 explicitly in the matrix stage.
@@ -39,6 +39,8 @@ explicitly in the matrix stage.
 - Kernel 4: one thread computes an `8x1` vertical register tile.
 - Kernel 5: one thread computes an `8x8` register tile using `regM[8]` and
   `regN[8]`.
+- Kernel 6: keeps kernel 5's `8x8` register tile and uses `float4`
+  vectorized global loads/stores with a transposed `As` shared-memory layout.
 
 ## Why Faster Page
 
@@ -58,6 +60,8 @@ Examples:
 - Kernel 4 vs 3: one C value per thread -> `8x1` register tile per thread.
 - Kernel 5 vs 4: `8x1` register tile -> `8x8` register tile with more shared
   memory and more FMAs per shared-memory load.
+- Kernel 6 vs 5: same `8x8` register math -> `float4` global loads/stores
+  and transposed `As` to reduce memory instruction overhead.
 
 ## Verification
 
