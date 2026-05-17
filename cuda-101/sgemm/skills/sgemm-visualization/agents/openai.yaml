@@ -1,0 +1,4 @@
+interface:
+  display_name: "SGEMM Visualization"
+  short_description: "Build SGEMM kernel visualizations for cuda-101."
+  default_prompt: "Use this skill when adding or updating cuda-101 SGEMM kernel visualizations."
