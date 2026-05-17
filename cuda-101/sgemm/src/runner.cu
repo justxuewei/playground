@@ -190,6 +190,20 @@ void run_sgemm_vectorize(int M, int N, int K, float alpha, float *A, float *B,
       <<<gridDim, blockDim>>>(M, N, K, alpha, A, B, beta, C);
 }
 
+void run_sgemm_resolve_bank_conflicts(int M, int N, int K, float alpha,
+                                      float *A, float *B, float beta,
+                                      float *C) {
+  const uint BK = 8;
+  const uint TM = 8;
+  const uint TN = 8;
+  const uint BM = 128;
+  const uint BN = 128;
+  dim3 gridDim((N + BN - 1) / BN, (M + BM - 1) / BM);
+  dim3 blockDim((BM * BN) / (TM * TN));
+  sgemmResolveBankConflicts<BM, BN, BK, TM, TN>
+      <<<gridDim, blockDim>>>(M, N, K, alpha, A, B, beta, C);
+}
+
 void run_kernel(int kernel_num, int M, int N, int K, float alpha, float *A,
                 float *B, float beta, float *C, cublasHandle_t handle) {
   switch (kernel_num) {
@@ -213,6 +227,9 @@ void run_kernel(int kernel_num, int M, int N, int K, float alpha, float *A,
     break;
   case 6:
     run_sgemm_vectorize(M, N, K, alpha, A, B, beta, C);
+    break;
+  case 7:
+    run_sgemm_resolve_bank_conflicts(M, N, K, alpha, A, B, beta, C);
     break;
   default:
     throw std::invalid_argument("Unknown kernel number");
