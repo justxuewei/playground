@@ -122,6 +122,15 @@ Kernel: `5`, the 2D block tiling SGEMM implementation.
 | 512 | 0.030167 | 8.9 | 0.000361 | 744.6 | +8266.3% | +4.3% |
 | 1024 | 0.092790 | 23.1 | 0.001580 | 1358.8 | +5782.3% | +62.4% |
 
+Kernel: `6`, the vectorized memory access SGEMM implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.010505 | 0.4 | 0.000094 | 44.4 | +11000.0% | +23.0% |
+| 256 | 0.014974 | 2.2 | 0.000172 | 195.4 | +8781.8% | +14.4% |
+| 512 | 0.030018 | 8.9 | 0.000330 | 814.1 | +9047.2% | +9.3% |
+| 1024 | 0.091689 | 23.4 | 0.001430 | 1501.6 | +6317.1% | +10.5% |
+
 ## Credit
 
 The CUDA example source is adapted from
