@@ -26,7 +26,7 @@ Start with `blockIdx = (0, 0)`:
 
 - Kernel 1-3: `C rows 0..31, C cols 0..31`
 - Kernel 4: `C rows 0..63, C cols 0..63`
-- Kernel 5-7: `C rows 0..127, C cols 0..127`
+- Kernel 5-8: `C rows 0..127, C cols 0..127`
 
 For kernels that use `gridDim.x` for columns and `gridDim.y` for rows, say so
 explicitly in the matrix stage.
@@ -43,6 +43,8 @@ explicitly in the matrix stage.
   vectorized global loads/stores with a transposed `As` shared-memory layout.
 - Kernel 7: keeps kernel 6's compute and vectorized memory movement, then
   remaps `Bs` in shared memory to reduce bank conflicts during `regN` loads.
+- Kernel 8: keeps kernel 7's compute shape but uses extra columns in `Bs`
+  shared memory so the physical row stride becomes `BN + 5`.
 
 ## Why Faster Page
 
@@ -66,6 +68,8 @@ Examples:
   and transposed `As` to reduce memory instruction overhead.
 - Kernel 7 vs 6: same bytes and same `8x8` register math -> remapped `Bs`
   shared-memory layout to reduce bank conflicts.
+- Kernel 8 vs 7: custom `Bs` remap -> padded `Bs` rows with stride `BN + 5`
+  to shift bank mapping between dot rows.
 
 ## Verification
 

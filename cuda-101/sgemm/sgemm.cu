@@ -20,15 +20,16 @@ int main(int argc, char **argv) {
                  "4 for 1D block tiling, "
                  "5 for 2D block tiling, "
                  "6 for vectorized memory access, "
-                 "7 for resolving shared-memory bank conflicts"
+                 "7 for resolving shared-memory bank conflicts, "
+                 "8 for padding shared-memory B rows"
               << std::endl;
     exit(EXIT_FAILURE);
   }
 
   const int kernel_num = std::stoi(argv[1]);
-  if (kernel_num < 0 || kernel_num > 7) {
+  if (kernel_num < 0 || kernel_num > 8) {
     std::cerr
-        << "Please enter a valid kernel number (0, 1, 2, 3, 4, 5, 6, or 7)"
+        << "Please enter a valid kernel number (0, 1, 2, 3, 4, 5, 6, 7, or 8)"
         << std::endl;
     exit(EXIT_FAILURE);
   }
