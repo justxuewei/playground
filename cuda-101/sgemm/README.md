@@ -140,6 +140,15 @@ Kernel: `7`, the shared-memory bank conflict SGEMM implementation.
 | 512 | 0.030440 | 8.8 | 0.000331 | 811.8 | +9125.0% | -0.3% |
 | 1024 | 0.092810 | 23.1 | 0.001304 | 1647.0 | +7029.9% | +9.7% |
 
+Kernel: `8`, the shared-memory B-row padding SGEMM implementation.
+
+| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 0.011507 | 0.4 | 0.000095 | 44.3 | +10975.0% | -0.4% |
+| 256 | 0.016664 | 2.0 | 0.000173 | 193.4 | +9570.0% | -1.0% |
+| 512 | 0.033291 | 8.1 | 0.000334 | 804.8 | +9835.8% | -0.9% |
+| 1024 | 0.100473 | 21.4 | 0.001699 | 1263.9 | +5806.1% | -23.3% |
+
 ## Credit
 
 The CUDA example source is adapted from
