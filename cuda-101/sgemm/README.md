@@ -63,91 +63,90 @@ debug CUDA flags.
 
 These benchmark results were recorded on an NVIDIA Tesla T4 GPU:
 
-Percentage columns use GFLOPS:
+Percentage column uses GFLOPS:
 
-- `Rel vs Debug` = `(release GFLOPS / debug GFLOPS - 1) * 100`.
 - `Rel vs Prev` = `(kernel n release GFLOPS / kernel n-1 release GFLOPS - 1) * 100`.
 
 Kernel: `0`, the cuBLAS FP32 reference implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.000121 | 34.7 | 0.000122 | 34.4 | -0.9% | N/A |
-| 256 | 0.000112 | 300.3 | 0.000112 | 298.4 | -0.6% | N/A |
-| 512 | 0.000135 | 1987.7 | 0.000135 | 1990.3 | +0.1% | N/A |
-| 1024 | 0.000829 | 2589.6 | 0.000829 | 2590.3 | +0.0% | N/A |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000122 | 34.4 | N/A |
+| 256 | 0.000112 | 298.4 | N/A |
+| 512 | 0.000135 | 1990.3 | N/A |
+| 1024 | 0.000829 | 2590.3 | N/A |
 
 Kernel: `1`, the naive SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.000380 | 11.0 | 0.000243 | 17.2 | +56.4% | N/A |
-| 256 | 0.001891 | 17.7 | 0.001868 | 18.0 | +1.7% | N/A |
-| 512 | 0.006330 | 42.4 | 0.007006 | 38.3 | -9.7% | N/A |
-| 1024 | 0.035482 | 60.5 | 0.035274 | 60.9 | +0.7% | N/A |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000243 | 17.2 | N/A |
+| 256 | 0.001868 | 18.0 | N/A |
+| 512 | 0.007006 | 38.3 | N/A |
+| 1024 | 0.035274 | 60.9 | N/A |
 
 Kernel: `2`, the global-memory coalescing SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.000216 | 19.4 | 0.000038 | 111.3 | +473.7% | +547.1% |
-| 256 | 0.000834 | 40.2 | 0.000142 | 235.6 | +486.1% | +1208.9% |
-| 512 | 0.004313 | 62.2 | 0.000962 | 279.0 | +348.6% | +628.5% |
-| 1024 | 0.020805 | 103.2 | 0.005219 | 411.5 | +298.7% | +575.7% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000038 | 111.3 | +547.1% |
+| 256 | 0.000142 | 235.6 | +1208.9% |
+| 512 | 0.000962 | 279.0 | +628.5% |
+| 1024 | 0.005219 | 411.5 | +575.7% |
 
 Kernel: `3`, the shared-memory block SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.000258 | 16.3 | 0.000026 | 160.2 | +882.8% | +43.9% |
-| 256 | 0.001004 | 33.4 | 0.000106 | 316.7 | +848.2% | +34.4% |
-| 512 | 0.004318 | 62.2 | 0.000700 | 383.4 | +516.4% | +37.4% |
-| 1024 | 0.019229 | 111.7 | 0.004174 | 514.4 | +360.5% | +25.0% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000026 | 160.2 | +43.9% |
+| 256 | 0.000106 | 316.7 | +34.4% |
+| 512 | 0.000700 | 383.4 | +37.4% |
+| 1024 | 0.004174 | 514.4 | +25.0% |
 
 Kernel: `4`, the 1D block tiling SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.001831 | 2.3 | 0.000045 | 93.4 | +3960.9% | -41.7% |
-| 256 | 0.002580 | 13.0 | 0.000082 | 409.5 | +3050.0% | +29.3% |
-| 512 | 0.003586 | 74.9 | 0.000376 | 713.8 | +853.0% | +86.2% |
-| 1024 | 0.022805 | 94.2 | 0.002567 | 836.6 | +788.1% | +62.6% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000045 | 93.4 | -41.7% |
+| 256 | 0.000082 | 409.5 | +29.3% |
+| 512 | 0.000376 | 713.8 | +86.2% |
+| 1024 | 0.002567 | 836.6 | +62.6% |
 
 Kernel: `5`, the 2D block tiling SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.010903 | 0.4 | 0.000116 | 36.1 | +8925.0% | -61.3% |
-| 256 | 0.014944 | 2.2 | 0.000196 | 170.8 | +7663.6% | -58.3% |
-| 512 | 0.030167 | 8.9 | 0.000361 | 744.6 | +8266.3% | +4.3% |
-| 1024 | 0.092790 | 23.1 | 0.001580 | 1358.8 | +5782.3% | +62.4% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000116 | 36.1 | -61.3% |
+| 256 | 0.000196 | 170.8 | -58.3% |
+| 512 | 0.000361 | 744.6 | +4.3% |
+| 1024 | 0.001580 | 1358.8 | +62.4% |
 
 Kernel: `6`, the vectorized memory access SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.010505 | 0.4 | 0.000094 | 44.4 | +11000.0% | +23.0% |
-| 256 | 0.014974 | 2.2 | 0.000172 | 195.4 | +8781.8% | +14.4% |
-| 512 | 0.030018 | 8.9 | 0.000330 | 814.1 | +9047.2% | +9.3% |
-| 1024 | 0.091689 | 23.4 | 0.001430 | 1501.6 | +6317.1% | +10.5% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000094 | 44.4 | +23.0% |
+| 256 | 0.000172 | 195.4 | +14.4% |
+| 512 | 0.000330 | 814.1 | +9.3% |
+| 1024 | 0.001430 | 1501.6 | +10.5% |
 
 Kernel: `7`, the shared-memory bank conflict SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.010230 | 0.4 | 0.000094 | 44.5 | +11025.0% | +0.2% |
-| 256 | 0.015085 | 2.2 | 0.000172 | 195.4 | +8781.8% | +0.0% |
-| 512 | 0.030440 | 8.8 | 0.000331 | 811.8 | +9125.0% | -0.3% |
-| 1024 | 0.092810 | 23.1 | 0.001304 | 1647.0 | +7029.9% | +9.7% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000094 | 44.5 | +0.2% |
+| 256 | 0.000172 | 195.4 | +0.0% |
+| 512 | 0.000331 | 811.8 | -0.3% |
+| 1024 | 0.001304 | 1647.0 | +9.7% |
 
 Kernel: `8`, the shared-memory B-row padding SGEMM implementation.
 
-| Size | Debug Time (s) | Debug GFLOPS | Release Time (s) | Release GFLOPS | Rel vs Debug | Rel vs Prev |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 128 | 0.011507 | 0.4 | 0.000095 | 44.3 | +10975.0% | -0.4% |
-| 256 | 0.016664 | 2.0 | 0.000173 | 193.4 | +9570.0% | -1.0% |
-| 512 | 0.033291 | 8.1 | 0.000334 | 804.8 | +9835.8% | -0.9% |
-| 1024 | 0.100473 | 21.4 | 0.001699 | 1263.9 | +5806.1% | -23.3% |
+| Size | Release Time (s) | Release GFLOPS | Rel vs Prev |
+| ---: | ---: | ---: | ---: |
+| 128 | 0.000095 | 44.3 | -0.4% |
+| 256 | 0.000173 | 193.4 | -1.0% |
+| 512 | 0.000334 | 804.8 | -0.9% |
+| 1024 | 0.001699 | 1263.9 | -23.3% |
 
 ## Credit
 
