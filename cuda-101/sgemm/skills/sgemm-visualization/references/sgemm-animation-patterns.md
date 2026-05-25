@@ -26,7 +26,7 @@ Start with `blockIdx = (0, 0)`:
 
 - Kernel 1-3: `C rows 0..31, C cols 0..31`
 - Kernel 4: `C rows 0..63, C cols 0..63`
-- Kernel 5-8: `C rows 0..127, C cols 0..127`
+- Kernel 5-9: `C rows 0..127, C cols 0..127`
 
 For kernels that use `gridDim.x` for columns and `gridDim.y` for rows, say so
 explicitly in the matrix stage.
@@ -45,6 +45,9 @@ explicitly in the matrix stage.
   remaps `Bs` in shared memory to reduce bank conflicts during `regN` loads.
 - Kernel 8: keeps kernel 7's compute shape but uses extra columns in `Bs`
   shared memory so the physical row stride becomes `BN + 5`.
+- Kernel 9: keeps a `128x128` block tile but changes the tuned parameters to
+  `BK=16` and expresses the work as `WM`/`WN` warp-sized subtiles controlled
+  by `WMITER` and `WNITER`.
 
 ## Why Faster Page
 
@@ -70,6 +73,8 @@ Examples:
   shared-memory layout to reduce bank conflicts.
 - Kernel 8 vs 7: custom `Bs` remap -> padded `Bs` rows with stride `BN + 5`
   to shift bank mapping between dot rows.
+- Kernel 9 vs 8: padded `Bs` rows -> autotuned `BK=16` and parameterized
+  `WM`/`WN` subtile loops for a more flexible register-tile schedule.
 
 ## Verification
 

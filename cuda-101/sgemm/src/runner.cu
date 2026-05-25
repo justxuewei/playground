@@ -218,6 +218,33 @@ void run_sgemm_resolve_bank_extra_col(int M, int N, int K, float alpha,
       <<<gridDim, blockDim>>>(M, N, K, alpha, A, B, beta, C);
 }
 
+void run_sgemm_autotuned(int M, int N, int K, float alpha, float *A, float *B,
+                         float beta, float *C) {
+  const uint K9_BK = 16;
+  const uint K9_TM = 8;
+  const uint K9_TN = 8;
+  const uint K9_BM = 128;
+  const uint K9_BN = 128;
+
+  static_assert((K9_NUM_THREADS * 4) % K9_BK == 0,
+                "K9_NUM_THREADS*4 must be a multiple of K9_BK");
+  static_assert((K9_NUM_THREADS * 4) % K9_BN == 0,
+                "K9_NUM_THREADS*4 must be a multiple of K9_BN");
+  static_assert(K9_BN % (16 * K9_TN) == 0,
+                "K9_BN must be a multiple of 16*K9_TN");
+  static_assert(K9_BM % (16 * K9_TM) == 0,
+                "K9_BM must be a multiple of 16*K9_TM");
+  static_assert((K9_BM * K9_BK) % (4 * K9_NUM_THREADS) == 0,
+                "K9_BM*K9_BK must be a multiple of 4*K9_NUM_THREADS");
+  static_assert((K9_BN * K9_BK) % (4 * K9_NUM_THREADS) == 0,
+                "K9_BN*K9_BK must be a multiple of 4*K9_NUM_THREADS");
+
+  dim3 gridDim((N + K9_BN - 1) / K9_BN, (M + K9_BM - 1) / K9_BM);
+  dim3 blockDim(K9_NUM_THREADS);
+  sgemmAutotuned<K9_BM, K9_BN, K9_BK, K9_TM, K9_TN>
+      <<<gridDim, blockDim>>>(M, N, K, alpha, A, B, beta, C);
+}
+
 void run_kernel(int kernel_num, int M, int N, int K, float alpha, float *A,
                 float *B, float beta, float *C, cublasHandle_t handle) {
   switch (kernel_num) {
@@ -247,6 +274,9 @@ void run_kernel(int kernel_num, int M, int N, int K, float alpha, float *A,
     break;
   case 8:
     run_sgemm_resolve_bank_extra_col(M, N, K, alpha, A, B, beta, C);
+    break;
+  case 9:
+    run_sgemm_autotuned(M, N, K, alpha, A, B, beta, C);
     break;
   default:
     throw std::invalid_argument("Unknown kernel number");
