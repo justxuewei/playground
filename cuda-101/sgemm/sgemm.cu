@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
   cudaEventCreate(&end);
 
   // Keep the first harness checkpoint small enough to run quickly.
-  std::vector<int> SIZE = {128, 256, 512, 1024};
+  std::vector<int> SIZE = {128, 256, 512, 1024, 4092};
 
   const long max_size = SIZE.back();
   std::cout << "Max size: " << max_size << std::endl;
