@@ -31,9 +31,8 @@
 // before the next loop iteration so no thread overwrites As/Bs while another
 // thread is still using the previous tile.
 //
-// This learning kernel assumes M, N, and K are multiples of BLOCKSIZE. The
-// benchmark harness currently uses 128, 256, 512, and 1024, so that condition
-// holds for BLOCKSIZE = 32.
+// Out-of-bounds loads are zero-padded so M, N, and K do not need to be
+// multiples of BLOCKSIZE.
 template <const int BLOCKSIZE>
 __global__ void sgemm_shared_mem_block(int M, int N, int K, float alpha,
                                        const float *A, const float *B,
@@ -63,8 +62,14 @@ __global__ void sgemm_shared_mem_block(int M, int N, int K, float alpha,
 
   float tmp = 0.0f;
   for (int bkIdx = 0; bkIdx < K; bkIdx += BLOCKSIZE) {
-    As[threadRow * BLOCKSIZE + threadCol] = A[threadRow * K + threadCol];
-    Bs[threadRow * BLOCKSIZE + threadCol] = B[threadRow * N + threadCol];
+    As[threadRow * BLOCKSIZE + threadCol] =
+        (cTileRow * BLOCKSIZE + threadRow < M && bkIdx + threadCol < K)
+            ? A[threadRow * K + threadCol]
+            : 0.0f;
+    Bs[threadRow * BLOCKSIZE + threadCol] =
+        (bkIdx + threadRow < K && cTileCol * BLOCKSIZE + threadCol < N)
+            ? B[threadRow * N + threadCol]
+            : 0.0f;
 
     __syncthreads();
     A += BLOCKSIZE;
@@ -78,6 +83,9 @@ __global__ void sgemm_shared_mem_block(int M, int N, int K, float alpha,
     __syncthreads();
   }
 
-  C[threadRow * N + threadCol] =
-      alpha * tmp + beta * C[threadRow * N + threadCol];
+  if (cTileRow * BLOCKSIZE + threadRow < M &&
+      cTileCol * BLOCKSIZE + threadCol < N) {
+    C[threadRow * N + threadCol] =
+        alpha * tmp + beta * C[threadRow * N + threadCol];
+  }
 }
