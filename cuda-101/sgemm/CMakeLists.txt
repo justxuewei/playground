@@ -90,6 +90,7 @@ target_link_libraries(sgemm_project_options
 target_compile_options(sgemm_project_options
   INTERFACE
     $<$<AND:$<CONFIG:Debug>,$<COMPILE_LANGUAGE:CUDA>>:-G;-src-in-ptx>
+    $<$<COMPILE_LANGUAGE:CUDA>:--ptxas-options=-v>
 )
 
 # Step 13: Add the simple CUDA executable target.
