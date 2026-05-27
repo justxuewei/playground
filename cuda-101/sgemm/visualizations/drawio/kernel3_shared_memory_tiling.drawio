@@ -1,0 +1,189 @@
+<mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== C matrix with block(0,0) highlighted ===== -->
+    <mxCell id="c0" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="" vertex="1">
+      <mxGeometry x="30" y="30" width="100" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="c00" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontSize=9;" value="(0,0)" vertex="1">
+      <mxGeometry x="30" y="30" width="50" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="c01" parent="1" style="whiteSpace=wrap;html=1;fontSize=9;" value="(0,1)" vertex="1">
+      <mxGeometry x="80" y="30" width="50" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="cl" parent="1" style="text;html=1;align=center;fontSize=9;" value="C matrix" vertex="1">
+      <mxGeometry x="45" y="132" width="50" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== bkIdx=0 panel ===== -->
+    <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#999;" value="" vertex="1">
+      <mxGeometry x="170" y="20" width="440" height="370" as="geometry" />
+    </mxCell>
+    <mxCell id="p0t" parent="1" style="text;html=1;align=center;fontSize=12;fontStyle=1;" value="bkIdx = 0" vertex="1">
+      <mxGeometry x="340" y="26" width="80" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A (M×K), highlight rows 0..31, cols 0..31 -->
+    <mxCell id="a0" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="190" y="60" width="160" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="a0h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="190" y="60" width="40" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a0l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix A (M×K)" vertex="1">
+      <mxGeometry x="210" y="182" width="90" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="a0n" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#6c8ebf;fontStyle=1;" value="A[0..31][0..31]" vertex="1">
+      <mxGeometry x="234" y="68" width="80" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B (K×N), highlight rows 0..31, cols 0..31 -->
+    <mxCell id="b0" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="400" y="60" width="120" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="b0h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="400" y="60" width="60" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="b0l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix B (K×N)" vertex="1">
+      <mxGeometry x="410" y="222" width="90" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="b0n" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#D6B656;fontStyle=1;" value="B[0..31][0..31]" vertex="1">
+      <mxGeometry x="400" y="102" width="80" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows: A tile → As, B tile → Bs -->
+    <mxCell id="la0" edge="1" parent="1" style="rounded=1;strokeColor=#6c8ebf;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="210" y="122" as="sourcePoint" />
+        <mxPoint x="260" y="264" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="la0l" parent="1" connectable="0" style="edgeLabel;html=1;fontSize=8;fontColor=#6c8ebf;" value="load into" vertex="1">
+      <mxGeometry x="200" y="190" width="40" height="12" as="geometry" />
+    </mxCell>
+
+    <mxCell id="lb0" edge="1" parent="1" style="rounded=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="430" y="102" as="sourcePoint" />
+        <mxPoint x="390" y="264" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="lb0l" parent="1" connectable="0" style="edgeLabel;html=1;fontSize=8;fontColor=#D6B656;" value="load into" vertex="1">
+      <mxGeometry x="430" y="190" width="40" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Shared memory: As and Bs -->
+    <mxCell id="as0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=10;" value="&lt;b&gt;As&lt;/b&gt;&lt;br&gt;32×32" vertex="1">
+      <mxGeometry x="220" y="264" width="80" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="bs0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=10;" value="&lt;b&gt;Bs&lt;/b&gt;&lt;br&gt;32×32" vertex="1">
+      <mxGeometry x="350" y="264" width="80" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="sml" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#666;" value="shared memory (per block)" vertex="1">
+      <mxGeometry x="240" y="316" width="150" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- __syncthreads -->
+    <mxCell id="sync0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" value="__syncthreads()" vertex="1">
+      <mxGeometry x="240" y="240" width="170" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Compute -->
+    <mxCell id="comp0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" value="tmp += As[row][d] × Bs[d][col]&lt;br&gt;d = 0..31" vertex="1">
+      <mxGeometry x="220" y="340" width="210" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== "next bkIdx" arrow ===== -->
+    <mxCell id="nk" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;width=6;endSize=4;fillColor=default;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="620" y="200" as="sourcePoint" />
+        <mxPoint x="680" y="200" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="nkl" parent="1" style="text;html=1;align=center;fontSize=9;" value="A += 32&lt;br&gt;B += 32*N" vertex="1">
+      <mxGeometry x="616" y="218" width="60" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- ===== bkIdx=32 panel ===== -->
+    <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#999;" value="" vertex="1">
+      <mxGeometry x="680" y="20" width="440" height="370" as="geometry" />
+    </mxCell>
+    <mxCell id="p1t" parent="1" style="text;html=1;align=center;fontSize=12;fontStyle=1;" value="bkIdx = 32" vertex="1">
+      <mxGeometry x="845" y="26" width="90" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A bkIdx=32, highlight rows 0..31, cols 32..63 -->
+    <mxCell id="a1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="700" y="60" width="160" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="a1h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="740" y="60" width="40" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix A (M×K)" vertex="1">
+      <mxGeometry x="720" y="182" width="90" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="a1n" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#6c8ebf;fontStyle=1;" value="A[0..31][32..63]" vertex="1">
+      <mxGeometry x="784" y="68" width="84" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B bkIdx=32, highlight rows 32..63, cols 0..31 -->
+    <mxCell id="b1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="910" y="60" width="120" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="b1h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="910" y="100" width="60" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="b1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix B (K×N)" vertex="1">
+      <mxGeometry x="920" y="222" width="90" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="b1n" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#D6B656;fontStyle=1;" value="B[32..63][0..31]" vertex="1">
+      <mxGeometry x="910" y="142" width="84" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows: A tile → As, B tile → Bs -->
+    <mxCell id="la1" edge="1" parent="1" style="rounded=1;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="760" y="122" as="sourcePoint" />
+        <mxPoint x="770" y="264" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="lb1" edge="1" parent="1" style="rounded=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="940" y="142" as="sourcePoint" />
+        <mxPoint x="900" y="264" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Shared memory: As and Bs (reloaded) -->
+    <mxCell id="as1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=10;" value="&lt;b&gt;As&lt;/b&gt;&lt;br&gt;32×32" vertex="1">
+      <mxGeometry x="730" y="264" width="80" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="bs1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=10;" value="&lt;b&gt;Bs&lt;/b&gt;&lt;br&gt;32×32" vertex="1">
+      <mxGeometry x="860" y="264" width="80" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="sml1" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#666;" value="shared memory (reloaded)" vertex="1">
+      <mxGeometry x="750" y="316" width="150" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- __syncthreads -->
+    <mxCell id="sync1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" value="__syncthreads()" vertex="1">
+      <mxGeometry x="750" y="240" width="170" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Compute -->
+    <mxCell id="comp1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" value="tmp += As[row][d] × Bs[d][col]&lt;br&gt;d = 0..31" vertex="1">
+      <mxGeometry x="730" y="340" width="210" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bottom: key point ===== -->
+    <mxCell id="key" parent="1" style="text;html=1;align=left;fontSize=10;fontColor=#666;" value="A tile slides &lt;b&gt;right&lt;/b&gt; by 32 cols each iter.  B tile slides &lt;b&gt;down&lt;/b&gt; by 32 rows.  Both advance along K." vertex="1">
+      <mxGeometry x="170" y="400" width="500" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="key2" parent="1" style="text;html=1;align=left;fontSize=10;fontColor=#118a4b;fontStyle=1;" value="Each tile loaded once into shared memory → reused by all 1024 threads → 32× less global traffic than kernel 2" vertex="1">
+      <mxGeometry x="170" y="420" width="580" height="16" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

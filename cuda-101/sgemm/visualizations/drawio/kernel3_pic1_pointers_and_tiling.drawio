@@ -1,0 +1,195 @@
+<mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== Matrix A (M×K) ===== -->
+    <mxCell id="a" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="40" y="80" width="240" height="200" as="geometry" />
+    </mxCell>
+    <!-- Row labels on left -->
+    <mxCell id="ar0" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="row 0" vertex="1">
+      <mxGeometry x="2" y="80" width="34" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ar31" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="row 31" vertex="1">
+      <mxGeometry x="2" y="126" width="34" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ar32" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="row 32" vertex="1">
+      <mxGeometry x="2" y="150" width="34" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="arM" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="row M-1" vertex="1">
+      <mxGeometry x="2" y="262" width="34" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Col labels on top -->
+    <mxCell id="ac0" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="0" vertex="1">
+      <mxGeometry x="40" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ac31" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="31" vertex="1">
+      <mxGeometry x="90" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ac32" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="32" vertex="1">
+      <mxGeometry x="110" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="acK" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="K-1" vertex="1">
+      <mxGeometry x="256" y="64" width="24" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- A pointer for block(0,0): top-left corner -->
+    <mxCell id="ap0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;opacity=40;" value="" vertex="1">
+      <mxGeometry x="40" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <!-- A pointer for block(1,0): shifted down -->
+    <mxCell id="ap1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;opacity=20;" value="" vertex="1">
+      <mxGeometry x="40" y="150" width="70" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- A bkIdx=0 tile label -->
+    <mxCell id="at0" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#6c8ebf;fontStyle=1;" value="bkIdx=0" vertex="1">
+      <mxGeometry x="46" y="118" width="40" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- A bkIdx=32 tile (shifted right) -->
+    <mxCell id="ap0b" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=1;opacity=20;dashed=1;" value="" vertex="1">
+      <mxGeometry x="110" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="at1" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#6c8ebf;" value="bkIdx=32" vertex="1">
+      <mxGeometry x="112" y="118" width="50" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow showing A tile slides right -->
+    <mxCell id="asl" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="75" y="155" as="sourcePoint" />
+        <mxPoint x="145" y="155" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="asll" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#6c8ebf;fontStyle=1;" value="A += 32" vertex="1">
+      <mxGeometry x="82" y="158" width="50" height="12" as="geometry" />
+    </mxCell>
+
+    <mxCell id="al" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="Matrix A (M×K)" vertex="1">
+      <mxGeometry x="100" y="284" width="100" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Pointer setup annotation for A ===== -->
+    <mxCell id="aptr" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#333;" value="&lt;b&gt;A += cTileRow * 32 * K&lt;/b&gt;&lt;br&gt;block(0,x): A starts at row 0&lt;br&gt;block(1,x): A starts at row 32" vertex="1">
+      <mxGeometry x="40" y="302" width="170" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Matrix B (K×N) ===== -->
+    <mxCell id="b" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="370" y="80" width="200" height="240" as="geometry" />
+    </mxCell>
+
+    <!-- Col labels -->
+    <mxCell id="bc0" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="0" vertex="1">
+      <mxGeometry x="370" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="bc31" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="31" vertex="1">
+      <mxGeometry x="430" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="bc32" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="32" vertex="1">
+      <mxGeometry x="450" y="64" width="20" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="bcN" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#666;" value="N-1" vertex="1">
+      <mxGeometry x="548" y="64" width="22" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Row labels -->
+    <mxCell id="br0" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="0" vertex="1">
+      <mxGeometry x="348" y="80" width="18" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="br31" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="31" vertex="1">
+      <mxGeometry x="348" y="140" width="18" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="br32" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#666;" value="32" vertex="1">
+      <mxGeometry x="348" y="156" width="18" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- B pointer for block(0,0): top-left -->
+    <mxCell id="bp0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;opacity=40;" value="" vertex="1">
+      <mxGeometry x="370" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <!-- B pointer for block(0,1): shifted right -->
+    <mxCell id="bp1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;opacity=20;" value="" vertex="1">
+      <mxGeometry x="450" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- B bkIdx=0 label -->
+    <mxCell id="bt0" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#D6B656;fontStyle=1;" value="bkIdx=0" vertex="1">
+      <mxGeometry x="376" y="120" width="40" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- B bkIdx=32 tile (shifted down) -->
+    <mxCell id="bp0b" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=1;opacity=20;dashed=1;" value="" vertex="1">
+      <mxGeometry x="370" y="150" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="bt1" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#D6B656;" value="bkIdx=32" vertex="1">
+      <mxGeometry x="376" y="190" width="50" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow showing B tile slides down -->
+    <mxCell id="bsl" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="445" y="115" as="sourcePoint" />
+        <mxPoint x="445" y="185" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="bsll" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#D6B656;fontStyle=1;" value="B += 32*N" vertex="1">
+      <mxGeometry x="450" y="148" width="54" height="12" as="geometry" />
+    </mxCell>
+
+    <mxCell id="bl" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="Matrix B (K×N)" vertex="1">
+      <mxGeometry x="410" y="324" width="100" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Pointer setup annotation for B -->
+    <mxCell id="bptr" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#333;" value="&lt;b&gt;B += cTileCol * 32&lt;/b&gt;&lt;br&gt;block(x,0): B starts at col 0&lt;br&gt;block(x,1): B starts at col 32" vertex="1">
+      <mxGeometry x="370" y="344" width="170" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Matrix C (M×N) ===== -->
+    <mxCell id="c" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="680" y="80" width="200" height="200" as="geometry" />
+    </mxCell>
+    <!-- C block(0,0) -->
+    <mxCell id="cp00" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontSize=9;" value="(0,0)" vertex="1">
+      <mxGeometry x="680" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <!-- C block(0,1) -->
+    <mxCell id="cp01" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=1;opacity=40;fontSize=9;" value="(0,1)" vertex="1">
+      <mxGeometry x="750" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <!-- C block(1,0) -->
+    <mxCell id="cp10" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=1;opacity=40;fontSize=9;" value="(1,0)" vertex="1">
+      <mxGeometry x="680" y="150" width="70" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="cll" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="Matrix C (M×N)" vertex="1">
+      <mxGeometry x="720" y="284" width="100" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- C pointer annotation -->
+    <mxCell id="cptr" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#333;" value="&lt;b&gt;C += cTileRow*32*N + cTileCol*32&lt;/b&gt;&lt;br&gt;block(0,0): C starts at (0,0)&lt;br&gt;block(0,1): C starts at (0,32)&lt;br&gt;block(1,0): C starts at (32,0)" vertex="1">
+      <mxGeometry x="680" y="302" width="200" height="46" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Dashed lines: A tile × B tile → C tile ===== -->
+    <mxCell id="ab1" edge="1" parent="1" style="endArrow=classic;html=1;rounded=1;strokeColor=#999;dashed=1;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="112" y="115" as="sourcePoint" />
+        <mxPoint x="680" y="115" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="ab1l" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#999;" value="A[0..31][0..31] × B[0..31][0..31] → partial C[0..31][0..31]" vertex="1">
+      <mxGeometry x="260" y="40" width="280" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bottom: K-loop summary ===== -->
+    <mxCell id="kl" parent="1" style="text;html=1;align=left;fontSize=10;fontColor=#666;" value="&lt;b&gt;for (bkIdx = 0; bkIdx &lt; K; bkIdx += 32):&lt;/b&gt;  A tile slides right, B tile slides down, accumulate into C tile" vertex="1">
+      <mxGeometry x="40" y="396" width="540" height="16" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

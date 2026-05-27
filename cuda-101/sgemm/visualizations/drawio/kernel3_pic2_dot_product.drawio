@@ -1,0 +1,145 @@
+<mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== As grid 32×32 (shown as 8×8 visual) ===== -->
+    <mxCell id="as" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="40" y="60" width="200" height="200" as="geometry" />
+    </mxCell>
+    <!-- Row highlight: threadRow=1 -->
+    <mxCell id="asrow" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;opacity=50;" value="" vertex="1">
+      <mxGeometry x="40" y="85" width="200" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="asl" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="As (32×32)" vertex="1">
+      <mxGeometry x="80" y="36" width="100" height="18" as="geometry" />
+    </mxCell>
+    <!-- Row label -->
+    <mxCell id="asrl" parent="1" style="text;html=1;align=right;fontSize=8;fontColor=#6c8ebf;fontStyle=1;" value="row 1 →" vertex="1">
+      <mxGeometry x="-2" y="88" width="40" height="14" as="geometry" />
+    </mxCell>
+    <!-- Col labels -->
+    <mxCell id="asc0" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#666;" value="d=0" vertex="1">
+      <mxGeometry x="40" y="262" width="24" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="asc1" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#666;" value="d=1" vertex="1">
+      <mxGeometry x="66" y="262" width="24" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="ascd" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#666;" value="⋯" vertex="1">
+      <mxGeometry x="120" y="262" width="20" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="asc31" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#666;" value="d=31" vertex="1">
+      <mxGeometry x="210" y="262" width="30" height="12" as="geometry" />
+    </mxCell>
+    <!-- dotIdx sweep arrow under As -->
+    <mxCell id="asd" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#9673a6;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="50" y="280" as="sourcePoint" />
+        <mxPoint x="230" y="280" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="asdl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;fontStyle=1;" value="dotIdx = 0 → 31" vertex="1">
+      <mxGeometry x="90" y="284" width="90" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bs grid 32×32 ===== -->
+    <mxCell id="bs" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="320" y="60" width="200" height="200" as="geometry" />
+    </mxCell>
+    <!-- Col highlight: threadCol=3 -->
+    <mxCell id="bscol" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;opacity=50;" value="" vertex="1">
+      <mxGeometry x="339" y="60" width="19" height="200" as="geometry" />
+    </mxCell>
+    <mxCell id="bsl" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="Bs (32×32)" vertex="1">
+      <mxGeometry x="360" y="36" width="100" height="18" as="geometry" />
+    </mxCell>
+    <!-- Col label -->
+    <mxCell id="bscl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#D6B656;fontStyle=1;" value="↓ col 3" vertex="1">
+      <mxGeometry x="330" y="262" width="40" height="14" as="geometry" />
+    </mxCell>
+    <!-- Row labels -->
+    <mxCell id="bsr0" parent="1" style="text;html=1;align=right;fontSize=7;fontColor=#666;" value="d=0" vertex="1">
+      <mxGeometry x="294" y="60" width="24" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bsr1" parent="1" style="text;html=1;align=right;fontSize=7;fontColor=#666;" value="d=1" vertex="1">
+      <mxGeometry x="294" y="86" width="24" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bsrd" parent="1" style="text;html=1;align=right;fontSize=7;fontColor=#666;" value="⋮" vertex="1">
+      <mxGeometry x="294" y="140" width="24" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bsr31" parent="1" style="text;html=1;align=right;fontSize=7;fontColor=#666;" value="d=31" vertex="1">
+      <mxGeometry x="290" y="240" width="28" height="12" as="geometry" />
+    </mxCell>
+    <!-- dotIdx sweep arrow left of Bs -->
+    <mxCell id="bsd" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#9673a6;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="286" y="70" as="sourcePoint" />
+        <mxPoint x="286" y="250" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="bsdl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;fontStyle=1;rotation=-90;" value="dotIdx = 0 → 31" vertex="1">
+      <mxGeometry x="230" y="152" width="90" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== × and = signs ===== -->
+    <mxCell id="mul" parent="1" style="text;html=1;align=center;fontSize=16;fontStyle=1;" value="×" vertex="1">
+      <mxGeometry x="252" y="148" width="20" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="eq" parent="1" style="text;html=1;align=center;fontSize=16;fontStyle=1;" value="=" vertex="1">
+      <mxGeometry x="540" y="148" width="20" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Result: C[1][3] ===== -->
+    <mxCell id="res" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontSize=10;" value="&lt;b&gt;C[1][3]&lt;/b&gt;" vertex="1">
+      <mxGeometry x="580" y="140" width="60" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Example thread annotation ===== -->
+    <mxCell id="ex" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999;fontSize=9;align=left;" value="&lt;b&gt;Example: threadIdx.x = 35&lt;/b&gt;&lt;br&gt;threadRow = 35/32 = 1&lt;br&gt;threadCol = 35%32 = 3" vertex="1">
+      <mxGeometry x="580" y="60" width="160" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Expanded dot product ===== -->
+    <mxCell id="dp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=9;align=left;" value="" vertex="1">
+      <mxGeometry x="40" y="310" width="700" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="dpt" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#9673a6;" value="tmp += As[1][0]×Bs[0][3] + As[1][1]×Bs[1][3] + As[1][2]×Bs[2][3] + ⋯ + As[1][31]×Bs[31][3]" vertex="1">
+      <mxGeometry x="54" y="318" width="660" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Per-step boxes -->
+    <mxCell id="d0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="d=0&lt;br&gt;As[1][0]×Bs[0][3]" vertex="1">
+      <mxGeometry x="54" y="344" width="90" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="dp1" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;" value="+" vertex="1">
+      <mxGeometry x="146" y="350" width="12" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="d1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="d=1&lt;br&gt;As[1][1]×Bs[1][3]" vertex="1">
+      <mxGeometry x="160" y="344" width="90" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="dp2" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;" value="+" vertex="1">
+      <mxGeometry x="252" y="350" width="12" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="d2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="d=2&lt;br&gt;As[1][2]×Bs[2][3]" vertex="1">
+      <mxGeometry x="266" y="344" width="90" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="dp3" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;" value="+ ⋯ +" vertex="1">
+      <mxGeometry x="358" y="350" width="36" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="d31" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="d=31&lt;br&gt;As[1][31]×Bs[31][3]" vertex="1">
+      <mxGeometry x="396" y="344" width="100" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="deq" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#118a4b;" value="→ tmp (partial C[1][3])" vertex="1">
+      <mxGeometry x="504" y="352" width="120" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Key insight ===== -->
+    <mxCell id="key" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="thread reads &lt;b&gt;one row&lt;/b&gt; of As + &lt;b&gt;one col&lt;/b&gt; of Bs from shared memory → 32+32 = 64 shared reads, 0 global reads" vertex="1">
+      <mxGeometry x="40" y="400" width="500" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="key2" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="this is a &lt;b&gt;partial&lt;/b&gt; dot product (32 terms). the full C[1][3] accumulates across all bkIdx iterations." vertex="1">
+      <mxGeometry x="40" y="418" width="500" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

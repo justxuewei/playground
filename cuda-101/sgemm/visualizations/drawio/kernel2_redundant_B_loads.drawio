@@ -1,0 +1,208 @@
+<mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== LEFT: C matrix + block zoom ===== -->
+    <mxCell id="c1" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="C" vertex="1">
+      <mxGeometry x="30" y="320" width="120" height="120" as="geometry" />
+    </mxCell>
+    <mxCell id="c2" parent="1" style="whiteSpace=wrap;html=1;" value="block&lt;br&gt;(0,0)" vertex="1">
+      <mxGeometry x="30" y="320" width="60" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="c3" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="block&lt;br&gt;(0,1)" vertex="1">
+      <mxGeometry x="90" y="320" width="60" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Zoomed block -->
+    <mxCell id="z0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;dashed=1;" value="" vertex="1">
+      <mxGeometry x="200" y="300" width="100" height="150" as="geometry" />
+    </mxCell>
+    <mxCell id="z1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="warp0" vertex="1">
+      <mxGeometry x="208" y="310" width="84" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="z2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="warp1" vertex="1">
+      <mxGeometry x="208" y="334" width="84" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="z3" parent="1" style="text;html=1;align=center;fontSize=9;" value="..." vertex="1">
+      <mxGeometry x="208" y="358" width="84" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="z4" parent="1" style="whiteSpace=wrap;html=1;fontSize=9;" value="warp31" vertex="1">
+      <mxGeometry x="208" y="378" width="84" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="zl1" edge="1" parent="1" source="c3" target="z0" style="endArrow=none;dashed=1;html=1;rounded=0;" value="">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== TOP: warps with threads ===== -->
+    <mxCell id="w0box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#6c8ebf;" value="" vertex="1">
+      <mxGeometry x="340" y="40" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="w0label" parent="1" style="text;html=1;align=left;fontSize=10;" value="&lt;b&gt;warp 0&lt;/b&gt; &lt;font color=&quot;#666&quot; style=&quot;font-size:9px&quot;&gt;(row 0)&lt;/font&gt;" vertex="1">
+      <mxGeometry x="348" y="42" width="100" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="w0t0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t0" vertex="1">
+      <mxGeometry x="348" y="60" width="30" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w0t1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t1" vertex="1">
+      <mxGeometry x="382" y="60" width="30" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w0dots" parent="1" style="text;html=1;align=center;fontSize=9;" value="⋯" vertex="1">
+      <mxGeometry x="416" y="60" width="16" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w0t31" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t31" vertex="1">
+      <mxGeometry x="436" y="60" width="30" height="18" as="geometry" />
+    </mxCell>
+
+    <mxCell id="w1box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#6c8ebf;" value="" vertex="1">
+      <mxGeometry x="340" y="98" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="w1label" parent="1" style="text;html=1;align=left;fontSize=10;" value="&lt;b&gt;warp 1&lt;/b&gt; &lt;font color=&quot;#666&quot; style=&quot;font-size:9px&quot;&gt;(row 1)&lt;/font&gt;" vertex="1">
+      <mxGeometry x="348" y="100" width="100" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="w1t32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t32" vertex="1">
+      <mxGeometry x="348" y="118" width="30" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w1t33" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t33" vertex="1">
+      <mxGeometry x="382" y="118" width="30" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w1tdots" parent="1" style="text;html=1;align=center;fontSize=9;" value="⋯" vertex="1">
+      <mxGeometry x="416" y="118" width="16" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="w1t63" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" value="t63" vertex="1">
+      <mxGeometry x="436" y="118" width="30" height="18" as="geometry" />
+    </mxCell>
+
+    <mxCell id="wdots" parent="1" style="text;html=1;align=center;fontSize=12;" value="⋮" vertex="1">
+      <mxGeometry x="370" y="152" width="16" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="w31box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#666;" value="" vertex="1">
+      <mxGeometry x="340" y="170" width="240" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="w31label" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;b&gt;warp 31&lt;/b&gt; &lt;font color=&quot;#666&quot;&gt;(row 31) t992..t1023&lt;/font&gt;" vertex="1">
+      <mxGeometry x="348" y="173" width="180" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Parallel bracket -->
+    <mxCell id="par" parent="1" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;size=0.5;" value="" vertex="1">
+      <mxGeometry x="588" y="40" width="12" height="152" as="geometry" />
+    </mxCell>
+    <mxCell id="parL" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#118a4b;" value="parallel" vertex="1">
+      <mxGeometry x="604" y="108" width="46" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== k=0 panel ===== -->
+    <mxCell id="k0box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#999;" value="" vertex="1">
+      <mxGeometry x="340" y="210" width="270" height="260" as="geometry" />
+    </mxCell>
+    <mxCell id="k0title" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="k = 0" vertex="1">
+      <mxGeometry x="436" y="214" width="44" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A k=0 (full matrix, 32-element piece of col 0 highlighted) -->
+    <mxCell id="a0" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="" vertex="1">
+      <mxGeometry x="360" y="248" width="100" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="a0h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="360" y="248" width="16" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a0l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix A" vertex="1">
+      <mxGeometry x="378" y="350" width="50" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="a0c" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#6c8ebf;fontStyle=1;" value="A[0..31][0]&lt;br&gt;32 elements" vertex="1">
+      <mxGeometry x="378" y="252" width="60" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B k=0 (full matrix, 32-element piece of row 0 highlighted) -->
+    <mxCell id="b0" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="" vertex="1">
+      <mxGeometry x="490" y="248" width="100" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="b0h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="540" y="248" width="50" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="b0l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix B" vertex="1">
+      <mxGeometry x="508" y="350" width="50" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="b0r" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#D6B656;fontStyle=1;" value="B[0][32..63]&lt;br&gt;32 elements" vertex="1">
+      <mxGeometry x="540" y="266" width="60" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- k=0 redundancy note -->
+    <mxCell id="k0r" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#b85450;fontStyle=1;" value="all 32 warps load B[0][0..31]&lt;br&gt;→ 1024 loads, 32 unique" vertex="1">
+      <mxGeometry x="360" y="370" width="180" height="26" as="geometry" />
+    </mxCell>
+
+    <!-- Load arrows k=0 -->
+    <mxCell id="la0" edge="1" parent="1" style="rounded=1;strokeColor=#6c8ebf;strokeWidth=1;dashed=1;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="368" y="196" as="sourcePoint" />
+        <mxPoint x="368" y="248" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="lb0" edge="1" parent="1" style="rounded=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="460" y="196" as="sourcePoint" />
+        <mxPoint x="540" y="248" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ===== "next k" arrow ===== -->
+    <mxCell id="nk" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;width=5;endSize=3;fillColor=default;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="620" y="340" as="sourcePoint" />
+        <mxPoint x="670" y="340" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="nkl" parent="1" style="text;html=1;align=center;fontSize=8;" value="next k" vertex="1">
+      <mxGeometry x="622" y="352" width="40" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== k=1 panel ===== -->
+    <mxCell id="k1box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#999;" value="" vertex="1">
+      <mxGeometry x="670" y="210" width="270" height="260" as="geometry" />
+    </mxCell>
+    <mxCell id="k1title" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="k = 1" vertex="1">
+      <mxGeometry x="766" y="214" width="44" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A k=1 (full matrix, 32-element piece of col 1 highlighted) -->
+    <mxCell id="a1" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="" vertex="1">
+      <mxGeometry x="690" y="248" width="100" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="a1h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="706" y="248" width="16" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix A" vertex="1">
+      <mxGeometry x="708" y="350" width="50" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="a1c" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#6c8ebf;fontStyle=1;" value="A[0..31][1]&lt;br&gt;32 elements" vertex="1">
+      <mxGeometry x="724" y="252" width="60" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B k=1 (full matrix, 32-element piece of row 1 highlighted) -->
+    <mxCell id="b1" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="" vertex="1">
+      <mxGeometry x="820" y="248" width="100" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="b1h" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="870" y="264" width="50" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="b1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="Matrix B" vertex="1">
+      <mxGeometry x="838" y="350" width="50" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="b1r" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#D6B656;fontStyle=1;" value="B[1][32..63]&lt;br&gt;32 elements" vertex="1">
+      <mxGeometry x="870" y="282" width="60" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- k=1 redundancy note -->
+    <mxCell id="k1r" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#b85450;fontStyle=1;" value="all 32 warps load B[1][0..31]&lt;br&gt;→ again 1024 loads, 32 unique" vertex="1">
+      <mxGeometry x="690" y="370" width="190" height="26" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bottom ===== -->
+    <mxCell id="sum" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="K loop is &lt;b&gt;sequential&lt;/b&gt; (k=0, k=1, …), &lt;b&gt;within each step all warps are parallel&lt;/b&gt;" vertex="1">
+      <mxGeometry x="340" y="480" width="380" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

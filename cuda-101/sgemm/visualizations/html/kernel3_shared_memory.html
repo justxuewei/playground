@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kernel 2 Global Memory Coalescing</title>
+  <title>Kernel 3 Shared Memory Blocking</title>
   <link rel="stylesheet" href="kernel_animation.css">
 </head>
 <body>
   <main>
     <header>
       <div>
-        <h1>Kernel 2: Global Memory Coalescing</h1>
+        <h1>Kernel 3: Shared Memory Blocking</h1>
         <p class="subtitle">
-          Walks from the CUDA code, to the first 1D block, to one 32x32 output
-          tile, and finally to the full matrix grid.
+          Thread → Warp → Block → Grid: how cooperative loading into
+          shared memory eliminates redundant global reads.
         </p>
       </div>
       <div class="controls" aria-label="Animation controls">
@@ -26,21 +26,17 @@
 
     <nav class="stage-tabs" aria-label="Animation stages" id="tabs"></nav>
 
-    <section class="canvas-shell" aria-label="Kernel 2 coalescing animation">
+    <section class="canvas-shell" aria-label="Kernel 3 shared memory animation">
       <canvas id="scene" width="1200" height="680"></canvas>
       <div class="legend" aria-label="Legend">
+        <span class="legend-item"><span class="swatch a"></span>A / As tile</span>
+        <span class="legend-item"><span class="swatch b"></span>B / Bs tile</span>
         <span class="legend-item"><span class="swatch c"></span>C tile</span>
-        <span class="legend-item"><span class="swatch warp"></span>Warp 0</span>
-        <span class="legend-item"><span class="swatch a"></span>A access</span>
-        <span class="legend-item"><span class="swatch b"></span>B access</span>
-        <span class="legend-item"><span class="swatch memo"></span>Register sum</span>
+        <span class="legend-item"><span class="swatch warp"></span>Thread / warp</span>
       </div>
     </section>
   </main>
 
-  <script>
-    window.SGEMM_KERNEL_ANIMATION = { kernel: 2 };
-  </script>
-  <script src="kernel_animation_common.js"></script>
+  <script src="kernel3_shared_memory.js"></script>
 </body>
 </html>
