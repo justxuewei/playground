@@ -26,6 +26,9 @@
 // A block has (BM * BN) / TM = 512 threads.
 // Those 512 threads produce BM * BN = 4096 output elements because each thread
 // keeps 8 partial sums in registers.
+//
+// Out-of-bounds loads are zero-padded and the C writeback is guarded so M, N,
+// and K do not need to be multiples of BM, BN, and BK.
 template <const int BM, const int BN, const int BK, const int TM>
 __global__ void sgemm1DBlocktiling(int M, int N, int K, float alpha,
                                    const float *A, const float *B, float beta,
@@ -75,8 +78,14 @@ __global__ void sgemm1DBlocktiling(int M, int N, int K, float alpha,
   float threadResults[TM] = {0.0f};
 
   for (uint bkIdx = 0; bkIdx < K; bkIdx += BK) {
-    As[innerRowA * BK + innerColA] = A[innerRowA * K + innerColA];
-    Bs[innerRowB * BN + innerColB] = B[innerRowB * N + innerColB];
+    As[innerRowA * BK + innerColA] =
+        (cTileRow * BM + innerRowA < M && bkIdx + innerColA < K)
+            ? A[innerRowA * K + innerColA]
+            : 0.0f;
+    Bs[innerRowB * BN + innerColB] =
+        (bkIdx + innerRowB < K && cTileCol * BN + innerColB < N)
+            ? B[innerRowB * N + innerColB]
+            : 0.0f;
     __syncthreads();
 
     A += BK;
@@ -94,8 +103,11 @@ __global__ void sgemm1DBlocktiling(int M, int N, int K, float alpha,
   }
 
   for (uint resIdx = 0; resIdx < TM; ++resIdx) {
-    C[(threadRow * TM + resIdx) * N + threadCol] =
-        alpha * threadResults[resIdx] +
-        beta * C[(threadRow * TM + resIdx) * N + threadCol];
+    if (cTileRow * BM + threadRow * TM + resIdx < M &&
+        cTileCol * BN + threadCol < N) {
+      C[(threadRow * TM + resIdx) * N + threadCol] =
+          alpha * threadResults[resIdx] +
+          beta * C[(threadRow * TM + resIdx) * N + threadCol];
+    }
   }
 }
