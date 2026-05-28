@@ -1,0 +1,142 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;" value="Inner loop: one thread at one dotIdx — 8 FMAs into r[0..7]" vertex="1">
+      <mxGeometry x="20" y="20" width="700" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Code block with inner loop highlighted -->
+    <mxCell id="codebg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="20" y="260" width="700" height="130" as="geometry" />
+    </mxCell>
+    <mxCell id="code1" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="for (uint dotIdx = 0; dotIdx &lt; BK; ++dotIdx) {" vertex="1">
+      <mxGeometry x="28" y="266" width="680" height="16" as="geometry" />
+    </mxCell>
+    <!-- inner block highlighted (yellow) -->
+    <mxCell id="inhi" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;strokeWidth=2;opacity=80;" value="" vertex="1">
+      <mxGeometry x="26" y="284" width="670" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="code2" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="  float tmpB = Bs[dotIdx * BN + threadCol];" vertex="1">
+      <mxGeometry x="28" y="286" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code3" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="  for (uint resIdx = 0; resIdx &lt; TM; ++resIdx) {" vertex="1">
+      <mxGeometry x="28" y="304" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code4" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="    threadResults[resIdx] +=" vertex="1">
+      <mxGeometry x="28" y="322" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code5" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="        As[(threadRow * TM + resIdx) * BK + dotIdx] * tmpB;" vertex="1">
+      <mxGeometry x="28" y="340" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code6" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="  }" vertex="1">
+      <mxGeometry x="28" y="358" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code7" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="}" vertex="1">
+      <mxGeometry x="28" y="376" width="680" height="16" as="geometry" />
+    </mxCell>
+
+    <mxCell id="inlbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#b45309;" value="↑ inner work (this pic)" vertex="1">
+      <mxGeometry x="540" y="320" width="160" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== As (left) - just thread 0's strip ===== -->
+    <mxCell id="aslbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#2563eb;" value="As column (at dotIdx=d)" vertex="1">
+      <mxGeometry x="20" y="60" width="200" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="as0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="As[0][d]" vertex="1">
+      <mxGeometry x="20" y="80" width="80" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="as1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="As[1][d]" vertex="1">
+      <mxGeometry x="20" y="100" width="80" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="as2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="As[2][d]" vertex="1">
+      <mxGeometry x="20" y="120" width="80" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="asdots" parent="1" style="text;html=1;align=center;fontSize=12;" value="⋮" vertex="1">
+      <mxGeometry x="20" y="142" width="80" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="as7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="As[7][d]" vertex="1">
+      <mxGeometry x="20" y="184" width="80" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ===== × ===== -->
+    <mxCell id="mul" parent="1" style="text;html=1;align=center;fontSize=20;fontStyle=1;" value="×" vertex="1">
+      <mxGeometry x="110" y="130" width="30" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Btmp ===== -->
+    <mxCell id="btmp" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#b45309;strokeWidth=2;fontSize=9;fontFamily=monospace;" value="Btmp&#10;= Bs[d][col]" vertex="1">
+      <mxGeometry x="150" y="120" width="100" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="btmpl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#b45309;fontStyle=2;" value="loaded once,&#10;reused 8×" vertex="1">
+      <mxGeometry x="150" y="174" width="100" height="24" as="geometry" />
+    </mxCell>
+
+    <!-- ===== = ===== -->
+    <mxCell id="eq" parent="1" style="text;html=1;align=center;fontSize=20;fontStyle=1;" value="+=" vertex="1">
+      <mxGeometry x="260" y="130" width="30" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== r[] registers ===== -->
+    <mxCell id="rlbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#9673a6;" value="thread's r[] (registers)" vertex="1">
+      <mxGeometry x="300" y="60" width="200" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="r0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[0]" vertex="1">
+      <mxGeometry x="300" y="80" width="60" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[1]" vertex="1">
+      <mxGeometry x="300" y="100" width="60" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[2]" vertex="1">
+      <mxGeometry x="300" y="120" width="60" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="rdots" parent="1" style="text;html=1;align=center;fontSize=12;" value="⋮" vertex="1">
+      <mxGeometry x="300" y="142" width="60" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[7]" vertex="1">
+      <mxGeometry x="300" y="184" width="60" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Connecting arrows (As[i] → r[i]) ===== -->
+    <mxCell id="ar0" parent="1" style="endArrow=classic;html=1;strokeColor=#9673a6;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="90" as="sourcePoint" /><mxPoint x="295" y="90" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ar1" parent="1" style="endArrow=classic;html=1;strokeColor=#9673a6;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="110" as="sourcePoint" /><mxPoint x="295" y="110" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ar2" parent="1" style="endArrow=classic;html=1;strokeColor=#9673a6;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="130" as="sourcePoint" /><mxPoint x="295" y="130" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ar7" parent="1" style="endArrow=classic;html=1;strokeColor=#9673a6;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="194" as="sourcePoint" /><mxPoint x="295" y="194" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- FMA labels next to arrows -->
+    <mxCell id="f0" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#9673a6;fontFamily=monospace;" value="r[0] += As[0][d] × Btmp" vertex="1">
+      <mxGeometry x="120" y="74" width="170" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="f1" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#9673a6;fontFamily=monospace;" value="r[1] += As[1][d] × Btmp" vertex="1">
+      <mxGeometry x="120" y="94" width="170" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="f2" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#9673a6;fontFamily=monospace;" value="r[2] += As[2][d] × Btmp" vertex="1">
+      <mxGeometry x="120" y="114" width="170" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="f7" parent="1" style="text;html=1;align=center;fontSize=7;fontColor=#9673a6;fontFamily=monospace;" value="r[7] += As[7][d] × Btmp" vertex="1">
+      <mxGeometry x="120" y="178" width="170" height="10" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Annotations on the right ===== -->
+    <mxCell id="note1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;align=left;" value="&lt;b&gt;8 independent FMAs&lt;/b&gt;&lt;br&gt;different r[], same Btmp&lt;br&gt;→ math pipe runs full speed" vertex="1">
+      <mxGeometry x="400" y="80" width="220" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="note2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontSize=9;align=left;" value="&lt;b&gt;Per dotIdx:&lt;/b&gt;&lt;br&gt;1 Bs load + 8 As loads&lt;br&gt;= 9 SMEM reads → 8 FMAs" vertex="1">
+      <mxGeometry x="400" y="140" width="220" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="note3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;" value="&lt;b&gt;Across 8 dotIdx steps:&lt;/b&gt;&lt;br&gt;each r[i] accumulates 8 times&lt;br&gt;= 1 full K-chunk contribution" vertex="1">
+      <mxGeometry x="400" y="200" width="220" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bottom: thread context ===== -->
+    <mxCell id="ctx" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;fontStyle=2;" value="for one thread:  threadRow ∈ {0..7}, threadCol ∈ {0..63}  →  thread owns r[0..7] mapped to C[threadRow*8+0..7][threadCol]" vertex="1">
+      <mxGeometry x="20" y="230" width="700" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

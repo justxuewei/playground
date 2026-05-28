@@ -1,0 +1,146 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;" value="Data sharing pattern: same row → share A · same column → share B" vertex="1">
+      <mxGeometry x="20" y="20" width="800" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- ===== PANEL 1: same row group share A ===== -->
+    <mxCell id="p1lbl" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#118a4b;" value="Same row group → share A (different B cols)" vertex="1">
+      <mxGeometry x="20" y="50" width="500" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Bs top -->
+    <mxCell id="p1bs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#D6B656;strokeWidth=2;fontSize=8;fontStyle=1;fontColor=#b45309;" value="Bs 8×64" vertex="1">
+      <mxGeometry x="100" y="80" width="160" height="14" as="geometry" />
+    </mxCell>
+    <!-- 2 different B cols highlighted -->
+    <mxCell id="p1bc1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#b45309;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="110" y="80" width="8" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="p1bc2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="240" y="80" width="8" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- As left -->
+    <mxCell id="p1as" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=8;fontStyle=1;fontColor=#2563eb;" value="As 8×8&#10;(same row group)" vertex="1">
+      <mxGeometry x="40" y="100" width="50" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- C tile (small) with 2 highlighted strips in same row -->
+    <mxCell id="p1c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="100" y="100" width="160" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1ct1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="110" y="100" width="8" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1ct2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c2185b;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="240" y="100" width="8" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1clbl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#118a4b;" value="C tile row group" vertex="1">
+      <mxGeometry x="120" y="184" width="120" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows: As → both threads -->
+    <mxCell id="p1aa1" parent="1" style="endArrow=classic;html=1;strokeColor=#2563eb;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="92" y="140" as="sourcePoint" /><mxPoint x="112" y="140" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p1aa2" parent="1" style="endArrow=classic;html=1;strokeColor=#2563eb;strokeWidth=1;dashed=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="92" y="160" as="sourcePoint" /><mxPoint x="242" y="160" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p1al" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#2563eb;fontStyle=1;" value="same A (shared)" vertex="1">
+      <mxGeometry x="130" y="142" width="100" height="10" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows: B col 1 → thread 1, B col 2 → thread 2 -->
+    <mxCell id="p1ba1" parent="1" style="endArrow=classic;html=1;strokeColor=#b45309;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="114" y="94" as="sourcePoint" /><mxPoint x="114" y="100" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p1ba2" parent="1" style="endArrow=classic;html=1;strokeColor=#b45309;strokeWidth=1;dashed=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="244" y="94" as="sourcePoint" /><mxPoint x="244" y="100" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p1bl" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#b45309;fontStyle=1;" value="different B cols" vertex="1">
+      <mxGeometry x="270" y="84" width="100" height="10" as="geometry" />
+    </mxCell>
+
+    <!-- ===== PANEL 2: same column share B ===== -->
+    <mxCell id="p2lbl" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#118a4b;" value="Same column → share B (different A rows)" vertex="1">
+      <mxGeometry x="20" y="230" width="500" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Bs top -->
+    <mxCell id="p2bs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#D6B656;strokeWidth=2;fontSize=8;fontStyle=1;fontColor=#b45309;" value="Bs 8×64" vertex="1">
+      <mxGeometry x="100" y="260" width="160" height="14" as="geometry" />
+    </mxCell>
+    <!-- one B col highlighted (shared by both threads) -->
+    <mxCell id="p2bc" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#b45309;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="170" y="260" width="8" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- As left (two different row groups) -->
+    <mxCell id="p2as1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;fontSize=7;fontStyle=1;fontColor=#2563eb;" value="As rows 0..7" vertex="1">
+      <mxGeometry x="40" y="280" width="50" height="36" as="geometry" />
+    </mxCell>
+    <mxCell id="p2as2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cce4ff;strokeColor=#0d47a1;strokeWidth=2;fontSize=7;fontStyle=1;fontColor=#0d47a1;" value="As rows 8..15" vertex="1">
+      <mxGeometry x="40" y="324" width="50" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- C tile with 2 highlighted strips in same column -->
+    <mxCell id="p2c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="100" y="280" width="160" height="100" as="geometry" />
+    </mxCell>
+    <!-- group divider -->
+    <mxCell id="p2cdiv" parent="1" style="endArrow=none;html=1;strokeColor=#be123c;strokeWidth=1;dashed=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="100" y="324" as="sourcePoint" /><mxPoint x="260" y="324" as="targetPoint" /></mxGeometry></mxCell>
+    <!-- thread strips (same col, diff row groups) -->
+    <mxCell id="p2ct1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="170" y="280" width="8" height="36" as="geometry" />
+    </mxCell>
+    <mxCell id="p2ct2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c2185b;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="170" y="324" width="8" height="36" as="geometry" />
+    </mxCell>
+    <mxCell id="p2clbl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#118a4b;" value="C tile (2 row groups, same col)" vertex="1">
+      <mxGeometry x="120" y="384" width="180" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows: As rows 0..7 → thread 1, As rows 8..15 → thread 2 -->
+    <mxCell id="p2aa1" parent="1" style="endArrow=classic;html=1;strokeColor=#2563eb;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="92" y="298" as="sourcePoint" /><mxPoint x="172" y="298" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p2aa2" parent="1" style="endArrow=classic;html=1;strokeColor=#0d47a1;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="92" y="342" as="sourcePoint" /><mxPoint x="172" y="342" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p2al" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#2563eb;fontStyle=1;" value="different A rows" vertex="1">
+      <mxGeometry x="22" y="262" width="100" height="10" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow: B col → both threads -->
+    <mxCell id="p2ba1" parent="1" style="endArrow=classic;html=1;strokeColor=#b45309;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="174" y="274" as="sourcePoint" /><mxPoint x="174" y="280" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p2ba2" parent="1" style="endArrow=classic;html=1;strokeColor=#b45309;strokeWidth=1;dashed=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="200" y="266" as="sourcePoint" /><mxPoint x="200" y="380" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="p2bl" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#b45309;fontStyle=1;" value="same B col (shared)" vertex="1">
+      <mxGeometry x="270" y="262" width="120" height="10" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Summary findings ===== -->
+    <mxCell id="sbg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999;strokeWidth=1;align=left;" value="" vertex="1">
+      <mxGeometry x="440" y="50" width="500" height="350" as="geometry" />
+    </mxCell>
+    <mxCell id="sh" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Four findings" vertex="1">
+      <mxGeometry x="450" y="58" width="200" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="s1" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;b&gt;1.&lt;/b&gt; Each thread computes &lt;b&gt;8 C elements&lt;/b&gt;,&#10;     takes &lt;b&gt;8 A&lt;/b&gt; + &lt;b&gt;1 B&lt;/b&gt; per dotIdx step." vertex="1">
+      <mxGeometry x="450" y="80" width="480" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="s2" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;b&gt;2.&lt;/b&gt; &lt;b&gt;2 warps&lt;/b&gt; process one C row group (64 cols)." vertex="1">
+      <mxGeometry x="450" y="120" width="480" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=1;fontSize=9;align=left;" value="" vertex="1">
+      <mxGeometry x="450" y="144" width="480" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="s3t" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;b&gt;3.&lt;/b&gt; Same row group  →  &lt;font color=&quot;#2563eb&quot;&gt;&lt;b&gt;same A&lt;/b&gt;&lt;/font&gt; (shared)&#10;                       →  &lt;font color=&quot;#b45309&quot;&gt;&lt;b&gt;different B&lt;/b&gt;&lt;/font&gt; (1 col per thread)" vertex="1">
+      <mxGeometry x="458" y="148" width="464" height="42" as="geometry" />
+    </mxCell>
+    <mxCell id="s4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c2185b;strokeWidth=1;fontSize=9;align=left;" value="" vertex="1">
+      <mxGeometry x="450" y="204" width="480" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="s4t" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;b&gt;4.&lt;/b&gt; Same column  →  &lt;font color=&quot;#2563eb&quot;&gt;&lt;b&gt;different A&lt;/b&gt;&lt;/font&gt; (1 row group each)&#10;                  →  &lt;font color=&quot;#b45309&quot;&gt;&lt;b&gt;same B&lt;/b&gt;&lt;/font&gt; (shared col)" vertex="1">
+      <mxGeometry x="458" y="208" width="464" height="42" as="geometry" />
+    </mxCell>
+
+    <mxCell id="sn" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;fontStyle=2;" value="↑ The sharing patterns are why register tiling (TM=8) is efficient:&#10;a thread reuses As in registers across 8 outputs, and Bs across 8 dotIdx steps." vertex="1">
+      <mxGeometry x="450" y="270" width="480" height="40" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

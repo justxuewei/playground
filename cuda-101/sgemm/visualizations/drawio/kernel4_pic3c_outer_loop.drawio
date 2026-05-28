@@ -1,0 +1,144 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;" value="Outer loop: dotIdx sweeps 0..7 — As column and Bs row advance, r[] accumulates" vertex="1">
+      <mxGeometry x="20" y="20" width="800" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- ===== As (left, with dotIdx sweep) ===== -->
+    <mxCell id="aslbl" parent="1" style="text;html=1;align=center;fontSize=9;fontStyle=1;fontColor=#2563eb;" value="As (this thread's 8 rows)" vertex="1">
+      <mxGeometry x="20" y="60" width="160" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="as" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="20" y="80" width="160" height="160" as="geometry" />
+    </mxCell>
+
+    <!-- 8 column dividers in As (8 cols) -->
+    <mxCell id="ad1" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="40" y="80" as="sourcePoint" /><mxPoint x="40" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad2" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="80" as="sourcePoint" /><mxPoint x="60" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad3" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="80" y="80" as="sourcePoint" /><mxPoint x="80" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad4" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="100" y="80" as="sourcePoint" /><mxPoint x="100" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad5" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="120" y="80" as="sourcePoint" /><mxPoint x="120" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad6" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="140" y="80" as="sourcePoint" /><mxPoint x="140" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="ad7" parent="1" style="endArrow=none;html=1;strokeColor=#6c8ebf;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="160" y="80" as="sourcePoint" /><mxPoint x="160" y="240" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- highlight dotIdx=0 col -->
+    <mxCell id="ahi" parent="1" style="whiteSpace=wrap;html=1;fillColor=#2563eb;strokeColor=#2563eb;strokeWidth=2;opacity=40;" value="" vertex="1">
+      <mxGeometry x="20" y="80" width="20" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="acoll" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#2563eb;fontStyle=1;" value="dotIdx=0" vertex="1">
+      <mxGeometry x="14" y="244" width="32" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- sweep arrow under As -->
+    <mxCell id="asweep" parent="1" style="endArrow=classic;html=1;strokeColor=#2563eb;strokeWidth=2;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="30" y="262" as="sourcePoint" /><mxPoint x="170" y="262" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="asweepl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#2563eb;fontStyle=2;" value="dotIdx sweeps right" vertex="1">
+      <mxGeometry x="40" y="266" width="140" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Bs (top, with dotIdx sweep) ===== -->
+    <mxCell id="bslbl" parent="1" style="text;html=1;align=center;fontSize=9;fontStyle=1;fontColor=#b45309;" value="Bs (this thread's col)" vertex="1">
+      <mxGeometry x="220" y="60" width="160" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="bs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="280" y="80" width="20" height="160" as="geometry" />
+    </mxCell>
+
+    <!-- 8 row dividers in Bs -->
+    <mxCell id="bd1" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="100" as="sourcePoint" /><mxPoint x="300" y="100" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd2" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="120" as="sourcePoint" /><mxPoint x="300" y="120" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd3" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="140" as="sourcePoint" /><mxPoint x="300" y="140" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd4" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="160" as="sourcePoint" /><mxPoint x="300" y="160" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd5" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="180" as="sourcePoint" /><mxPoint x="300" y="180" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd6" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="200" as="sourcePoint" /><mxPoint x="300" y="200" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bd7" parent="1" style="endArrow=none;html=1;strokeColor=#D6B656;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="220" as="sourcePoint" /><mxPoint x="300" y="220" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- highlight dotIdx=0 row in Bs -->
+    <mxCell id="bhi" parent="1" style="whiteSpace=wrap;html=1;fillColor=#b45309;strokeColor=#b45309;strokeWidth=2;opacity=40;" value="" vertex="1">
+      <mxGeometry x="280" y="80" width="20" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="bcoll" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#b45309;fontStyle=1;" value="dotIdx=0  (tmpB)" vertex="1">
+      <mxGeometry x="306" y="82" width="100" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- sweep arrow next to Bs -->
+    <mxCell id="bsweep" parent="1" style="endArrow=classic;html=1;strokeColor=#b45309;strokeWidth=2;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="270" y="90" as="sourcePoint" /><mxPoint x="270" y="230" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bsweepl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#b45309;fontStyle=2;rotation=-90;" value="dotIdx sweeps down" vertex="1">
+      <mxGeometry x="200" y="150" width="140" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== r[] registers ===== -->
+    <mxCell id="rlbl" parent="1" style="text;html=1;align=center;fontSize=9;fontStyle=1;fontColor=#9673a6;" value="r[0..7] accumulators" vertex="1">
+      <mxGeometry x="440" y="60" width="160" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="r0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[0]" vertex="1">
+      <mxGeometry x="440" y="80" width="160" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[1]" vertex="1">
+      <mxGeometry x="440" y="100" width="160" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[2]" vertex="1">
+      <mxGeometry x="440" y="120" width="160" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="rdots" parent="1" style="text;html=1;align=center;fontSize=12;" value="⋮" vertex="1">
+      <mxGeometry x="440" y="142" width="160" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=8;fontFamily=monospace;" value="r[7]" vertex="1">
+      <mxGeometry x="440" y="220" width="160" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- r accumulation note -->
+    <mxCell id="raccl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;fontStyle=2;" value="each r[i] += FMA  (8 times across dotIdx 0..7)" vertex="1">
+      <mxGeometry x="440" y="246" width="200" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Big arrow showing inner work fills the registers -->
+    <mxCell id="bigarr" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=16;endSize=6;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" edge="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="340" y="160" as="sourcePoint" />
+        <mxPoint x="430" y="160" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="bigarrl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;fontStyle=1;" value="inner loop" vertex="1">
+      <mxGeometry x="340" y="142" width="90" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Code block with OUTER loop highlighted ===== -->
+    <mxCell id="codebg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="20" y="290" width="700" height="130" as="geometry" />
+    </mxCell>
+    <!-- outer block highlighted (blue) -->
+    <mxCell id="outhi" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;opacity=80;" value="" vertex="1">
+      <mxGeometry x="26" y="296" width="680" height="116" as="geometry" />
+    </mxCell>
+    <mxCell id="code1" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="for (uint dotIdx = 0; dotIdx &lt; BK; ++dotIdx) {" vertex="1">
+      <mxGeometry x="28" y="298" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code2" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  float tmpB = Bs[dotIdx * BN + threadCol];" vertex="1">
+      <mxGeometry x="28" y="316" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code3" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  for (uint resIdx = 0; resIdx &lt; TM; ++resIdx) {" vertex="1">
+      <mxGeometry x="28" y="334" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code4" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="    threadResults[resIdx] += As[...] * tmpB;" vertex="1">
+      <mxGeometry x="28" y="352" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code6" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  }" vertex="1">
+      <mxGeometry x="28" y="370" width="680" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code7" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="}" vertex="1">
+      <mxGeometry x="28" y="388" width="680" height="16" as="geometry" />
+    </mxCell>
+
+    <mxCell id="outlbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#2563eb;" value="↑ outer loop (this pic)" vertex="1">
+      <mxGeometry x="540" y="298" width="160" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

@@ -1,0 +1,147 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== C tile (64x64) with 8x1 thread tiles ===== -->
+    <mxCell id="ct" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="40" y="60" width="240" height="240" as="geometry" />
+    </mxCell>
+    <mxCell id="ctl" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;" value="C tile (64×64)" vertex="1">
+      <mxGeometry x="90" y="36" width="140" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- Thread tile: 8 rows × 1 col, highlighted -->
+    <mxCell id="tt" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="48" y="60" width="7.5" height="240" as="geometry" />
+    </mxCell>
+
+    <!-- 8 cells inside thread tile -->
+    <mxCell id="tt0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;fontSize=6;" value="r0" vertex="1">
+      <mxGeometry x="48" y="60" width="20" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="tt1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;fontSize=6;" value="r1" vertex="1">
+      <mxGeometry x="48" y="90" width="20" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="tt2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;fontSize=6;" value="..." vertex="1">
+      <mxGeometry x="48" y="120" width="20" height="150" as="geometry" />
+    </mxCell>
+    <mxCell id="tt7" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;fontSize=6;" value="r7" vertex="1">
+      <mxGeometry x="48" y="270" width="20" height="30" as="geometry" />
+    </mxCell>
+
+    <mxCell id="ttl" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#118a4b;fontStyle=1;" value="1 thread → 8 C elements&lt;br&gt;(TM=8, same column)" vertex="1">
+      <mxGeometry x="80" y="120" width="160" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Block info -->
+    <mxCell id="bi" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="block: 64×64 = 4096 outputs&lt;br&gt;threads: 512 (each owns 8)&lt;br&gt;BM=64, BN=64, BK=8, TM=8" vertex="1">
+      <mxGeometry x="40" y="310" width="240" height="46" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Inner loop: As column + Bs row → 8 FMAs ===== -->
+    <!-- As tile (64x8) -->
+    <mxCell id="as" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#6c8ebf;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="360" y="60" width="80" height="240" as="geometry" />
+    </mxCell>
+    <mxCell id="asl" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;" value="As 64×8" vertex="1">
+      <mxGeometry x="370" y="36" width="60" height="18" as="geometry" />
+    </mxCell>
+    <!-- Highlight: 8 rows in one column -->
+    <mxCell id="ash" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="370" y="60" width="10" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="asnote" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#2563eb;fontStyle=1;" value="8 A values&lt;br&gt;(threadRow rows&lt;br&gt;at dotIdx col)" vertex="1">
+      <mxGeometry x="383" y="60" width="60" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- × sign -->
+    <mxCell id="mul" parent="1" style="text;html=1;align=center;fontSize=18;fontStyle=1;" value="×" vertex="1">
+      <mxGeometry x="450" y="158" width="20" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- Bs tile (8x64) -->
+    <mxCell id="bs" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#D6B656;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="480" y="60" width="240" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="bsl" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;" value="Bs 8×64" vertex="1">
+      <mxGeometry x="570" y="36" width="60" height="18" as="geometry" />
+    </mxCell>
+    <!-- Highlight: 1 element (one Bs value broadcast to 8 As) -->
+    <mxCell id="bsh" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#b45309;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="480" y="100" width="10" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="bsnote" parent="1" style="text;html=1;align=left;fontSize=8;fontColor=#b45309;fontStyle=1;" value="1 B value (tmpB)&lt;br&gt;at [dotIdx][threadCol]&lt;br&gt;loaded once, reused 8×" vertex="1">
+      <mxGeometry x="500" y="156" width="200" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow Bs → register tile -->
+    <mxCell id="bs2r" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#b45309;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="486" y="115" as="sourcePoint" />
+        <mxPoint x="486" y="220" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ===== Register tile (8 floats) ===== -->
+    <mxCell id="rt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="480" y="210" width="240" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="rtl" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#9673a6;" value="threadResults[8] (registers)" vertex="1">
+      <mxGeometry x="530" y="216" width="150" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- 8 register cells -->
+    <mxCell id="r0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="r[0]" vertex="1">
+      <mxGeometry x="490" y="240" width="28" height="28" as="geometry" />
+    </mxCell>
+    <mxCell id="r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="r[1]" vertex="1">
+      <mxGeometry x="520" y="240" width="28" height="28" as="geometry" />
+    </mxCell>
+    <mxCell id="r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="r[2]" vertex="1">
+      <mxGeometry x="550" y="240" width="28" height="28" as="geometry" />
+    </mxCell>
+    <mxCell id="r3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="..." vertex="1">
+      <mxGeometry x="580" y="240" width="58" height="28" as="geometry" />
+    </mxCell>
+    <mxCell id="r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;" value="r[7]" vertex="1">
+      <mxGeometry x="640" y="240" width="28" height="28" as="geometry" />
+    </mxCell>
+
+    <mxCell id="rfma" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;" value="r[i] += As[threadRow*TM+i][dotIdx] × tmpB" vertex="1">
+      <mxGeometry x="490" y="278" width="220" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="rcount" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#9673a6;fontStyle=1;" value="8 FMAs per shared mem load of tmpB" vertex="1">
+      <mxGeometry x="490" y="293" width="220" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow from As → register tile -->
+    <mxCell id="as2r" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#2563eb;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="420" y="90" as="sourcePoint" />
+        <mxPoint x="500" y="240" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Arrow register → C tile -->
+    <mxCell id="r2c" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#118a4b;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="490" y="320" as="sourcePoint" />
+        <mxPoint x="60" y="320" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="r2cl" parent="1" style="text;html=1;align=center;fontSize=8;fontColor=#118a4b;" value="write 8 values to C[threadRow*TM+i][threadCol] after all K chunks" vertex="1">
+      <mxGeometry x="120" y="334" width="360" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Key insight ===== -->
+    <mxCell id="key" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;" value="&lt;b&gt;Key vs kernel 3:&lt;/b&gt; 1 Bs load → 8 FMAs (instead of 1)&lt;br&gt;arithmetic intensity ×8, MIO pressure drops" vertex="1">
+      <mxGeometry x="40" y="380" width="380" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="key2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;" value="&lt;b&gt;Register tile:&lt;/b&gt; 8 partial sums per thread live in registers, accumulated across all K chunks before writeback" vertex="1">
+      <mxGeometry x="440" y="380" width="380" height="40" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

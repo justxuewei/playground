@@ -1,0 +1,126 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;" value="Logic tile: each thread owns TM×TN elements (kernel 4: 8×1 strip)" vertex="1">
+      <mxGeometry x="20" y="20" width="800" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- ===== C tile, divided into logic tiles ===== -->
+    <mxCell id="clbl" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#118a4b;" value="C tile 64×64 = 8 logic rows × 64 logic cols of thread tiles" vertex="1">
+      <mxGeometry x="20" y="50" width="400" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+      <mxGeometry x="60" y="80" width="320" height="320" as="geometry" />
+    </mxCell>
+
+    <!-- 8 row group dividers (logic row boundaries) -->
+    <mxCell id="rd1" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="120" as="sourcePoint" /><mxPoint x="380" y="120" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd2" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="160" as="sourcePoint" /><mxPoint x="380" y="160" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd3" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="200" as="sourcePoint" /><mxPoint x="380" y="200" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd4" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="240" as="sourcePoint" /><mxPoint x="380" y="240" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd5" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="280" as="sourcePoint" /><mxPoint x="380" y="280" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd6" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="320" as="sourcePoint" /><mxPoint x="380" y="320" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="rd7" parent="1" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="60" y="360" as="sourcePoint" /><mxPoint x="380" y="360" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- ===== HIGHLIGHT: one logic row (top row group) ===== -->
+    <mxCell id="lrow" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=3;opacity=40;" value="" vertex="1">
+      <mxGeometry x="60" y="80" width="320" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="lrowlbl" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#2563eb;" value="logic row 0 (8 actual rows, 64 logic cols of thread tiles)" vertex="1">
+      <mxGeometry x="390" y="92" width="320" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== HIGHLIGHT: one logic col (e.g. col 10) ===== -->
+    <mxCell id="lcol" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff5f5;strokeColor=#be123c;strokeWidth=3;opacity=50;" value="" vertex="1">
+      <mxGeometry x="110" y="80" width="5" height="320" as="geometry" />
+    </mxCell>
+    <mxCell id="lcollbl" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#be123c;" value="logic col (1 actual col, 8 logic rows of thread tiles)" vertex="1">
+      <mxGeometry x="125" y="408" width="320" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== One thread tile highlighted: 8×1 ===== -->
+    <mxCell id="tt" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=3;" value="" vertex="1">
+      <mxGeometry x="110" y="80" width="5" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="ttlbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#9673a6;" value="thread tile&#10;TM=8 × TN=1" vertex="1">
+      <mxGeometry x="125" y="62" width="120" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- arrow from thread tile to label -->
+    <mxCell id="ttarr" parent="1" style="endArrow=none;html=1;strokeColor=#9673a6;strokeWidth=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="112" y="82" as="sourcePoint" /><mxPoint x="130" y="76" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- ===== Right side: definition + comparison ===== -->
+    <mxCell id="dbg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="720" y="50" width="380" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="dh" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Definitions" vertex="1">
+      <mxGeometry x="728" y="58" width="200" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="d1" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;font color=&quot;#9673a6&quot;&gt;&lt;b&gt;thread tile&lt;/b&gt;&lt;/font&gt; = &lt;b&gt;TM × TN&lt;/b&gt; actual C elements&#10;                owned by 1 thread, kept in registers" vertex="1">
+      <mxGeometry x="728" y="80" width="364" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="d2" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;font color=&quot;#2563eb&quot;&gt;&lt;b&gt;logic row&lt;/b&gt;&lt;/font&gt; = one row of thread tiles&#10;                = TM actual rows × BN actual cols" vertex="1">
+      <mxGeometry x="728" y="116" width="364" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="d3" parent="1" style="text;html=1;align=left;fontSize=9;" value="&lt;font color=&quot;#be123c&quot;&gt;&lt;b&gt;logic col&lt;/b&gt;&lt;/font&gt; = one column of thread tiles&#10;                = BM actual rows × TN actual cols" vertex="1">
+      <mxGeometry x="728" y="152" width="364" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- comparison table -->
+    <mxCell id="cmpbg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#999;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="720" y="230" width="380" height="180" as="geometry" />
+    </mxCell>
+    <mxCell id="cmph" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Kernel 4 vs Kernel 5" vertex="1">
+      <mxGeometry x="728" y="238" width="200" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- table header -->
+    <mxCell id="thA" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#ccc;fontSize=9;fontStyle=1;" value="" vertex="1">
+      <mxGeometry x="728" y="258" width="120" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="thB" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;fontSize=9;fontStyle=1;fontColor=#2563eb;" value="Kernel 4 (1D)" vertex="1">
+      <mxGeometry x="848" y="258" width="120" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="thC" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff5f5;strokeColor=#be123c;fontSize=9;fontStyle=1;fontColor=#be123c;" value="Kernel 5 (2D)" vertex="1">
+      <mxGeometry x="968" y="258" width="120" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- rows -->
+    <mxCell id="r1a" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="TM" vertex="1"><mxGeometry x="728" y="278" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r1b" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="8" vertex="1"><mxGeometry x="848" y="278" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r1c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="8" vertex="1"><mxGeometry x="968" y="278" width="120" height="22" as="geometry" /></mxCell>
+
+    <mxCell id="r2a" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;" value="TN" vertex="1"><mxGeometry x="728" y="300" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r2b" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;fontStyle=1;fontColor=#be123c;" value="1" vertex="1"><mxGeometry x="848" y="300" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r2c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;fontStyle=1;fontColor=#be123c;" value="8" vertex="1"><mxGeometry x="968" y="300" width="120" height="22" as="geometry" /></mxCell>
+
+    <mxCell id="r3a" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="thread tile" vertex="1"><mxGeometry x="728" y="322" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r3b" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="8×1 strip" vertex="1"><mxGeometry x="848" y="322" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r3c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="8×8 square" vertex="1"><mxGeometry x="968" y="322" width="120" height="22" as="geometry" /></mxCell>
+
+    <mxCell id="r4a" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;" value="threads/block" vertex="1"><mxGeometry x="728" y="344" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r4b" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;" value="512" vertex="1"><mxGeometry x="848" y="344" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r4c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#ccc;fontSize=9;" value="256" vertex="1"><mxGeometry x="968" y="344" width="120" height="22" as="geometry" /></mxCell>
+
+    <mxCell id="r5a" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="loads per FMA" vertex="1"><mxGeometry x="728" y="366" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r5b" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;" value="≈1.125 SMEM" vertex="1"><mxGeometry x="848" y="366" width="120" height="22" as="geometry" /></mxCell>
+    <mxCell id="r5c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#ccc;fontSize=9;fontStyle=1;fontColor=#118a4b;" value="≈0.25 SMEM" vertex="1"><mxGeometry x="968" y="366" width="120" height="22" as="geometry" /></mxCell>
+
+    <!-- ===== Bottom: kernel 5 preview ===== -->
+    <mxCell id="prevlbl" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#666;" value="Kernel 5 preview: 8×8 thread tile" vertex="1">
+      <mxGeometry x="20" y="450" width="300" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="k5tt" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=3;fontSize=8;align=center;" value="8×8" vertex="1">
+      <mxGeometry x="20" y="476" width="40" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="k5l" parent="1" style="text;html=1;align=left;fontSize=9;" value="each thread → 8×8 = 64 C outputs in registers&#10;1 As load + 1 Bs load → 8×8 = 64 FMAs per dotIdx&#10;much higher arithmetic intensity" vertex="1">
+      <mxGeometry x="80" y="476" width="500" height="42" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

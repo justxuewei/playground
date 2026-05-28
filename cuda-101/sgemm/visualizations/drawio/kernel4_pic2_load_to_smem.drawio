@@ -1,0 +1,139 @@
+<mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== ROUND 1 ===== -->
+    <mxCell id="r1l" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Round 1 (bkIdx=0)" vertex="1">
+      <mxGeometry x="20" y="20" width="200" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A round 1 -->
+    <mxCell id="a1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="20" y="50" width="160" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="a1t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=7;fontColor=#2563eb;" value="64×8" vertex="1">
+      <mxGeometry x="20" y="50" width="10" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="A" vertex="1">
+      <mxGeometry x="90" y="132" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- arrow A → As -->
+    <mxCell id="aa1" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="25" y="135" as="sourcePoint" />
+        <mxPoint x="25" y="160" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- As round 1 -->
+    <mxCell id="as1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=1;" value="As 64×8" vertex="1">
+      <mxGeometry x="15" y="160" width="40" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B round 1 -->
+    <mxCell id="b1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="210" y="50" width="160" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="b1t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=7;fontColor=#b45309;" value="8×64" vertex="1">
+      <mxGeometry x="210" y="50" width="80" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="b1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="B" vertex="1">
+      <mxGeometry x="280" y="212" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- arrow B → Bs -->
+    <mxCell id="ab1" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="200" y="55" as="sourcePoint" />
+        <mxPoint x="155" y="170" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Bs round 1 -->
+    <mxCell id="bs1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=9;fontStyle=1;" value="Bs 8×64" vertex="1">
+      <mxGeometry x="60" y="160" width="150" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Slide arrow ===== -->
+    <mxCell id="sl" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=8;endSize=4;fillColor=default;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="390" y="120" as="sourcePoint" />
+        <mxPoint x="440" y="120" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="sll" parent="1" style="text;html=1;align=center;fontSize=8;fontStyle=1;" value="A+=8&lt;br&gt;B+=8N" vertex="1">
+      <mxGeometry x="386" y="132" width="60" height="24" as="geometry" />
+    </mxCell>
+
+    <!-- ===== ROUND 2 ===== -->
+    <mxCell id="r2l" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Round 2 (bkIdx=8)" vertex="1">
+      <mxGeometry x="460" y="20" width="200" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix A round 2 -->
+    <mxCell id="a2" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="460" y="50" width="160" height="80" as="geometry" />
+    </mxCell>
+    <!-- prev shadow -->
+    <mxCell id="a2p" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;dashed=1;" value="" vertex="1">
+      <mxGeometry x="460" y="50" width="10" height="40" as="geometry" />
+    </mxCell>
+    <!-- current tile -->
+    <mxCell id="a2t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=7;fontColor=#2563eb;" value="" vertex="1">
+      <mxGeometry x="470" y="50" width="10" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a2l" parent="1" style="text;html=1;align=center;fontSize=9;" value="A" vertex="1">
+      <mxGeometry x="530" y="132" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- arrow A → As -->
+    <mxCell id="aa2" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="475" y="135" as="sourcePoint" />
+        <mxPoint x="475" y="160" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- As round 2 -->
+    <mxCell id="as2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=1;" value="As 64×8" vertex="1">
+      <mxGeometry x="455" y="160" width="40" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Matrix B round 2 -->
+    <mxCell id="b2" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="650" y="50" width="160" height="160" as="geometry" />
+    </mxCell>
+    <!-- prev shadow -->
+    <mxCell id="b2p" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;opacity=30;dashed=1;" value="" vertex="1">
+      <mxGeometry x="650" y="50" width="80" height="10" as="geometry" />
+    </mxCell>
+    <!-- current tile -->
+    <mxCell id="b2t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=7;fontColor=#b45309;" value="" vertex="1">
+      <mxGeometry x="650" y="60" width="80" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="b2l" parent="1" style="text;html=1;align=center;fontSize=9;" value="B" vertex="1">
+      <mxGeometry x="720" y="212" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- arrow B → Bs -->
+    <mxCell id="ab2" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="640" y="65" as="sourcePoint" />
+        <mxPoint x="595" y="170" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Bs round 2 -->
+    <mxCell id="bs2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=9;fontStyle=1;" value="Bs 8×64" vertex="1">
+      <mxGeometry x="500" y="160" width="150" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Footer -->
+    <mxCell id="ft" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="K/8 rounds total · A tile slides right · B tile slides down" vertex="1">
+      <mxGeometry x="20" y="240" width="800" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

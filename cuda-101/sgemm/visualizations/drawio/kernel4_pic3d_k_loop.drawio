@@ -1,0 +1,144 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;" value="K loop: bkIdx steps through K/BK chunks — load, compute, repeat" vertex="1">
+      <mxGeometry x="20" y="20" width="800" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- ===== K chunks timeline ===== -->
+    <mxCell id="ch1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=10;align=left;verticalAlign=top;" value="" vertex="1">
+      <mxGeometry x="20" y="60" width="200" height="180" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1l" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#118a4b;" value="bkIdx = 0" vertex="1">
+      <mxGeometry x="28" y="64" width="180" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1s1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#6c8ebf;fontSize=8;align=left;" value="  1. load As from A[…][0..7]&#10;  2. load Bs from B[0..7][…]" vertex="1">
+      <mxGeometry x="28" y="82" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1s2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="28" y="116" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1s3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;align=left;" value="  3. dotIdx loop (8×)&#10;     update r[0..7]" vertex="1">
+      <mxGeometry x="28" y="134" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1s4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="28" y="168" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="ch1ptr" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#666;" value="  A += BK · B += BK*N" vertex="1">
+      <mxGeometry x="28" y="188" width="184" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- arrow → bkIdx=BK -->
+    <mxCell id="arr1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=10;endSize=5;fillColor=default;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="225" y="140" as="sourcePoint" /><mxPoint x="265" y="140" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- chunk 2 -->
+    <mxCell id="ch2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=10;align=left;verticalAlign=top;opacity=80;" value="" vertex="1">
+      <mxGeometry x="270" y="60" width="200" height="180" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2l" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#118a4b;" value="bkIdx = BK" vertex="1">
+      <mxGeometry x="278" y="64" width="180" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2s1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#6c8ebf;fontSize=8;align=left;" value="  1. load As from A[…][8..15]&#10;  2. load Bs from B[8..15][…]" vertex="1">
+      <mxGeometry x="278" y="82" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2s2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="278" y="116" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2s3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;align=left;" value="  3. dotIdx loop (8×)&#10;     update r[0..7]" vertex="1">
+      <mxGeometry x="278" y="134" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2s4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="278" y="168" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="ch2ptr" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#666;" value="  A += BK · B += BK*N" vertex="1">
+      <mxGeometry x="278" y="188" width="184" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- arrow ... -->
+    <mxCell id="arr2" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=10;endSize=5;fillColor=default;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="475" y="140" as="sourcePoint" /><mxPoint x="515" y="140" as="targetPoint" /></mxGeometry></mxCell>
+
+    <mxCell id="dots" parent="1" style="text;html=1;align=center;fontSize=24;" value="⋯" vertex="1">
+      <mxGeometry x="520" y="130" width="40" height="30" as="geometry" />
+    </mxCell>
+
+    <mxCell id="arr3" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=10;endSize=5;fillColor=default;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="565" y="140" as="sourcePoint" /><mxPoint x="605" y="140" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- last chunk -->
+    <mxCell id="chN" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=10;align=left;verticalAlign=top;opacity=80;" value="" vertex="1">
+      <mxGeometry x="610" y="60" width="200" height="180" as="geometry" />
+    </mxCell>
+    <mxCell id="chNl" parent="1" style="text;html=1;align=left;fontSize=10;fontStyle=1;fontColor=#118a4b;" value="bkIdx = K - BK" vertex="1">
+      <mxGeometry x="618" y="64" width="180" height="14" as="geometry" />
+    </mxCell>
+    <mxCell id="chNs1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#6c8ebf;fontSize=8;align=left;" value="  1. load last A chunk&#10;  2. load last B chunk" vertex="1">
+      <mxGeometry x="618" y="82" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="chNs2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="618" y="116" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="chNs3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#9673a6;fontSize=8;align=left;" value="  3. final dotIdx loop&#10;     r[0..7] fully done" vertex="1">
+      <mxGeometry x="618" y="134" width="184" height="32" as="geometry" />
+    </mxCell>
+    <mxCell id="chNs4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#be123c;fontSize=8;align=left;fontFamily=monospace;fontStyle=1;fontColor=#be123c;" value="  __syncthreads()" vertex="1">
+      <mxGeometry x="618" y="168" width="184" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="chNptr" parent="1" style="text;html=1;align=left;fontSize=7;fontColor=#118a4b;fontStyle=1;" value="  done → write r[] to C" vertex="1">
+      <mxGeometry x="618" y="188" width="184" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Code block with OUTERMOST loop highlighted ===== -->
+    <mxCell id="codebg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#999;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="20" y="280" width="800" height="200" as="geometry" />
+    </mxCell>
+    <!-- K loop highlighted (green) -->
+    <mxCell id="khi" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;opacity=80;" value="" vertex="1">
+      <mxGeometry x="26" y="286" width="780" height="186" as="geometry" />
+    </mxCell>
+    <mxCell id="code1" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="for (uint bkIdx = 0; bkIdx &lt; K; bkIdx += BK) {" vertex="1">
+      <mxGeometry x="28" y="288" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code2" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  As[innerRowA * BK + innerColA] = A[innerRowA * K + innerColA];" vertex="1">
+      <mxGeometry x="28" y="306" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code3" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  Bs[innerRowB * BN + innerColB] = B[innerRowB * N + innerColB];" vertex="1">
+      <mxGeometry x="28" y="324" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code4" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#be123c;fontStyle=1;" value="  __syncthreads();" vertex="1">
+      <mxGeometry x="28" y="342" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code5" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  A += BK;  B += BK * N;" vertex="1">
+      <mxGeometry x="28" y="360" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code6" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  for (uint dotIdx = 0; dotIdx &lt; BK; ++dotIdx) {" vertex="1">
+      <mxGeometry x="28" y="378" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code7" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="    float tmpB = Bs[dotIdx * BN + threadCol];" vertex="1">
+      <mxGeometry x="28" y="396" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code8" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="    for (resIdx 0..TM)  threadResults[resIdx] += As[…] * tmpB;" vertex="1">
+      <mxGeometry x="28" y="414" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code9" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#666;" value="  }" vertex="1">
+      <mxGeometry x="28" y="432" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code10" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;fontColor=#be123c;fontStyle=1;" value="  __syncthreads();" vertex="1">
+      <mxGeometry x="28" y="450" width="780" height="16" as="geometry" />
+    </mxCell>
+    <mxCell id="code11" parent="1" style="text;html=1;align=left;fontSize=10;fontFamily=monospace;" value="}" vertex="1">
+      <mxGeometry x="28" y="468" width="780" height="16" as="geometry" />
+    </mxCell>
+
+    <mxCell id="kllbl" parent="1" style="text;html=1;align=left;fontSize=9;fontStyle=1;fontColor=#118a4b;" value="↑ K loop (this pic)" vertex="1">
+      <mxGeometry x="690" y="288" width="160" height="14" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Summary ===== -->
+    <mxCell id="sum" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#666;" value="K/BK iterations · each: load + sync + compute (dotIdx × resIdx) + sync · final: write 8 r[] to C" vertex="1">
+      <mxGeometry x="20" y="248" width="800" height="14" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
