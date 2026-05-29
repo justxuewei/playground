@@ -1,0 +1,117 @@
+<mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="t1" parent="1" style="text;html=1;align=left;fontSize=14;fontStyle=1;" value="Raising arithmetic intensity: more results per thread" vertex="1">
+      <mxGeometry x="20" y="15" width="600" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- ============== LEFT: 1 result per thread ============== -->
+    <mxCell id="ls" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Calculating 1 result per thread requires:" vertex="1">
+      <mxGeometry x="20" y="50" width="320" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- B (top) -->
+    <mxCell id="l_b" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="100" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="l_b_s" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c6dafc;strokeColor=#4285f4;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="130" y="80" width="10" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="l_b_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="B" vertex="1">
+      <mxGeometry x="100" y="152" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- A (bottom-left) -->
+    <mxCell id="l_a" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="20" y="170" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="l_a_s" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c6dafc;strokeColor=#4285f4;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="20" y="200" width="70" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="l_a_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="A" vertex="1">
+      <mxGeometry x="20" y="242" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- C (bottom-right) -->
+    <mxCell id="l_c" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="100" y="170" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="l_c_cell" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="130" y="200" width="10" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="l_c_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="C" vertex="1">
+      <mxGeometry x="100" y="242" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Left bullets -->
+    <mxCell id="lt" parent="1" style="text;html=1;align=left;fontSize=11;spacingLeft=4;" value="&lt;ul style=&quot;margin:4px 0 6px 18px;padding:0;line-height:1.55&quot;&gt;&lt;li&gt;7 loads from A&lt;/li&gt;&lt;li&gt;7 loads from B&lt;/li&gt;&lt;li&gt;1 load &amp;amp; 1 store to C&lt;/li&gt;&lt;/ul&gt;&lt;b&gt;⇒ 15 loads &amp;amp; 1 store per result&lt;/b&gt;" vertex="1">
+      <mxGeometry x="200" y="100" width="220" height="120" as="geometry" />
+    </mxCell>
+
+    <!-- Vertical separator -->
+    <mxCell id="sep" parent="1" style="endArrow=none;html=1;strokeColor=#ccc;strokeWidth=1;dashed=1;" edge="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="440" y="50" as="sourcePoint" />
+        <mxPoint x="440" y="270" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ============== RIGHT: 4 results per thread ============== -->
+    <mxCell id="rs" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="Calculating 4 results per thread requires:" vertex="1">
+      <mxGeometry x="460" y="50" width="320" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- B (top) with two stripes -->
+    <mxCell id="r_b" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="540" y="80" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="r_b_s1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c6dafc;strokeColor=#4285f4;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="570" y="80" width="10" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="r_b_s2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fcd9b2;strokeColor=#f29900;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="580" y="80" width="10" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="r_b_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="B" vertex="1">
+      <mxGeometry x="540" y="152" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- A (bottom-left) with two stripes -->
+    <mxCell id="r_a" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="460" y="170" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="r_a_s1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c6dafc;strokeColor=#4285f4;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="460" y="200" width="70" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="r_a_s2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fcd9b2;strokeColor=#f29900;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="460" y="210" width="70" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="r_a_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="A" vertex="1">
+      <mxGeometry x="460" y="242" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- C (bottom-right) with 2x2 -->
+    <mxCell id="r_c" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#888;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="540" y="170" width="70" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="r_c_cell" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;strokeWidth=1;" value="" vertex="1">
+      <mxGeometry x="570" y="200" width="20" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="r_c_lab" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;" value="C" vertex="1">
+      <mxGeometry x="540" y="242" width="70" height="12" as="geometry" />
+    </mxCell>
+
+    <!-- Right bullets -->
+    <mxCell id="rt" parent="1" style="text;html=1;align=left;fontSize=11;spacingLeft=4;" value="&lt;ul style=&quot;margin:4px 0 6px 18px;padding:0;line-height:1.55&quot;&gt;&lt;li&gt;14 loads from A&lt;/li&gt;&lt;li&gt;14 loads from B&lt;/li&gt;&lt;li&gt;4 loads &amp;amp; 4 stores to C&lt;/li&gt;&lt;/ul&gt;&lt;b&gt;⇒ 8 loads &amp;amp; 1 store per result&lt;/b&gt;" vertex="1">
+      <mxGeometry x="640" y="100" width="180" height="120" as="geometry" />
+    </mxCell>
+
+    <!-- Bottom take-away spans both -->
+    <mxCell id="cmp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;" value="&lt;b&gt;Take-away:&lt;/b&gt; each loaded A row is reused across every B column the thread owns (and vice-versa). 4× outputs per thread costs only ~2× the loads → &lt;b&gt;~1.9× fewer memory accesses per result&lt;/b&gt; (15 → 8)." vertex="1">
+      <mxGeometry x="20" y="285" width="800" height="40" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

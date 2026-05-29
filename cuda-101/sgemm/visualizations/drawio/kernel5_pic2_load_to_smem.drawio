@@ -1,0 +1,143 @@
+<mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== ROUND 1 ===== -->
+    <mxCell id="r1l" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="bkIdx=0  (inner loop ×4 fills the tile)" vertex="1">
+      <mxGeometry x="20" y="20" width="320" height="16" as="geometry" />
+    </mxCell>
+
+    <!-- A matrix outline -->
+    <mxCell id="a1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="20" y="50" width="100" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a1t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=7;fontColor=#2563eb;" value="128×8" vertex="1">
+      <mxGeometry x="20" y="50" width="8" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="A" vertex="1">
+      <mxGeometry x="60" y="220" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="aa1" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="24" y="115" as="sourcePoint" />
+        <mxPoint x="24" y="135" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- As: 4 inner-loop iteration bands (rows 0..31, 32..63, 64..95, 96..127) -->
+    <mxCell id="as_b0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#eaf2fd;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=8;fontColor=#1d4f8b;align=center;verticalAlign=middle;" value="i=0" vertex="1">
+      <mxGeometry x="10" y="135" width="30" height="15" as="geometry" />
+    </mxCell>
+    <mxCell id="as_b1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#c6dafc;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=8;fontColor=#1d4f8b;align=center;verticalAlign=middle;" value="i=1" vertex="1">
+      <mxGeometry x="10" y="150" width="30" height="15" as="geometry" />
+    </mxCell>
+    <mxCell id="as_b2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#9bbef8;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=8;fontColor=#1d4f8b;align=center;verticalAlign=middle;" value="i=2" vertex="1">
+      <mxGeometry x="10" y="165" width="30" height="15" as="geometry" />
+    </mxCell>
+    <mxCell id="as_b3" parent="1" style="whiteSpace=wrap;html=1;fillColor=#6c9bf3;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=8;fontColor=#ffffff;align=center;verticalAlign=middle;" value="i=3" vertex="1">
+      <mxGeometry x="10" y="180" width="30" height="15" as="geometry" />
+    </mxCell>
+    <!-- B matrix outline -->
+    <mxCell id="b1" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="275" y="50" width="140" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="b1t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=7;fontColor=#b45309;" value="8×128" vertex="1">
+      <mxGeometry x="275" y="50" width="100" height="8" as="geometry" />
+    </mxCell>
+    <mxCell id="b1l" parent="1" style="text;html=1;align=center;fontSize=9;" value="B" vertex="1">
+      <mxGeometry x="335" y="220" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="ab1" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="275" y="55" as="sourcePoint" />
+        <mxPoint x="225" y="170" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Bs: 4 inner-loop iteration bands (rows 0..1, 2..3, 4..5, 6..7) -->
+    <mxCell id="bs_b0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff4cb;strokeColor=#D6B656;strokeWidth=1.5;fontSize=8;fontColor=#7a5d00;align=left;verticalAlign=middle;spacingLeft=6;" value="i=0" vertex="1">
+      <mxGeometry x="55" y="155" width="220" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bs_b1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#ffe580;strokeColor=#D6B656;strokeWidth=1.5;fontSize=8;fontColor=#7a5d00;align=left;verticalAlign=middle;spacingLeft=6;" value="i=1" vertex="1">
+      <mxGeometry x="55" y="167" width="220" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bs_b2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=1.5;fontSize=8;fontColor=#7a5d00;align=left;verticalAlign=middle;spacingLeft=6;" value="i=2" vertex="1">
+      <mxGeometry x="55" y="179" width="220" height="12" as="geometry" />
+    </mxCell>
+    <mxCell id="bs_b3" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e8b020;strokeColor=#D6B656;strokeWidth=1.5;fontSize=8;fontColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;" value="i=3" vertex="1">
+      <mxGeometry x="55" y="191" width="220" height="12" as="geometry" />
+    </mxCell>
+    <!-- ===== Slide arrow ===== -->
+    <mxCell id="sl" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;width=8;endSize=4;fillColor=default;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="430" y="100" as="sourcePoint" />
+        <mxPoint x="470" y="100" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="sll" parent="1" style="text;html=1;align=center;fontSize=8;fontStyle=1;" value="outer loop&lt;br&gt;A+=8, B+=8N" vertex="1">
+      <mxGeometry x="420" y="112" width="60" height="24" as="geometry" />
+    </mxCell>
+
+    <!-- ===== ROUND 2 ===== -->
+    <mxCell id="r2l" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="bkIdx=8" vertex="1">
+      <mxGeometry x="490" y="20" width="120" height="16" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a2" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="490" y="50" width="100" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a2p" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;dashed=1;" value="" vertex="1">
+      <mxGeometry x="490" y="50" width="8" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a2t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=7;fontColor=#2563eb;" value="" vertex="1">
+      <mxGeometry x="498" y="50" width="8" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a2l" parent="1" style="text;html=1;align=center;fontSize=9;" value="A" vertex="1">
+      <mxGeometry x="530" y="220" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="aa2" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#6c8ebf;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="502" y="115" as="sourcePoint" />
+        <mxPoint x="502" y="135" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="as2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=1;" value="As&lt;br&gt;128×8" vertex="1">
+      <mxGeometry x="485" y="135" width="30" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b2" parent="1" style="whiteSpace=wrap;html=1;" value="" vertex="1">
+      <mxGeometry x="745" y="50" width="140" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="b2p" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;opacity=30;dashed=1;" value="" vertex="1">
+      <mxGeometry x="745" y="50" width="100" height="8" as="geometry" />
+    </mxCell>
+    <mxCell id="b2t" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=7;fontColor=#b45309;" value="" vertex="1">
+      <mxGeometry x="745" y="58" width="100" height="8" as="geometry" />
+    </mxCell>
+    <mxCell id="b2l" parent="1" style="text;html=1;align=center;fontSize=9;" value="B" vertex="1">
+      <mxGeometry x="805" y="220" width="20" height="14" as="geometry" />
+    </mxCell>
+
+    <mxCell id="ab2" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#D6B656;strokeWidth=2;" value="">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="745" y="62" as="sourcePoint" />
+        <mxPoint x="695" y="180" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="bs2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;strokeWidth=2;fontSize=9;fontStyle=1;" value="Bs 8×128" vertex="1">
+      <mxGeometry x="525" y="180" width="220" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ===== Strided-load callout ===== -->
+    <mxCell id="co" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontSize=10;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;" value="&lt;b&gt;Inner loop ×4 (per round):&lt;/b&gt; 256 threads load only 256 elements per pass, so each tile needs 4 strided iterations.&amp;nbsp;&amp;nbsp;&lt;b&gt;As (128×8)&lt;/b&gt; = 4 iter × 32 rows (strideA=32).&amp;nbsp;&amp;nbsp;&lt;b&gt;Bs (8×128)&lt;/b&gt; = 4 iter × 2 rows (strideB=2)." vertex="1">
+      <mxGeometry x="20" y="250" width="865" height="36" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
