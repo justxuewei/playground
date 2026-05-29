@@ -20,6 +20,9 @@
 //
 // Each thread caches 8 As values and 8 Bs values in registers for one dotIdx,
 // then performs their outer product into 64 thread-local accumulators.
+//
+// Out-of-bounds loads are zero-padded and the C writeback is guarded so M, N,
+// and K do not need to be multiples of BM, BN, and BK.
 template <const int BM, const int BN, const int BK, const int TM, const int TN>
 __global__ void __launch_bounds__((BM * BN) / (TM * TN), 1)
     sgemm2DBlocktiling(int M, int N, int K, float alpha, const float *A,
@@ -55,11 +58,15 @@ __global__ void __launch_bounds__((BM * BN) / (TM * TN), 1)
   for (uint bkIdx = 0; bkIdx < K; bkIdx += BK) {
     for (uint loadOffset = 0; loadOffset < BM; loadOffset += strideA) {
       As[(innerRowA + loadOffset) * BK + innerColA] =
-          A[(innerRowA + loadOffset) * K + innerColA];
+          (cTileRow * BM + innerRowA + loadOffset < M && bkIdx + innerColA < K)
+              ? A[(innerRowA + loadOffset) * K + innerColA]
+              : 0.0f;
     }
     for (uint loadOffset = 0; loadOffset < BK; loadOffset += strideB) {
       Bs[(innerRowB + loadOffset) * BN + innerColB] =
-          B[(innerRowB + loadOffset) * N + innerColB];
+          (bkIdx + innerRowB + loadOffset < K && cTileCol * BN + innerColB < N)
+              ? B[(innerRowB + loadOffset) * N + innerColB]
+              : 0.0f;
     }
     __syncthreads();
 
@@ -88,9 +95,12 @@ __global__ void __launch_bounds__((BM * BN) / (TM * TN), 1)
 
   for (uint resIdxM = 0; resIdxM < TM; ++resIdxM) {
     for (uint resIdxN = 0; resIdxN < TN; ++resIdxN) {
-      C[(threadRow * TM + resIdxM) * N + threadCol * TN + resIdxN] =
-          alpha * threadResults[resIdxM * TN + resIdxN] +
-          beta * C[(threadRow * TM + resIdxM) * N + threadCol * TN + resIdxN];
+      if (cTileRow * BM + threadRow * TM + resIdxM < M &&
+          cTileCol * BN + threadCol * TN + resIdxN < N) {
+        C[(threadRow * TM + resIdxM) * N + threadCol * TN + resIdxN] =
+            alpha * threadResults[resIdxM * TN + resIdxN] +
+            beta * C[(threadRow * TM + resIdxM) * N + threadCol * TN + resIdxN];
+      }
     }
   }
 }
