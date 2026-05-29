@@ -22,16 +22,17 @@ int main(int argc, char **argv) {
                  "6 for vectorized memory access, "
                  "7 for resolving shared-memory bank conflicts, "
                  "8 for padding shared-memory B rows, "
-                 "9 for autotuned tiling"
+                 "9 for autotuned tiling, "
+                 "10 for warptiling"
               << std::endl;
     exit(EXIT_FAILURE);
   }
 
   const int kernel_num = std::stoi(argv[1]);
-  if (kernel_num < 0 || kernel_num > 9) {
-    std::cerr
-        << "Please enter a valid kernel number (0, 1, 2, 3, 4, 5, 6, 7, 8, or 9)"
-        << std::endl;
+  if (kernel_num < 0 || kernel_num > 10) {
+    std::cerr << "Please enter a valid kernel number (0, 1, 2, 3, 4, 5, 6, 7, "
+                 "8, 9, or 10)"
+              << std::endl;
     exit(EXIT_FAILURE);
   }
 
