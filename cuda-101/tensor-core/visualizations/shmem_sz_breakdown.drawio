@@ -1,0 +1,68 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="SHMEM_SZ">
+    <mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" parent="1" vertex="1" style="text;html=1;align=left;fontSize=14;fontStyle=1;" value="cudaTensorCoreGemm — SHMEM_SZ = MAX( load-stage A&amp;B buffer , store-stage C/D buffer )"><mxGeometry x="20" y="12" width="1100" height="22" as="geometry" /></mxCell>
+
+        <!-- ============ PANEL A: LOAD STAGE ============ -->
+        <mxCell id="aLab" parent="1" vertex="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#118a4b;" value="A.  Load stage — A &amp; B chunk tiles  (half = 2 B)"><mxGeometry x="40" y="48" width="480" height="18" as="geometry" /></mxCell>
+
+        <!-- height label (left) -->
+        <mxCell id="aH" parent="1" vertex="1" style="text;html=1;align=right;fontSize=10;fontColor=#118a4b;" value="rows =&#10;BLOCK_COL_TILES · M&#10;= 8 · 16&#10;= 128"><mxGeometry x="30" y="150" width="120" height="60" as="geometry" /></mxCell>
+
+        <!-- width labels (top) -->
+        <mxCell id="aWd" parent="1" vertex="1" style="text;html=1;align=center;fontSize=10;fontColor=#333;" value="CHUNK_K · K = 4 · 16 = 64"><mxGeometry x="170" y="78" width="192" height="16" as="geometry" /></mxCell>
+        <mxCell id="aWs" parent="1" vertex="1" style="text;html=1;align=center;fontSize=9;fontColor=#999;" value="+ SKEW_HALF = 16"><mxGeometry x="362" y="78" width="120" height="16" as="geometry" /></mxCell>
+
+        <!-- A box -->
+        <mxCell id="aBox" parent="1" vertex="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontStyle=1;" value="A chunk&#10;128 × 64 half"><mxGeometry x="170" y="100" width="192" height="90" as="geometry" /></mxCell>
+        <mxCell id="aSkew" parent="1" vertex="1" style="whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;strokeWidth=1;dashed=1;fontSize=9;fontColor=#777;" value="skew&#10;pad"><mxGeometry x="362" y="100" width="48" height="90" as="geometry" /></mxCell>
+
+        <!-- B box -->
+        <mxCell id="bBox" parent="1" vertex="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2255aa;strokeWidth=2;fontStyle=1;" value="B chunk&#10;128 × 64 half"><mxGeometry x="170" y="210" width="192" height="90" as="geometry" /></mxCell>
+        <mxCell id="bSkew" parent="1" vertex="1" style="whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;strokeWidth=1;dashed=1;fontSize=9;fontColor=#777;" value="skew&#10;pad"><mxGeometry x="362" y="210" width="48" height="90" as="geometry" /></mxCell>
+
+        <!-- x2 marker -->
+        <mxCell id="aX2" parent="1" vertex="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#a33;" value="× 2&#10;(A &amp; B)"><mxGeometry x="425" y="180" width="80" height="36" as="geometry" /></mxCell>
+
+        <!-- A compute -->
+        <mxCell id="aCalc" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fff0;strokeColor=#118a4b;fontSize=10;align=left;spacingLeft=8;" value="load = sizeof(half) × (BLOCK_COL_TILES·M) × (CHUNK_K·K + SKEW_HALF) × 2&#10;     = 2 × 128 × 80 × 2&#10;     = 40,960 B  =  40 KB"><mxGeometry x="40" y="320" width="470" height="64" as="geometry" /></mxCell>
+
+        <!-- ============ PANEL B: STORE STAGE ============ -->
+        <mxCell id="cLab" parent="1" vertex="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#d79b00;" value="B.  Store stage — C / D output tile  (float = 4 B)"><mxGeometry x="600" y="48" width="500" height="18" as="geometry" /></mxCell>
+
+        <!-- height label -->
+        <mxCell id="cH" parent="1" vertex="1" style="text;html=1;align=right;fontSize=10;fontColor=#b07a00;" value="height =&#10;N · BLOCK_COL_WARPS · WARP_COL_TILES&#10;= 16 · 4 · 2&#10;= 128"><mxGeometry x="560" y="160" width="170" height="60" as="geometry" /></mxCell>
+
+        <!-- width label -->
+        <mxCell id="cW" parent="1" vertex="1" style="text;html=1;align=center;fontSize=10;fontColor=#b07a00;" value="width = M · BLOCK_ROW_WARPS · WARP_ROW_TILES = 16 · 2 · 4 = 128"><mxGeometry x="740" y="78" width="320" height="16" as="geometry" /></mxCell>
+
+        <!-- C box -->
+        <mxCell id="cBox" parent="1" vertex="1" style="whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontStyle=1;" value="C / D tile&#10;128 × 128 float"><mxGeometry x="780" y="100" width="200" height="200" as="geometry" /></mxCell>
+        <!-- light tile grid suggestion -->
+        <mxCell id="cg1" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;" value=""><mxGeometry x="780" y="150" width="200" height="1" as="geometry" /></mxCell>
+        <mxCell id="cg2" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;" value=""><mxGeometry x="780" y="200" width="200" height="1" as="geometry" /></mxCell>
+        <mxCell id="cg3" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;" value=""><mxGeometry x="780" y="250" width="200" height="1" as="geometry" /></mxCell>
+        <mxCell id="cg4" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;direction=north;" value=""><mxGeometry x="830" y="100" width="1" height="200" as="geometry" /></mxCell>
+        <mxCell id="cg5" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;direction=north;" value=""><mxGeometry x="880" y="100" width="1" height="200" as="geometry" /></mxCell>
+        <mxCell id="cg6" parent="1" vertex="1" style="line;html=1;strokeColor=#e3b878;direction=north;" value=""><mxGeometry x="930" y="100" width="1" height="200" as="geometry" /></mxCell>
+
+        <!-- C compute -->
+        <mxCell id="cCalc" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f0;strokeColor=#d79b00;fontSize=10;align=left;spacingLeft=8;" value="store = (M·BLOCK_ROW_WARPS·WARP_ROW_TILES) × (N·BLOCK_COL_WARPS·WARP_COL_TILES) × sizeof(float)&#10;      = 128 × 128 × 4&#10;      = 65,536 B  =  64 KB"><mxGeometry x="600" y="320" width="500" height="64" as="geometry" /></mxCell>
+
+        <!-- ============ MAX combiner ============ -->
+        <mxCell id="maxBox" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=13;fontStyle=1;" value="SHMEM_SZ = MAX( load = 40 KB ,  store = 64 KB )  =  64 KB&#10;( one shared-memory allocation, reused for both phases )"><mxGeometry x="350" y="420" width="460" height="64" as="geometry" /></mxCell>
+
+        <mxCell id="aArr" parent="1" edge="1" style="endArrow=classic;html=1;strokeColor=#118a4b;strokeWidth=2;" ><mxGeometry relative="1" as="geometry"><mxPoint x="350" y="384" as="sourcePoint" /><mxPoint x="430" y="420" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="cArr" parent="1" edge="1" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;" ><mxGeometry relative="1" as="geometry"><mxPoint x="820" y="384" as="sourcePoint" /><mxPoint x="730" y="420" as="targetPoint" /></mxGeometry></mxCell>
+
+        <!-- ============ LEGEND ============ -->
+        <mxCell id="legBox" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#aaaaaa;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;spacingTop=8;" value="Values   ·   M = N = K = 16   ·   CHUNK_K = 4   ·   SKEW_HALF = 16   ·   sizeof(half) = 2 B   ·   sizeof(float) = 4 B&#10;&#10;BLOCK_COL_TILES = WARP_COL_TILES (2) × BLOCK_COL_WARPS (4) = 8          BLOCK_ROW_TILES = WARP_ROW_TILES (4) × BLOCK_ROW_WARPS (2) = 8&#10;&#10;Load buffer = A (128 × 64 half) + B (128 × 64 half).  Each row is padded to 64 + 16(SKEW_HALF) = 80 cols → avoids shared-memory bank conflicts.&#10;Store buffer = the full 128 × 128 float output tile, staged in shared memory before writing to global D.&#10;Both phases share the SAME bytes, so the kernel allocates the larger of the two → 64 KB."><mxGeometry x="40" y="510" width="1060" height="150" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

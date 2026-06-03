@@ -1,0 +1,56 @@
+<mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <mxCell id="title" parent="1" style="text;html=1;align=left;fontSize=14;fontStyle=1;" value="cudaTensorCoreGemm — K-loop streaming: one block slides a CHUNK_K window along K into shared memory" vertex="1"><mxGeometry x="20" y="12" width="1100" height="22" as="geometry" /></mxCell>
+    <mxCell id="sub" parent="1" style="text;html=1;align=left;fontSize=11;fontColor=#555;" value="A, B are full SQUARE 4096×4096 matrices.  The block touches only a thin 128-wide PANEL; the CHUNK window (128×64 / 64×128) slides along K inside that panel.  Bands below are NOT to scale (128/4096 ≈ 3%, drawn fat for visibility)." vertex="1"><mxGeometry x="20" y="36" width="1100" height="30" as="geometry" /></mxCell>
+
+    <!-- ===================== GLOBAL A (square) ===================== -->
+    <mxCell id="alab" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="GLOBAL A  =  M_GLOBAL × K_GLOBAL  =  4096 × 4096  (square)" vertex="1"><mxGeometry x="80" y="92" width="380" height="16" as="geometry" /></mxCell>
+    <mxCell id="amat" parent="1" style="whiteSpace=wrap;html=1;fillColor=#eef4fc;strokeColor=#3b6fb6;strokeWidth=2;" value="" vertex="1"><mxGeometry x="80" y="120" width="200" height="200" as="geometry" /></mxCell>
+    <!-- block A-panel: 128 of 4096 rows -->
+    <mxCell id="apanel" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#3b6fb6;strokeWidth=1;fontSize=8;fontColor=#1f3f6b;align=right;verticalAlign=top;" value="block A-panel: 128 of 4096 rows " vertex="1"><mxGeometry x="80" y="120" width="200" height="30" as="geometry" /></mxCell>
+    <!-- current chunk inside the panel -->
+    <mxCell id="achunk" parent="1" style="whiteSpace=wrap;html=1;fillColor=#3b6fb6;strokeColor=#1f3f6b;strokeWidth=2;fontColor=#ffffff;fontSize=8;fontStyle=1;align=center;" value="A chunk&#10;128×64" vertex="1"><mxGeometry x="80" y="120" width="40" height="30" as="geometry" /></mxCell>
+    <!-- slide arrow along K -->
+    <mxCell id="aslide" parent="1" style="endArrow=classic;html=1;strokeColor=#1f3f6b;strokeWidth=2;fontSize=9;fontStyle=2;" value="slides → along K" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="122" y="135" as="sourcePoint" /><mxPoint x="278" y="135" as="targetPoint" /></mxGeometry></mxCell>
+    <!-- axes -->
+    <mxCell id="amrows" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#1f3f6b;rotation=-90;" value="M = 4096 rows" vertex="1"><mxGeometry x="20" y="212" width="120" height="14" as="geometry" /></mxCell>
+    <mxCell id="akcols" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#1f3f6b;" value="K = 4096 cols  →" vertex="1"><mxGeometry x="120" y="322" width="120" height="14" as="geometry" /></mxCell>
+
+    <!-- ===================== GLOBAL B (square) ===================== -->
+    <mxCell id="blab" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="GLOBAL B  =  K_GLOBAL × N_GLOBAL  =  4096 × 4096  (square)" vertex="1"><mxGeometry x="80" y="360" width="380" height="16" as="geometry" /></mxCell>
+    <mxCell id="bmat" parent="1" style="whiteSpace=wrap;html=1;fillColor=#eef8ee;strokeColor=#118a4b;strokeWidth=2;" value="" vertex="1"><mxGeometry x="80" y="388" width="200" height="200" as="geometry" /></mxCell>
+    <!-- block B-panel: 128 of 4096 cols -->
+    <mxCell id="bpanel" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=1;fontSize=8;fontColor=#0a5e33;align=center;verticalAlign=bottom;horizontal=0;" value="block B-panel: 128 of 4096 cols" vertex="1"><mxGeometry x="80" y="388" width="30" height="200" as="geometry" /></mxCell>
+    <!-- current chunk inside the panel -->
+    <mxCell id="bchunk" parent="1" style="whiteSpace=wrap;html=1;fillColor=#118a4b;strokeColor=#0a5e33;strokeWidth=2;fontColor=#ffffff;fontSize=8;fontStyle=1;align=center;" value="B chunk&#10;64×128" vertex="1"><mxGeometry x="80" y="388" width="30" height="40" as="geometry" /></mxCell>
+    <mxCell id="bslide" parent="1" style="endArrow=classic;html=1;strokeColor=#0a5e33;strokeWidth=2;fontSize=9;fontStyle=2;direction=south;" value="slides ↓ along K" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="95" y="430" as="sourcePoint" /><mxPoint x="95" y="586" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bkrows" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#0a5e33;rotation=-90;" value="K = 4096 rows" vertex="1"><mxGeometry x="220" y="480" width="120" height="14" as="geometry" /></mxCell>
+    <mxCell id="bncols" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#0a5e33;" value="N = 4096 cols  →" vertex="1"><mxGeometry x="120" y="590" width="120" height="14" as="geometry" /></mxCell>
+
+    <!-- ===================== COPY ARROW ===================== -->
+    <mxCell id="copy" parent="1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=3;fontSize=11;fontStyle=1;" value="vectorized int4 copy&#10;(one chunk per K-step)" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="320" y="300" as="sourcePoint" /><mxPoint x="600" y="240" as="targetPoint" /></mxGeometry></mxCell>
+
+    <!-- ===================== SHARED MEMORY BUFFER ===================== -->
+    <mxCell id="slab" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;" value="SHARED MEMORY buffer (one K-step)  =  (BLOCK_COL_TILES·M) × (CHUNK_K·K + SKEW_HALF) × 2  =  128 × 80 × 2 halves" vertex="1"><mxGeometry x="620" y="92" width="520" height="16" as="geometry" /></mxCell>
+
+    <mxCell id="sa" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#3b6fb6;strokeWidth=2;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" value="A half&#10;A chunk  128 × 64&#10;(M rows of this block)" vertex="1"><mxGeometry x="620" y="120" width="300" height="120" as="geometry" /></mxCell>
+    <mxCell id="sapad" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;fontSize=8;fontColor=#7a2e2b;align=center;" value="SKEW&#10;HALF&#10;= 16&#10;(pad)" vertex="1"><mxGeometry x="920" y="120" width="60" height="120" as="geometry" /></mxCell>
+
+    <mxCell id="sb" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;" value="B half&#10;B chunk  64 × 128&#10;(N cols of this block)" vertex="1"><mxGeometry x="620" y="240" width="300" height="120" as="geometry" /></mxCell>
+    <mxCell id="sbpad" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;fontSize=8;fontColor=#7a2e2b;align=center;" value="SKEW&#10;HALF&#10;= 16&#10;(pad)" vertex="1"><mxGeometry x="920" y="240" width="60" height="120" as="geometry" /></mxCell>
+
+    <mxCell id="x2" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;fontColor=#b85450;rotation=-90;" value="× 2  (A half + B half)" vertex="1"><mxGeometry x="950" y="240" width="160" height="16" as="geometry" /></mxCell>
+    <mxCell id="rw" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#444;" value="row width = CHUNK_K·K + SKEW_HALF = 64 + 16 = 80 halves" vertex="1"><mxGeometry x="620" y="365" width="360" height="14" as="geometry" /></mxCell>
+    <mxCell id="hh" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#3b6fb6;rotation=-90;" value="BLOCK_COL_TILES·M = 128 rows" vertex="1"><mxGeometry x="500" y="160" width="180" height="14" as="geometry" /></mxCell>
+
+    <mxCell id="acc" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=10;align=center;" value="load_matrix_sync → fragments → 8× mma_sync → accumulate into c[2][4] (float, in registers).&#10;c[2][4] is kept ACROSS all 64 K-steps; after the K loop: scale by α and store_matrix_sync → D." vertex="1"><mxGeometry x="620" y="420" width="420" height="60" as="geometry" /></mxCell>
+
+    <!-- ===================== legend ===================== -->
+    <mxCell id="leg" parent="1" style="text;html=1;align=left;fontSize=10;fontColor=#333;" value="Labels:  M = 16, K = 16 (one WMMA tile)   ·   CHUNK_K = 4 (K-tiles loaded per step → chunk is 64 wide in K)   ·   BLOCK_COL_TILES = 8 = WARP_COL_TILES·BLOCK_COL_WARPS = 2·4   (→ ·M = 128-row panel)" vertex="1"><mxGeometry x="40" y="630" width="1080" height="16" as="geometry" /></mxCell>
+    <mxCell id="leg2" parent="1" style="text;html=1;align=left;fontSize=10;fontColor=#333;" value="Movement:  the block's 128×128 OUTPUT tile is FIXED; only the K-window moves.  K_TILES/CHUNK_K = 256/4 = 64 steps sweep all of K=4096, each adding into the same c[2][4]." vertex="1"><mxGeometry x="40" y="650" width="1080" height="16" as="geometry" /></mxCell>
+
+  </root>
+</mxGraphModel>

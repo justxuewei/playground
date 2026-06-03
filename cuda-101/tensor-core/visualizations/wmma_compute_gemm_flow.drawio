@@ -1,0 +1,52 @@
+<mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="760" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <mxCell id="title" parent="1" style="text;html=1;align=left;fontSize=14;fontStyle=1;" value="compute_gemm() — D = α·(A·B) + β·C  per 128×128 tile" vertex="1"><mxGeometry x="20" y="12" width="900" height="22" as="geometry" /></mxCell>
+
+    <!-- lane headers -->
+    <mxCell id="h1" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;fontColor=#666;" value="FLOW" vertex="1"><mxGeometry x="40" y="44" width="320" height="16" as="geometry" /></mxCell>
+    <mxCell id="h2" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;fontColor=#666;" value="SHARED MEMORY (one buffer reused)" vertex="1"><mxGeometry x="400" y="44" width="240" height="16" as="geometry" /></mxCell>
+    <mxCell id="h3" parent="1" style="text;html=1;align=center;fontSize=11;fontStyle=1;fontColor=#666;" value="REGISTERS" vertex="1"><mxGeometry x="680" y="44" width="280" height="16" as="geometry" /></mxCell>
+
+    <!-- ===== Phases ===== -->
+    <mxCell id="p0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#8a52b5;strokeWidth=2;fontSize=11;align=center;" value="0. PICK A TILE&#10;grid-stride over the 32×32 output tiles" vertex="1"><mxGeometry x="40" y="70" width="320" height="50" as="geometry" /></mxCell>
+
+    <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#3b6fb6;strokeWidth=2;fontSize=11;align=center;" value="1. SEED&#10;load C → accumulators, scale by β" vertex="1"><mxGeometry x="40" y="140" width="320" height="50" as="geometry" /></mxCell>
+
+    <mxCell id="p2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;align=center;" value="2a. STREAM&#10;load one A+B K-chunk into shared mem" vertex="1"><mxGeometry x="70" y="245" width="290" height="50" as="geometry" /></mxCell>
+
+    <mxCell id="p2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;align=center;" value="2b. MULTIPLY&#10;8 Tensor-Core MMAs per warp → accumulate" vertex="1"><mxGeometry x="70" y="315" width="290" height="50" as="geometry" /></mxCell>
+
+    <mxCell id="kloop" parent="1" style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#d79b00;" value="K-loop ×64 chunks" vertex="1"><mxGeometry x="0" y="295" width="60" height="20" as="geometry" /></mxCell>
+
+    <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;fontSize=11;align=center;" value="3. STORE&#10;scale by α, write D to global" vertex="1"><mxGeometry x="40" y="415" width="320" height="50" as="geometry" /></mxCell>
+
+    <!-- flow arrows -->
+    <mxCell id="e01" parent="1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" source="p0" target="p1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e12" parent="1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" source="p1" target="p2a"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e2a2b" parent="1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" source="p2a" target="p2b"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="e2b3" parent="1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=2;" edge="1" source="p2b" target="p3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="innerloop" parent="1" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;exitX=0;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" source="p2b" target="p2a"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="40" y="340" /><mxPoint x="40" y="270" /></Array></mxGeometry></mxCell>
+    <mxCell id="outerloop" parent="1" style="endArrow=classic;html=1;strokeColor=#8a52b5;strokeWidth=2;fontSize=9;fontStyle=2;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" value="next tile" edge="1" source="p3" target="p0"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="378" y="440" /><mxPoint x="378" y="95" /></Array></mxGeometry></mxCell>
+
+    <!-- ===== SHARED MEMORY ===== -->
+    <mxCell id="s1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#3b6fb6;fontSize=10;align=center;" value="C tile  (64 KB)" vertex="1"><mxGeometry x="400" y="142" width="240" height="46" as="geometry" /></mxCell>
+    <mxCell id="s2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center;" value="A + B chunk  (40 KB)" vertex="1"><mxGeometry x="400" y="262" width="240" height="46" as="geometry" /></mxCell>
+    <mxCell id="s3" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;fontSize=10;align=center;" value="D tile  (64 KB)" vertex="1"><mxGeometry x="400" y="417" width="240" height="46" as="geometry" /></mxCell>
+    <mxCell id="snote" parent="1" style="text;html=1;align=center;fontSize=10;fontColor=#b85450;fontStyle=1;" value="same bytes, 3 roles → SHMEM_SZ = MAX = 64 KB" vertex="1"><mxGeometry x="400" y="485" width="240" height="30" as="geometry" /></mxCell>
+
+    <mxCell id="cs1" parent="1" style="endArrow=open;html=1;strokeColor=#3b6fb6;dashed=1;" edge="1" source="p1" target="s1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="cs2" parent="1" style="endArrow=open;html=1;strokeColor=#d6b656;dashed=1;" edge="1" source="p2a" target="s2"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="cs3" parent="1" style="endArrow=open;html=1;strokeColor=#118a4b;dashed=1;" edge="1" source="p3" target="s3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- ===== REGISTERS ===== -->
+    <mxCell id="acc" parent="1" style="whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=11;align=center;verticalAlign=top;spacingTop=8;" value="&lt;b&gt;c[2][4] accumulators&lt;/b&gt;&#10;(per warp = 32×64 of the tile)&#10;&#10;stay in registers the WHOLE time:&#10;seed β·C → += A·B → ×α" vertex="1"><mxGeometry x="680" y="142" width="280" height="120" as="geometry" /></mxCell>
+
+    <mxCell id="trick" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=11;align=center;verticalAlign=top;spacingTop=8;" value="&lt;b&gt;β-fold trick&lt;/b&gt;&#10;C is the accumulator's seed, not a&#10;separate add — so one pass gives&#10;D = α·(A·B) + β·C" vertex="1"><mxGeometry x="680" y="290" width="280" height="100" as="geometry" /></mxCell>
+
+    <mxCell id="key" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999;strokeWidth=1;fontSize=10;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;" value="&lt;b&gt;Key idea:&lt;/b&gt;  output tile is FIXED;&#10;only the K-window moves (64 chunks).&#10;Accumulators never leave registers;&#10;shared mem is reused for C / A+B / D." vertex="1"><mxGeometry x="680" y="415" width="280" height="100" as="geometry" /></mxCell>
+
+  </root>
+</mxGraphModel>

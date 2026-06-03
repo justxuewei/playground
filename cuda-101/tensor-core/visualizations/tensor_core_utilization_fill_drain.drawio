@@ -1,0 +1,78 @@
+<mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="title" parent="1" style="text;html=1;align=left;fontSize=14;fontStyle=1;" value="Systolic-array utilization: one lone tile wastes the array on fill/drain — streaming tiles hides it" vertex="1"><mxGeometry x="20" y="12" width="1000" height="22" as="geometry" /></mxCell>
+
+    <!-- ====================================================== PANEL A: single tile ====================================================== -->
+    <mxCell id="aSub" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#2563eb;" value="A single isolated 16×16×16 MMA — active cells per cycle" vertex="1"><mxGeometry x="40" y="44" width="600" height="18" as="geometry" /></mxCell>
+
+    <!-- axes -->
+    <mxCell id="aYaxis" parent="1" style="endArrow=classic;html=1;strokeColor=#333;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="300" as="sourcePoint" /><mxPoint x="115" y="82" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="aXaxis" parent="1" style="endArrow=classic;html=1;strokeColor=#333;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="300" as="sourcePoint" /><mxPoint x="778" y="300" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="aYlab" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#555;rotation=-90;" value="active cells (of 256)" vertex="1"><mxGeometry x="40" y="170" width="120" height="14" as="geometry" /></mxCell>
+    <mxCell id="aXlab" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#555;" value="cycle  t →" vertex="1"><mxGeometry x="710" y="304" width="70" height="14" as="geometry" /></mxCell>
+
+    <!-- reference lines -->
+    <mxCell id="a100" parent="1" style="endArrow=none;html=1;dashed=1;strokeColor=#cc0000;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="100" as="sourcePoint" /><mxPoint x="760" y="100" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="a100lab" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#cc0000;fontStyle=1;" value="100% — all 256 cells busy (never reached)" vertex="1"><mxGeometry x="500" y="84" width="280" height="14" as="geometry" /></mxCell>
+    <mxCell id="a35" parent="1" style="endArrow=none;html=1;dashed=1;strokeColor=#e07b00;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="230" as="sourcePoint" /><mxPoint x="760" y="230" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="a35lab" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#e07b00;fontStyle=1;" value="average ≈ 35%" vertex="1"><mxGeometry x="665" y="232" width="110" height="14" as="geometry" /></mxCell>
+    <mxCell id="apeak" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#2563eb;fontStyle=1;" value="peak ≈ 75%" vertex="1"><mxGeometry x="360" y="132" width="110" height="14" as="geometry" /></mxCell>
+
+    <!-- bars (sampled every 3 cycles t=0..45) -->
+    <mxCell id="ab0" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="130" y="298" width="30" height="2" as="geometry" /></mxCell>
+    <mxCell id="ab1" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="168" y="292" width="30" height="8" as="geometry" /></mxCell>
+    <mxCell id="ab2" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="206" y="278" width="30" height="22" as="geometry" /></mxCell>
+    <mxCell id="ab3" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="244" y="257" width="30" height="43" as="geometry" /></mxCell>
+    <mxCell id="ab4" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="282" y="229" width="30" height="71" as="geometry" /></mxCell>
+    <mxCell id="ab5" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="320" y="194" width="30" height="106" as="geometry" /></mxCell>
+    <mxCell id="ab6" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="358" y="166" width="30" height="134" as="geometry" /></mxCell>
+    <mxCell id="ab7" parent="1" style="whiteSpace=wrap;html=1;fillColor=#bdd7f7;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="396" y="152" width="30" height="148" as="geometry" /></mxCell>
+    <mxCell id="ab8" parent="1" style="whiteSpace=wrap;html=1;fillColor=#bdd7f7;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="434" y="152" width="30" height="148" as="geometry" /></mxCell>
+    <mxCell id="ab9" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="472" y="166" width="30" height="134" as="geometry" /></mxCell>
+    <mxCell id="ab10" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="510" y="194" width="30" height="106" as="geometry" /></mxCell>
+    <mxCell id="ab11" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="548" y="229" width="30" height="71" as="geometry" /></mxCell>
+    <mxCell id="ab12" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="586" y="257" width="30" height="43" as="geometry" /></mxCell>
+    <mxCell id="ab13" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="624" y="278" width="30" height="22" as="geometry" /></mxCell>
+    <mxCell id="ab14" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="662" y="292" width="30" height="8" as="geometry" /></mxCell>
+    <mxCell id="ab15" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2563eb;" value="" vertex="1"><mxGeometry x="700" y="298" width="30" height="2" as="geometry" /></mxCell>
+
+    <!-- fill / drain brackets -->
+    <mxCell id="afill" parent="1" style="endArrow=none;html=1;strokeColor=#118a4b;strokeWidth=2;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="130" y="312" as="sourcePoint" /><mxPoint x="388" y="312" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="afilllab" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#118a4b;fontStyle=1;" value="fill (~15 cyc)" vertex="1"><mxGeometry x="190" y="316" width="130" height="14" as="geometry" /></mxCell>
+    <mxCell id="adrain" parent="1" style="endArrow=none;html=1;strokeColor=#b45309;strokeWidth=2;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="472" y="312" as="sourcePoint" /><mxPoint x="730" y="312" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="adrainlab" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#b45309;fontStyle=1;" value="drain (~15 cyc)" vertex="1"><mxGeometry x="535" y="316" width="130" height="14" as="geometry" /></mxCell>
+
+    <mxCell id="anote" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#999;fontSize=10;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;" value="4096 useful MACs spread over 46 cycles on 256 cells → only &lt;b&gt;~35% average&lt;/b&gt;. Fill never finishes ramping before drain begins, so it &lt;b&gt;never hits 100%&lt;/b&gt; (peak ~75%)." vertex="1"><mxGeometry x="800" y="120" width="330" height="70" as="geometry" /></mxCell>
+
+    <!-- ====================================================== PANEL B: streamed ====================================================== -->
+    <mxCell id="bSub" parent="1" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#118a4b;" value="Thousands of tiles streamed back-to-back — combined utilization" vertex="1"><mxGeometry x="40" y="360" width="640" height="18" as="geometry" /></mxCell>
+
+    <mxCell id="bYaxis" parent="1" style="endArrow=classic;html=1;strokeColor=#333;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="520" as="sourcePoint" /><mxPoint x="115" y="392" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bXaxis" parent="1" style="endArrow=classic;html=1;strokeColor=#333;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="520" as="sourcePoint" /><mxPoint x="900" y="520" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="bXlab" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#555;" value="cycle  t →" vertex="1"><mxGeometry x="835" y="524" width="70" height="14" as="geometry" /></mxCell>
+
+    <!-- 100% line -->
+    <mxCell id="b100" parent="1" style="endArrow=none;html=1;dashed=1;strokeColor=#cc0000;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="400" as="sourcePoint" /><mxPoint x="885" y="400" as="targetPoint" /></mxGeometry></mxCell>
+    <mxCell id="b100lab" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#cc0000;fontStyle=1;" value="100%" vertex="1"><mxGeometry x="888" y="393" width="50" height="14" as="geometry" /></mxCell>
+
+    <!-- utilization envelope: trapezoid, flat top at 100% -->
+    <mxCell id="benv" parent="1" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#118a4b;strokeWidth=2;opacity=70;size=0.09;" value="" vertex="1"><mxGeometry x="150" y="400" width="700" height="120" as="geometry" /></mxCell>
+    <mxCell id="bsteady" parent="1" style="text;html=1;align=center;fontSize=11;fontColor=#0b4f29;fontStyle=1;" value="steady state ≈ 100%" vertex="1"><mxGeometry x="380" y="430" width="240" height="18" as="geometry" /></mxCell>
+    <mxCell id="bfilllab" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#118a4b;fontStyle=1;" value="fill&#10;once" vertex="1"><mxGeometry x="120" y="455" width="50" height="28" as="geometry" /></mxCell>
+    <mxCell id="bdrainlab" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#b45309;fontStyle=1;" value="drain&#10;once" vertex="1"><mxGeometry x="830" y="455" width="50" height="28" as="geometry" /></mxCell>
+
+    <!-- gantt: overlapping tiles -->
+    <mxCell id="gtitle" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#555;fontStyle=2;" value="each tile's 46-cycle life overlaps its neighbours:" vertex="1"><mxGeometry x="150" y="535" width="320" height="14" as="geometry" /></mxCell>
+    <mxCell id="gt1" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#dae8fc;strokeColor=#2563eb;fontSize=8;fontColor=#1d4f8b;" value="tile N" vertex="1"><mxGeometry x="150" y="552" width="230" height="12" as="geometry" /></mxCell>
+    <mxCell id="gt2" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#dae8fc;strokeColor=#2563eb;fontSize=8;fontColor=#1d4f8b;" value="N+1" vertex="1"><mxGeometry x="210" y="566" width="230" height="12" as="geometry" /></mxCell>
+    <mxCell id="gt3" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#dae8fc;strokeColor=#2563eb;fontSize=8;fontColor=#1d4f8b;" value="N+2" vertex="1"><mxGeometry x="270" y="580" width="230" height="12" as="geometry" /></mxCell>
+    <mxCell id="gt4" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#dae8fc;strokeColor=#2563eb;fontSize=8;fontColor=#1d4f8b;" value="N+3" vertex="1"><mxGeometry x="330" y="594" width="230" height="12" as="geometry" /></mxCell>
+    <mxCell id="gt5" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#eaf2fd;strokeColor=#9bbef8;fontSize=8;fontColor=#6c8ebf;" value="…" vertex="1"><mxGeometry x="390" y="608" width="230" height="12" as="geometry" /></mxCell>
+    <mxCell id="goverlap" parent="1" style="text;html=1;align=left;fontSize=9;fontColor=#118a4b;fontStyle=1;" value="N+1 fills the cells N is draining → no idle gap" vertex="1"><mxGeometry x="565" y="566" width="300" height="14" as="geometry" /></mxCell>
+
+    <!-- ====================================================== bottom bar ====================================================== -->
+    <mxCell id="bar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;" value="&lt;b&gt;Takeaway:&lt;/b&gt; a lone 16×16×16 op pays ~15 cycles to &lt;b style=&quot;color:#118a4b&quot;&gt;fill&lt;/b&gt; the array and ~15 to &lt;b style=&quot;color:#b45309&quot;&gt;drain&lt;/b&gt; it, so the wavefront leaves most cells idle (≈35% average, ≈75% peak). In a real GEMM the kernel streams &lt;b&gt;millions&lt;/b&gt; of tiles (the K-loop × all output tiles); each tile reuses the cells the previous one is vacating, the fill/drain happen &lt;b&gt;once&lt;/b&gt; at the very start/end, and steady-state utilization approaches 100%. That is exactly why keeping the Tensor Core fed (shared-memory tiling, operand reuse, no stalls) is the whole game. (Conceptual systolic model — NVIDIA's real microarchitecture is undisclosed.)" vertex="1"><mxGeometry x="20" y="635" width="1120" height="74" as="geometry" /></mxCell>
+  </root>
+</mxGraphModel>
